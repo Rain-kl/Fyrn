@@ -20,6 +20,7 @@ package com.arctel.mms.service;
 import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
+import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -34,10 +35,10 @@ import java.io.IOException;
 public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
     /**
-     * 获取本地小说文件分页列表
+     * 获取本地小说文件分页列表, 未处理的小说文件
      * @param input
      * @return
      */
-    Result<QueryPage<MmsNovelFile>> getLocalNovelFilePageList(UMmsPageInput input) throws IOException;
+    Result<QueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
 }

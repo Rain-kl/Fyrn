@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.utils;
+package com.arctel.oms.oos;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -33,7 +33,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 @Component
-public class MinioSupport {
+public class MinioSupport implements OosSupport{
 
     @Value("${minio.endpoint}")
     private String endpoint;

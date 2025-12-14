@@ -17,8 +17,7 @@
 
 package com.arctel.domain.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -64,16 +63,19 @@ public class MmsNovelFile {
     /**
      * 2：正常，4：删除
      */
+    @TableLogic(value = "2", delval = "4")
     private Integer status;
 
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 修改时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**

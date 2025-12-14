@@ -19,19 +19,29 @@ package com.arctel.mms.service.impl;
 
 import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.common.utils.FileUtil;
+import com.arctel.common.utils.NovelUtil;
+import com.arctel.common.utils.PagingUtil;
 import com.arctel.common.utils.Result;
+import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
+import com.arctel.domain.dao.mapper.MmsNovelMapper;
+import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
+import com.arctel.oms.oos.OosSupport;
 import com.arctel.oms.utils.PublicParamSupport;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Arctel
@@ -43,11 +53,73 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     @Resource
     PublicParamSupport publicParamSupport;
 
+    @Resource
+    MmsNovelMapper mmsNovelMapper;
+
+    @Resource
+    OosSupport oosSupport;
+
     @Override
-    public Result<QueryPage<MmsNovelFile>> getLocalNovelFilePageList(UMmsPageInput input) throws IOException {
+    public Result<QueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
         String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
         List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
-        System.out.printf("Found %d txt files in directory: %s%n", allTxtFiles.size(), paramValueByCode);
-        return null;
+
+        QueryPage<Path> page = PagingUtil.page(
+                allTxtFiles, input.getPageNo(), input.getPageSize(),
+                Comparator.comparing(Path::getFileName), Objects::nonNull
+        );
+        QueryPage<LocalFileSimpleDTO> localFileSimpleDTOQueryPage = new QueryPage<>();
+        localFileSimpleDTOQueryPage.setCurrentPage(page.getCurrentPage());
+        localFileSimpleDTOQueryPage.setPageSize(page.getPageSize());
+        localFileSimpleDTOQueryPage.setTotal(page.getTotal());
+
+        List<LocalFileSimpleDTO> localFileSimpleDTOS = page.getRows().stream().map(file -> {
+            LocalFileSimpleDTO localFileSimpleDTO = new LocalFileSimpleDTO();
+            localFileSimpleDTO.setFileName(file.getFileName().toString());
+            localFileSimpleDTO.setFilePath(file.toString());
+            localFileSimpleDTO.setFileSize(FileUtil.getFileSize(file));
+            localFileSimpleDTO.setWordCount(NovelUtil.countWordsInFile(new File(file.toString())));
+            return localFileSimpleDTO;
+        }).toList();
+
+        localFileSimpleDTOQueryPage.setRows(localFileSimpleDTOS);
+
+        return Result.success(localFileSimpleDTOQueryPage);
     }
+
+    public void syncJob() throws IOException {
+        String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
+        List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
+        allTxtFiles.forEach(file -> {
+            Path fileName = file.getFileName();
+            System.out.println(fileName);
+            List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName.toString());
+
+            // 查询小说是否存在
+            MmsNovel mmsNovel = mmsNovelMapper.selectOne(
+                    new LambdaQueryWrapper<MmsNovel>()
+                            .eq(MmsNovel::getNovelTitle, novelBasicMetadata.get(0))
+                            .eq(MmsNovel::getNovelAuthor, novelBasicMetadata.get(1))
+            );
+            // 如果小说不存在，则新增小说记录, 并且直接上传 OOS
+            if (mmsNovel == null) {
+                MmsNovelFile mmsNovelFile = new MmsNovelFile();
+                mmsNovelFile.setFileName(fileName.toString());
+                mmsNovelFile.setFileSize(FileUtil.getFileSize(file));
+                mmsNovelFile.setWordCount(NovelUtil.countWordsInFile(new File(file.toString())));
+
+                String oosPath = oosSupport.upload(
+                        FileUtil.fileToByteArray(file.toFile()),
+                        fileName.toString()
+                );
+                mmsNovelFile.setFilePath(oosPath);
+
+            } else {
+                //如果小说存在, 则下载文件进行对比, 如果相似度高于 0.95, 则认为是重复文件, 否则新增为其他插入 OOS 库中, 更新小说下载地址记录
+            }
+
+        });
+    }
+
+
 }
