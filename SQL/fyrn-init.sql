@@ -13,6 +13,9 @@ CREATE TABLE `mms_novel`
     `novel_title`  VARCHAR(50) DEFAULT NULL COMMENT '小说名称',
     `novel_author` VARCHAR(50) DEFAULT NULL COMMENT '小说作者',
     `file_path`    VARCHAR(200) DEFAULT NULL COMMENT '文件路径',
+    `file_name`    VARCHAR(100) DEFAULT NULL COMMENT '文件名称',
+    `file_size`    BIGINT(20) DEFAULT NULL COMMENT '文件大小，单位：字节',
+    `word_count`   BIGINT(20) DEFAULT NULL COMMENT '小说字数, 单位：字',
     `status`       TINYINT(4)  DEFAULT '2' COMMENT '2：正常，4：删除',
 
     `create_time`  DATETIME    DEFAULT NULL COMMENT '创建时间',
