@@ -15,15 +15,29 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.dto.input;
+package com.arctel.mms.service;
 
-import com.arctel.common.baseDTO.BaseInput;
-import com.arctel.common.baseDTO.QueryPageInput;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.arctel.common.baseDTO.QueryPage;
+import com.arctel.common.utils.Result;
+import com.arctel.domain.dao.entity.MmsNovelFile;
+import com.arctel.domain.dto.input.UMmsPageInput;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-@Getter
-@Setter
-public class AddInputDTO extends BaseInput {
+import java.io.IOException;
+
+/**
+ * UMmsNovelBizService, 原始文件处理服务
+ *
+ * @author Arctel
+ * @date 2024-06-10
+ */
+public interface MmsNovelFileService extends IService<MmsNovelFile> {
+
+    /**
+     * 获取本地小说文件分页列表
+     * @param input
+     * @return
+     */
+    Result<QueryPage<MmsNovelFile>> getLocalNovelFilePageList(UMmsPageInput input) throws IOException;
+
 }

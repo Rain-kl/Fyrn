@@ -15,18 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.service;
+package com.arctel.oms.domain.mapper;
 
-import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.oms.domain.entity.OmsParameter;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
 * @author ryan
-* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
 * @createDate 2025-12-14 15:12:52
+* @Entity generator.domain.OmsParameter
 */
-public interface OmsParameterService extends IService<OmsParameter> {
+public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
 
-    QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 }
+
+
+
+

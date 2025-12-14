@@ -17,8 +17,8 @@
 
 package com.arctel.oms.utils;
 
-import com.arctel.oms.domain.OmsParameter;
-import com.arctel.oms.mapper.OmsParameterMapper;
+import com.arctel.oms.domain.entity.OmsParameter;
+import com.arctel.oms.domain.mapper.OmsParameterMapper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

@@ -15,21 +15,13 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.mapper;
+package com.arctel.domain.dto.input;
 
-import com.arctel.oms.domain.OmsParameter;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.arctel.common.baseDTO.BaseInput;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
-* @author ryan
-* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
-* @createDate 2025-12-14 15:12:52
-* @Entity generator.domain.OmsParameter
-*/
-public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
-
+@Getter
+@Setter
+public class MmsAddInput extends BaseInput {
 }
-
-
-
-

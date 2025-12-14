@@ -15,40 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.dto.input;
+package com.arctel.domain.dao.mapper;
 
-import com.arctel.common.baseDTO.BaseInput;
-import lombok.Data;
+import com.arctel.domain.dao.entity.MmsNovel;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Data
-public class AddParameterInput extends BaseInput {
-    /**
-     * 主键
-     */
-    private Long paramCode;
+/**
+* @author ryan
+* @description 针对表【mms_novel(本地小说表)】的数据库操作Mapper
+* @createDate 2025-12-14 10:51:35
+* @Entity com.arctel.domain.dao.entity.MmsNovel
+*/
+public interface MmsNovelMapper extends BaseMapper<MmsNovel> {
 
-    /**
-     * 参数名称
-     */
-    private String paramName;
-
-    /**
-     * 参数类型
-     */
-    private String kindCode;
-
-    /**
-     * 参数值
-     */
-    private String paramValue;
-
-    /**
-     * 参数描述
-     */
-    private String paramDesc;
-
-    /**
-     * 是否启用
-     */
-    private Integer enabledFlag;
 }
+
+
+
+

@@ -19,9 +19,10 @@ package com.arctel.mms.controller;
 
 import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.common.utils.Result;
-import com.arctel.domain.dao.MmsNovel;
-import com.arctel.domain.service.MmsNovelService;
-import com.arctel.mms.dto.input.PageInputDTO;
+import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.domain.dto.input.MmsPageInput;
+import com.arctel.mms.service.MmsNovelService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,14 +40,17 @@ public class MmsNovelController {
 
     /**
      * 小说分页列表
-     * @param pageInputDTO 分页输入对象
+     * @param input 分页输入对象
      * @return 分页结果
      */
     @GetMapping("/page")
-    public Result<QueryPage<MmsNovel>> page(PageInputDTO pageInputDTO) {
+    public Result<QueryPage<MmsNovel>> page(MmsPageInput input) {
+
+        MmsNovel mmsNovel = new MmsNovel();
+        BeanUtils.copyProperties(input, mmsNovel);
 
         QueryPage<MmsNovel> mmsNovelQueryPage = mmsNovelService.pageMmsNovel(
-                pageInputDTO.getMmsNovel(), pageInputDTO.getPageNo(), pageInputDTO.getPageSize());
+                mmsNovel, input.getPageNo(), input.getPageSize());
         return Result.success(mmsNovelQueryPage);
     }
 }

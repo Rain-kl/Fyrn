@@ -15,18 +15,25 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.service;
+package com.arctel.common.utils;
 
-import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.baomidou.mybatisplus.extension.service.IService;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
-* @author ryan
-* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
-* @createDate 2025-12-14 15:12:52
-*/
-public interface OmsParameterService extends IService<OmsParameter> {
+public class FileUtil {
 
-    QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
+    public static List<Path> getAllTxtFiles(String dirPath) throws IOException {
+        try (Stream<Path> paths = Files.walk(Paths.get(dirPath))) {
+            return paths
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.toString().endsWith(".txt"))
+                    .collect(Collectors.toList());
+        }
+    }
+
 }

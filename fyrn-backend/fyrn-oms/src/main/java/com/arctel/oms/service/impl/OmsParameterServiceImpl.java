@@ -18,8 +18,8 @@
 package com.arctel.oms.service.impl;
 
 import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.oms.domain.OmsParameter;
-import com.arctel.oms.mapper.OmsParameterMapper;
+import com.arctel.oms.domain.entity.OmsParameter;
+import com.arctel.oms.domain.mapper.OmsParameterMapper;
 import com.arctel.oms.service.OmsParameterService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

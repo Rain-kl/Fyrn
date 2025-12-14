@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.arctel.domain.service.impl;
+package com.arctel.mms.service.impl;
 
 import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.domain.dao.MmsNovel;
-import com.arctel.domain.mapper.MmsNovelMapper;
-import com.arctel.domain.service.MmsNovelService;
+import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.domain.dao.mapper.MmsNovelMapper;
+import com.arctel.mms.service.MmsNovelService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,16 +29,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author ryan
- * @description 针对表【mms_novel(本地小说表)】的数据库操作Service实现
- * @createDate 2025-12-14 10:51:35
- */
+
 @Service
 public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         implements MmsNovelService {
-
-
     @Override
     public QueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize) {
 //        设置分页
@@ -51,8 +45,6 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                                 MmsNovel::getNovelTitle, mmsNovel.getNovelTitle())
                         .like(mmsNovel.getNovelAuthor() != null,
                                 MmsNovel::getNovelAuthor, mmsNovel.getNovelAuthor())
-                        .eq(mmsNovel.getStatus() != null,
-                                MmsNovel::getStatus, mmsNovel.getStatus())
                         .orderByDesc(MmsNovel::getId)
         );
 //
@@ -62,4 +54,3 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         return new QueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
 }
-

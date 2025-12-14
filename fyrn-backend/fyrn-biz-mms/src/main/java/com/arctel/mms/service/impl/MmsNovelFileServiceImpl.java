@@ -15,44 +15,39 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.controller;
+package com.arctel.mms.service.impl;
 
 import com.arctel.common.baseDTO.QueryPage;
+import com.arctel.common.utils.FileUtil;
 import com.arctel.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
+import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.oms.utils.PublicParamSupport;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
-@RequestMapping("/umms/novel")
-@RestController
-@Validated
-public class UMmsNovelController {
-
-
+/**
+ * @author Arctel
+ * @date 2024-06-10
+ */
+@Service
+public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile>
+        implements MmsNovelFileService {
     @Resource
     PublicParamSupport publicParamSupport;
 
-    @Resource
-    MmsNovelFileService uMmsNovelService;
-
-
-    /**
-     * 获取未处理的小说列表
-     *
-     * @return
-     */
-    @GetMapping("/page")
-    public Result<QueryPage<MmsNovelFile>> page(UMmsPageInput input) throws IOException {
-
-        return uMmsNovelService.getLocalNovelFilePageList(input);
-
+    @Override
+    public Result<QueryPage<MmsNovelFile>> getLocalNovelFilePageList(UMmsPageInput input) throws IOException {
+        String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
+        List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
+        System.out.printf("Found %d txt files in directory: %s%n", allTxtFiles.size(), paramValueByCode);
+        return null;
     }
 }
