@@ -15,20 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.aggregation;
+package com.arctel.common.baseDTO;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@SpringBootApplication
-@MapperScan("com.arctel.domain.mapper")
-@ComponentScan(basePackages = {"com.arctel.mms","com.arctel.domain","com.arctel.common"})
-class AggregationApplication {
+import java.io.Serializable;
+import java.util.List;
 
-    public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
-    }
+/**
+ * 封装分页查询结果
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class QueryPage<T> implements Serializable {
+
+    private long total;
+    private int pageSize;
+    private int currentPage;
+    private List<T> rows;
 
 }

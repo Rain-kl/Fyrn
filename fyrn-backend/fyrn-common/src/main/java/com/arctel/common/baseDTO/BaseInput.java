@@ -15,20 +15,17 @@
  * limitations under the License.
  */
 
-package com.arctel.aggregation;
+package com.arctel.common.baseDTO;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-@SpringBootApplication
-@MapperScan("com.arctel.domain.mapper")
-@ComponentScan(basePackages = {"com.arctel.mms","com.arctel.domain","com.arctel.common"})
-class AggregationApplication {
+@Data
+public class BaseInput {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
-    }
-
+    /**
+     * 操作人
+     */
+    @NotBlank(message = "操作人不能为空")
+    private String operator;
 }

@@ -15,25 +15,16 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service.impl;
+package com.arctel.mms.dto.input;
 
-import com.arctel.domain.dao.MmsNovel;
-import com.arctel.mms.mapper.MmsNovelMapper;
-import com.arctel.mms.service.MmsNovelService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
+import com.arctel.common.baseDTO.BaseInput;
+import com.arctel.common.baseDTO.QueryPageInput;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * @author ryan
- * @description 针对表【mms_novel(本地小说表)】的数据库操作Service实现
- * @createDate 2025-12-14 10:51:35
- */
-@Service
-public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
-        implements MmsNovelService {
-
+@Getter
+@Setter
+public class PageInputDTO extends QueryPageInput {
 }
-
-
-
-

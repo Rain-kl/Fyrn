@@ -29,19 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@RequestMapping("/mms/novel")
+@RequestMapping("/umms/novel")
 @RestController
 @Validated
-public class MmsNovelController {
+public class UMmsNovelController {
 
     @Resource
     MmsNovelService mmsNovelService;
 
-    /**
-     * 小说分页列表
-     * @param pageInputDTO 分页输入对象
-     * @return 分页结果
-     */
+
+
     @GetMapping("/page")
     public Result<QueryPage<MmsNovel>> page(PageInputDTO pageInputDTO) {
 

@@ -20,9 +20,11 @@ package com.arctel.mms;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@MapperScan("com.arctel.mms.mapper")
+@MapperScan("com.arctel.domain.mapper")
+@ComponentScan(basePackages = {"com.arctel.mms","com.arctel.domain","com.arctel.common"})
 class MmsServiceApplication {
 
     public static void main(String[] args) {

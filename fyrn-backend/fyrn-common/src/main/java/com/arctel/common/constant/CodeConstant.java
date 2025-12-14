@@ -15,16 +15,9 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.common.constant;
 
-import com.arctel.domain.dao.MmsNovel;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-/**
-* @author ryan
-* @description 针对表【mms_novel(本地小说表)】的数据库操作Service
-* @createDate 2025-12-14 10:51:35
-*/
-public interface MmsNovelService extends IService<MmsNovel> {
-
+public class CodeConstant {
+    public static final Integer SUCCESS = 200;
+    public static final Integer ERROR = 4000;
 }

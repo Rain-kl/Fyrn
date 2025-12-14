@@ -15,20 +15,28 @@
  * limitations under the License.
  */
 
-package com.arctel.aggregation;
+package com.arctel.common.baseDTO;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import lombok.*;
 
-@SpringBootApplication
-@MapperScan("com.arctel.domain.mapper")
-@ComponentScan(basePackages = {"com.arctel.mms","com.arctel.domain","com.arctel.common"})
-class AggregationApplication {
+/**
+ * 封装分页查询结果
+ */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class QueryPageInput extends BaseInput {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
-    }
+    /**
+     * 当前页码
+     */
+    private int pageNo;
+
+    /**
+     * 每页记录数
+     */
+    private int pageSize;
+
 
 }
