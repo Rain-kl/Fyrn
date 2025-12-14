@@ -19,10 +19,10 @@ package com.arctel.mms.controller;
 
 import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.common.utils.Result;
+import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
-import com.arctel.oms.utils.PublicParamSupport;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,14 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.io.IOException;
 
-@RequestMapping("/umms/novel")
+@RequestMapping("/umms")
 @RestController
 @Validated
 public class UMmsNovelController {
-
-
-    @Resource
-    PublicParamSupport publicParamSupport;
 
     @Resource
     MmsNovelFileService uMmsNovelService;
@@ -49,8 +45,14 @@ public class UMmsNovelController {
      *
      * @return
      */
-    @GetMapping("/page")
-    public Result<QueryPage<LocalFileSimpleDTO>> page(UMmsPageInput input) throws IOException {
+    @GetMapping("/local/page")
+    public Result<QueryPage<LocalFileSimpleDTO>> localPage(UMmsPageInput input) throws IOException {
         return uMmsNovelService.getUnprocessedLocalFile(input);
     }
+
+    @GetMapping("/noevl/page")
+    public Result<QueryPage<MmsNovelFile>> novelPage(UMmsPageInput input) throws IOException {
+        return null;
+    }
+
 }
