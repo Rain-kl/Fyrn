@@ -6,3 +6,9 @@ fyrn:
     database: fyrn
     username: root
     password: root
+
+  minio:
+    access-key-id: eZkIBk8WaWlfxjCx5OAW
+    access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
+    bucket-name: fyrn
+    endpoint: http://localhost:9000

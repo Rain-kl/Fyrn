@@ -22,3 +22,10 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
+
+
+minio:
+  access-key-id: 6KMyYpBT5D4HTXoVH702
+  access-key-secret: n5kWezUSIeCDqsxE0t5OBCuwlIPWOoyQdr8fTTaj
+  bucket-name: sky-take-out
+  endpoint: http://localhost:9000
