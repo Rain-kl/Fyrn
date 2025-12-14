@@ -1,11 +1,13 @@
 package com.arctel.oms.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 
-@SpringBootTest()
+@SpringBootTest
+@Slf4j
 class MinioSupportTest {
 
     @Resource
@@ -16,6 +18,7 @@ class MinioSupportTest {
         String randomContent = "This is a test file for MinIO upload.";
         byte[] contentBytes = randomContent.getBytes();
         String objectName = "test-folder/test-file.txt";
-        minioSupport.upload(contentBytes, objectName);
+        String upload = minioSupport.upload(contentBytes, objectName);
+        log.info(upload);
     }
 }
