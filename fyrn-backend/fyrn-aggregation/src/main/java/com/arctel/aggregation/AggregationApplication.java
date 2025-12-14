@@ -23,7 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@MapperScan({ "com.arctel.domain.dao.mapper", "com.arctel.oms.domain.mapper" })
+@MapperScan({ "com.arctel.domain.dao.mapper", "com.arctel.oms" })
 @ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
 class AggregationApplication {
 

@@ -15,26 +15,40 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.dto;
+package com.arctel.oms.pms.domain.dto;
 
-import com.arctel.common.baseDTO.QueryPageInput;
+import com.arctel.common.baseDTO.BaseInput;
 import lombok.Data;
 
 @Data
-public class QueryParameterInput extends QueryPageInput {
-
+public class AddParameterInput extends BaseInput {
     /**
      * 主键
      */
-    private Long paramCode = null;
+    private Long paramCode;
 
     /**
      * 参数名称
      */
-    private String paramName = null;
+    private String paramName;
+
+    /**
+     * 参数类型
+     */
+    private String kindCode;
+
+    /**
+     * 参数值
+     */
+    private String paramValue;
+
+    /**
+     * 参数描述
+     */
+    private String paramDesc;
 
     /**
      * 是否启用
      */
-    private Integer enabledFlag = 1;
+    private Integer enabledFlag;
 }

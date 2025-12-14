@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.controller;
+package com.arctel.oms.pms.controller;
 
 
 import cn.hutool.core.bean.BeanUtil;
 import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.arctel.oms.domain.dto.AddParameterInput;
-import com.arctel.oms.domain.dto.QueryParameterInput;
-import com.arctel.oms.service.OmsParameterService;
+import com.arctel.oms.pms.domain.entity.OmsParameter;
+import com.arctel.oms.pms.domain.dto.AddParameterInput;
+import com.arctel.oms.pms.domain.dto.QueryParameterInput;
+import com.arctel.oms.pms.service.OmsParameterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 

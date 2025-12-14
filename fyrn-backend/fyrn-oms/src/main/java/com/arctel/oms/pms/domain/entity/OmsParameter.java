@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.entity;
+package com.arctel.oms.pms.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

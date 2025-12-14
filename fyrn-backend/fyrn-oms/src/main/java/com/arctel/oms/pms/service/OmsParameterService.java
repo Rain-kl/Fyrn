@@ -15,22 +15,18 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.utils;
+package com.arctel.oms.pms.service;
 
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.arctel.oms.domain.mapper.OmsParameterMapper;
-import org.springframework.stereotype.Component;
+import com.arctel.common.baseDTO.QueryPage;
+import com.arctel.oms.pms.domain.entity.OmsParameter;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-import javax.annotation.Resource;
+/**
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
+* @createDate 2025-12-14 15:12:52
+*/
+public interface OmsParameterService extends IService<OmsParameter> {
 
-@Component
-public class PublicParamSupport {
-
-    @Resource
-    private OmsParameterMapper omsParameterMapper;
-
-    public Object getParamValueByCode(int paramCode) {
-        OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
-        return omsParameter.getParamValue();
-    }
+    QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 }

@@ -30,7 +30,7 @@ import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.oms.oos.OosSupport;
-import com.arctel.oms.utils.PublicParamSupport;
+import com.arctel.oms.pms.utils.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

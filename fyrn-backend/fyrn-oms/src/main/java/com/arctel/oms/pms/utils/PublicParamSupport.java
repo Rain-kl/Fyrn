@@ -15,21 +15,22 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.mapper;
+package com.arctel.oms.pms.utils;
 
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.arctel.oms.pms.domain.entity.OmsParameter;
+import com.arctel.oms.pms.domain.mapper.OmsParameterMapper;
+import org.springframework.stereotype.Component;
 
-/**
-* @author ryan
-* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
-* @createDate 2025-12-14 15:12:52
-* @Entity generator.domain.OmsParameter
-*/
-public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
+import javax.annotation.Resource;
 
+@Component
+public class PublicParamSupport {
+
+    @Resource
+    private OmsParameterMapper omsParameterMapper;
+
+    public Object getParamValueByCode(int paramCode) {
+        OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
+        return omsParameter.getParamValue();
+    }
 }
-
-
-
-

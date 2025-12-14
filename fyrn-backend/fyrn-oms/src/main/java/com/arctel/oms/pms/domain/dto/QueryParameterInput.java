@@ -15,18 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.service;
+package com.arctel.oms.pms.domain.dto;
 
-import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.arctel.common.baseDTO.QueryPageInput;
+import lombok.Data;
 
-/**
-* @author ryan
-* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
-* @createDate 2025-12-14 15:12:52
-*/
-public interface OmsParameterService extends IService<OmsParameter> {
+@Data
+public class QueryParameterInput extends QueryPageInput {
 
-    QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
+    /**
+     * 主键
+     */
+    private Long paramCode = null;
+
+    /**
+     * 参数名称
+     */
+    private String paramName = null;
+
+    /**
+     * 是否启用
+     */
+    private Integer enabledFlag = 1;
 }

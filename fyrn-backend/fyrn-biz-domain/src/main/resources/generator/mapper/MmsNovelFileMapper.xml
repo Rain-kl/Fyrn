@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.MmsNovelFileMapper">
+<mapper namespace="com.arctel.domain.dao.mapper.MmsNovelFileMapper">
 
-    <resultMap id="BaseResultMap" type="generator.domain.MmsNovelFile">
+    <resultMap id="BaseResultMap" type="com.arctel.domain.dao.entity.MmsNovelFile">
             <id property="id" column="id" />
             <result property="novelId" column="novel_id" />
             <result property="fileName" column="file_name" />

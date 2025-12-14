@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.service.impl;
+package com.arctel.oms.pms.service.impl;
 
 import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.oms.domain.entity.OmsParameter;
-import com.arctel.oms.domain.mapper.OmsParameterMapper;
-import com.arctel.oms.service.OmsParameterService;
+import com.arctel.oms.pms.domain.entity.OmsParameter;
+import com.arctel.oms.pms.domain.mapper.OmsParameterMapper;
+import com.arctel.oms.pms.service.OmsParameterService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

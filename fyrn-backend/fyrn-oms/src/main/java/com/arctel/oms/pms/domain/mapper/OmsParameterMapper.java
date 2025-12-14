@@ -15,40 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.dto;
+package com.arctel.oms.pms.domain.mapper;
 
-import com.arctel.common.baseDTO.BaseInput;
-import lombok.Data;
+import com.arctel.oms.pms.domain.entity.OmsParameter;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Data
-public class AddParameterInput extends BaseInput {
-    /**
-     * 主键
-     */
-    private Long paramCode;
+/**
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
+* @createDate 2025-12-14 15:12:52
+* @Entity generator.domain.OmsParameter
+*/
+public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
 
-    /**
-     * 参数名称
-     */
-    private String paramName;
-
-    /**
-     * 参数类型
-     */
-    private String kindCode;
-
-    /**
-     * 参数值
-     */
-    private String paramValue;
-
-    /**
-     * 参数描述
-     */
-    private String paramDesc;
-
-    /**
-     * 是否启用
-     */
-    private Integer enabledFlag;
 }
+
+
+
+
