@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>fyrn-aggregation</artifactId>
+    <artifactId>fyrn-oms</artifactId>
 
     <dependencies>
         <dependency>
@@ -23,25 +23,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-biz-domain</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
 
         <dependency>
             <groupId>com.arctel</groupId>
             <artifactId>fyrn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-oms</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-biz-mms</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -57,6 +46,21 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -65,6 +69,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

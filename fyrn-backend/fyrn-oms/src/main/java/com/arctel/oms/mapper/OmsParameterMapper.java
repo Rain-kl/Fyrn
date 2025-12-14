@@ -15,20 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.aggregation;
+package com.arctel.oms.mapper;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.oms.domain.OmsParameter;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@SpringBootApplication
-@MapperScan({ "com.arctel.domain.mapper", "com.arctel.oms.mapper" })
-@ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
-class AggregationApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
-    }
+/**
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
+* @createDate 2025-12-14 15:12:52
+* @Entity generator.domain.OmsParameter
+*/
+public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
 
 }
+
+
+
+

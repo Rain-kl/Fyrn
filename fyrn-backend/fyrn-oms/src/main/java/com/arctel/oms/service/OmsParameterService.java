@@ -15,20 +15,18 @@
  * limitations under the License.
  */
 
-package com.arctel.aggregation;
+package com.arctel.oms.service;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.common.baseDTO.QueryPage;
+import com.arctel.oms.domain.OmsParameter;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-@SpringBootApplication
-@MapperScan({ "com.arctel.domain.mapper", "com.arctel.oms.mapper" })
-@ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
-class AggregationApplication {
+/**
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
+* @createDate 2025-12-14 15:12:52
+*/
+public interface OmsParameterService extends IService<OmsParameter> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
-    }
-
+    QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 }
