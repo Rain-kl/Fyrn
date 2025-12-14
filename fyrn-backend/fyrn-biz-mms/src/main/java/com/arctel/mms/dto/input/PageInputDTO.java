@@ -17,14 +17,16 @@
 
 package com.arctel.mms.dto.input;
 
-import com.arctel.common.baseDTO.BaseInput;
 import com.arctel.common.baseDTO.QueryPageInput;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.arctel.domain.dao.MmsNovel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class PageInputDTO extends QueryPageInput {
+    /**
+     * 查询条件
+     */
+    MmsNovel mmsNovel;
 }

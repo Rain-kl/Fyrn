@@ -46,7 +46,7 @@ public class MmsNovelController {
     public Result<QueryPage<MmsNovel>> page(PageInputDTO pageInputDTO) {
 
         QueryPage<MmsNovel> mmsNovelQueryPage = mmsNovelService.pageMmsNovel(
-                new MmsNovel(), pageInputDTO.getPageNo(), pageInputDTO.getPageSize());
+                pageInputDTO.getMmsNovel(), pageInputDTO.getPageNo(), pageInputDTO.getPageSize());
         return Result.success(mmsNovelQueryPage);
     }
 }

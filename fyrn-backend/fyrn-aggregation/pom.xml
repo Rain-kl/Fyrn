@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>com.arctel</groupId>
-            <artifactId>fyrn-domain</artifactId>
+            <artifactId>fyrn-biz-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
