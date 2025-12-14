@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+    banner-mode: off
+  datasource:
+    driver-class-name: ${fyrn.datasource.driver-class-name}
+    url: jdbc:mysql://${fyrn.datasource.host}:${fyrn.datasource.port}/${fyrn.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${fyrn.datasource.username}
+    password: ${fyrn.datasource.password}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
