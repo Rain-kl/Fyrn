@@ -15,18 +15,16 @@
  * limitations under the License.
  */
 
-package com.arctel.mms;
+package com.arctel.mms.service;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.arctel.domain.dao.MmsNovel;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-@SpringBootApplication
-@MapperScan("com.arctel.mms.mapper")
-class MmsServiceApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(MmsServiceApplication.class, args);
-    }
+/**
+* @author ryan
+* @description 针对表【mms_novel(本地小说表)】的数据库操作Service
+* @createDate 2025-12-14 10:51:35
+*/
+public interface MmsNovelService extends IService<MmsNovel> {
 
 }

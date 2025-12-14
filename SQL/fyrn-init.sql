@@ -3,3 +3,26 @@ use `fyrn`;
 
 SET NAMES utf8mb4;
 
+-- ----------------------------
+-- Table structure for mms_novel
+-- ----------------------------
+DROP TABLE IF EXISTS `mms_novel`;
+CREATE TABLE `mms_novel`
+(
+    `id`           BIGINT(20) NOT NULL COMMENT '主键',
+    `novel_title`  VARCHAR(50) DEFAULT NULL COMMENT '小说名称',
+    `novel_author` VARCHAR(50) DEFAULT NULL COMMENT '小说作者',
+    `file_path`    VARCHAR(200) DEFAULT NULL COMMENT '文件路径',
+    `status`       TINYINT(4)  DEFAULT '2' COMMENT '2：正常，4：删除',
+
+    `create_time`  DATETIME    DEFAULT NULL COMMENT '创建时间',
+    `update_time`  DATETIME    DEFAULT NULL COMMENT '修改时间',
+    `created_user` VARCHAR(50) DEFAULT NULL COMMENT '创建人',
+    `updated_user` VARCHAR(50) DEFAULT NULL COMMENT '修改人',
+
+    PRIMARY KEY (`id`),
+
+    KEY `idx_author_status_time` (`novel_author`, `status`),
+    KEY `idx_title_status` (`novel_title`, `status`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='本地小说表';
