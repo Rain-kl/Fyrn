@@ -15,31 +15,19 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.controller;
+package com.arctel.oms;
 
-import com.arctel.common.utils.Result;
-import com.arctel.mms.dto.input.PageInputDTO;
-import com.arctel.oms.utils.PublicParamSupport;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
-import javax.annotation.Resource;
+@SpringBootApplication
+@MapperScan("com.arctel.oms")
+class OmsApplication {
 
-@RequestMapping("/umms/novel")
-@RestController
-@Validated
-public class UMmsNovelController {
-
-
-    @Resource
-    PublicParamSupport publicParamSupport;
-
-
-    @GetMapping("/page")
-    public Result<String> page() {
-        Object paramValueByCode = publicParamSupport.getParamValueByCode(1001);
-        return Result.success((String) paramValueByCode);
+    public static void main(String[] args) {
+        SpringApplication.run(OmsApplication.class, args);
     }
+
 }
