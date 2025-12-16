@@ -37,9 +37,7 @@ services:
       - "56379:6379"
     volumes:
       - ./data/redis:/data
-    command: redis-server --requirepass root --appendonly yes
-    environment:
-      - REDIS_PASSWORD=123456
+    command: redis-server --requirepass 123456 --appendonly yes
     networks:
       - fyrn-network
 
