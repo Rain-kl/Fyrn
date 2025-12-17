@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 /**
  * 后端统一返回结果
+ *
  * @param <T>
  */
 @Data
@@ -51,6 +52,10 @@ public class Result<T> implements Serializable {
         result.msg = msg;
         result.code = CodeConstant.ERROR;
         return result;
+    }
+
+    public static <T> Result<T> fail(String msg) {
+        return Result.error(msg);
     }
 
     public String toString() {

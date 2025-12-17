@@ -11,6 +11,9 @@
 
     <artifactId>fyrn-oms</artifactId>
 
+    <name>运维管理系统</name>
+    <description>运维管理系统, 包含redis管理, 系统参数管理, 用户认证, 任务管理</description>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

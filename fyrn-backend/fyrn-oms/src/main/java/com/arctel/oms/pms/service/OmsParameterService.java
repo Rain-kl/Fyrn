@@ -21,6 +21,8 @@ import com.arctel.common.baseDTO.QueryPage;
 import com.arctel.oms.pms.domain.entity.OmsParameter;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.io.Serializable;
+
 /**
 * @author ryan
 * @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
@@ -29,4 +31,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface OmsParameterService extends IService<OmsParameter> {
 
     QueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
+
+    @Override
+    default boolean save(OmsParameter entity) {
+        return IService.super.save(entity);
+    }
+
+    @Override
+    default boolean updateById(OmsParameter entity) {
+        return IService.super.updateById(entity);
+    }
+
+    @Override
+    default OmsParameter getById(Serializable id) {
+        return IService.super.getById(id);
+    }
 }

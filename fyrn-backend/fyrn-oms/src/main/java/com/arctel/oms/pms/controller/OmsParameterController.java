@@ -54,16 +54,19 @@ public class OmsParameterController {
     }
 
     /**
-     * 新增系统参数
+     * 修改系统参数
      *
      * @param input 分页输入对象
      * @return 分页结果
      */
-    @PostMapping("/add")
+    @PostMapping("/edit")
     public Result<String> add(@RequestBody AddParameterInput input) {
-        OmsParameter omsParameter = new OmsParameter();
-        BeanUtil.copyProperties(input, omsParameter);
-        omsParameterService.save(omsParameter);
-        return Result.success("新增成功");
+        OmsParameter omsParameterOld = omsParameterService.getById(input.getParamCode());
+        if(omsParameterOld!=null){
+            BeanUtil.copyProperties(input, omsParameterOld);
+            omsParameterService.updateById(omsParameterOld);
+            return Result.success("修改成功");
+        }
+        return Result.fail("参数不存在，修改失败");
     }
 }
