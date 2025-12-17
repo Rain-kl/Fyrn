@@ -17,8 +17,8 @@
 
 package com.arctel.mms.service;
 
-import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.common.utils.Result;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
@@ -39,6 +39,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
      * @param input
      * @return
      */
-    Result<QueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
+    Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
 }

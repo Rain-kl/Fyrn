@@ -17,9 +17,9 @@
 
 package com.arctel.domain.dto.input;
 
-import com.arctel.common.baseDTO.QueryPageInput;
+import com.arctel.oms.common.base.BaseQueryPageInput;
 import lombok.Data;
 
 @Data
-public class UMmsPageInput extends QueryPageInput {
+public class UMmsPageInput extends BaseQueryPageInput {
 }

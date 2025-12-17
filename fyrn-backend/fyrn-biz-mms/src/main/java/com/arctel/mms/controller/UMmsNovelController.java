@@ -17,8 +17,8 @@
 
 package com.arctel.mms.controller;
 
-import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.common.utils.Result;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
@@ -46,12 +46,12 @@ public class UMmsNovelController {
      * @return
      */
     @GetMapping("/local/page")
-    public Result<QueryPage<LocalFileSimpleDTO>> localPage(UMmsPageInput input) throws IOException {
+    public Result<BaseQueryPage<LocalFileSimpleDTO>> localPage(UMmsPageInput input) throws IOException {
         return uMmsNovelService.getUnprocessedLocalFile(input);
     }
 
     @GetMapping("/noevl/page")
-    public Result<QueryPage<MmsNovelFile>> novelPage(UMmsPageInput input) throws IOException {
+    public Result<BaseQueryPage<MmsNovelFile>> novelPage(UMmsPageInput input) throws IOException {
         return null;
     }
 

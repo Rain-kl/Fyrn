@@ -17,14 +17,13 @@
 
 package com.arctel.domain.dto.input;
 
-import com.arctel.common.baseDTO.QueryPageInput;
-import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.oms.common.base.BaseQueryPageInput;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MmsPageInput extends QueryPageInput {
+public class MmsPageInput extends BaseQueryPageInput {
 
     /**
      * 小说名称

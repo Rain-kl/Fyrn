@@ -15,19 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.oms.common.base;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.domain.dao.entity.MmsNovel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * MmsNovelBizService, 本地小说业务服务
- *
- * @author Arctel
- * @date 2024-06-10
+ * 封装分页查询结果
  */
-public interface MmsNovelService   {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class BaseQueryPage<T> implements Serializable {
 
-    BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
+    private long total;
+    private int pageSize;
+    private int currentPage;
+    private List<T> rows;
 
 }

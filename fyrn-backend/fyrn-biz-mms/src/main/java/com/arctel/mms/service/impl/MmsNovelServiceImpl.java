@@ -17,7 +17,7 @@
 
 package com.arctel.mms.service.impl;
 
-import com.arctel.common.baseDTO.QueryPage;
+import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelService;
@@ -34,7 +34,7 @@ import java.util.List;
 public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         implements MmsNovelService {
     @Override
-    public QueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize) {
+    public BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize) {
 //        设置分页
         IPage<MmsNovel> page = new Page<>(pageNo, pageSize);
 
@@ -51,6 +51,6 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         List<MmsNovel> ordersList = result.getRecords();
 
 
-        return new QueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
+        return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
 }

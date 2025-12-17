@@ -15,19 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.oms.biz.pms.domain.dto;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Data;
 
-/**
- * MmsNovelBizService, 本地小说业务服务
- *
- * @author Arctel
- * @date 2024-06-10
- */
-public interface MmsNovelService   {
+@Data
+public class QueryParameterInput extends BaseQueryPageInput {
 
-    BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
+    /**
+     * 主键
+     */
+    private Long paramCode = null;
 
+    /**
+     * 参数名称
+     */
+    private String paramName = null;
+
+    /**
+     * 是否启用
+     */
+    private Integer enabledFlag = 1;
 }

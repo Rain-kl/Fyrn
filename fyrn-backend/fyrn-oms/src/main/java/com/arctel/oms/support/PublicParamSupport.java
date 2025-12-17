@@ -15,19 +15,22 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.oms.support;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.oms.biz.pms.domain.entity.OmsParameter;
+import com.arctel.oms.biz.pms.domain.mapper.OmsParameterMapper;
+import org.springframework.stereotype.Component;
 
-/**
- * MmsNovelBizService, 本地小说业务服务
- *
- * @author Arctel
- * @date 2024-06-10
- */
-public interface MmsNovelService   {
+import javax.annotation.Resource;
 
-    BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
+@Component
+public class PublicParamSupport {
 
+    @Resource
+    private OmsParameterMapper omsParameterMapper;
+
+    public Object getParamValueByCode(int paramCode) {
+        OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
+        return omsParameter.getParamValue();
+    }
 }

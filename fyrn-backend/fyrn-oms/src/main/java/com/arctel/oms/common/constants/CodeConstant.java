@@ -15,19 +15,9 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.oms.common.constants;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.domain.dao.entity.MmsNovel;
-
-/**
- * MmsNovelBizService, 本地小说业务服务
- *
- * @author Arctel
- * @date 2024-06-10
- */
-public interface MmsNovelService   {
-
-    BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
-
+public class CodeConstant {
+    public static final Integer SUCCESS = 200;
+    public static final Integer ERROR = 4000;
 }

@@ -17,7 +17,7 @@
 
 package com.arctel.common.exception;
 
-import com.arctel.common.utils.Result;
+import com.arctel.oms.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;

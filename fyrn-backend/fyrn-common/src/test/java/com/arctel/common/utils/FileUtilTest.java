@@ -1,13 +1,10 @@
 package com.arctel.common.utils;
 
+import com.arctel.oms.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class FileUtilTest {

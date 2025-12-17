@@ -15,19 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.service;
+package com.arctel.oms.biz.pms.domain.mapper;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.oms.biz.pms.domain.entity.OmsParameter;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * MmsNovelBizService, 本地小说业务服务
- *
- * @author Arctel
- * @date 2024-06-10
- */
-public interface MmsNovelService   {
-
-    BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Mapper
+* @createDate 2025-12-14 15:12:52
+* @Entity generator.domain.OmsParameter
+*/
+public interface OmsParameterMapper extends BaseMapper<OmsParameter> {
 
 }
+
+
+
+

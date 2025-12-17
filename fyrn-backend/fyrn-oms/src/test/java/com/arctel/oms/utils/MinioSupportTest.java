@@ -17,7 +17,7 @@
 
 package com.arctel.oms.utils;
 
-import com.arctel.oms.oos.MinioSupport;
+import com.arctel.oms.support.MinioSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

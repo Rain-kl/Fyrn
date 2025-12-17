@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.arctel.oms.job.mapper.OmsJobMapper">
+<mapper namespace="com.arctel.oms.biz.job.mapper.OmsJobMapper">
 
-    <resultMap id="BaseResultMap" type="com.arctel.oms.job.domain.OmsJob">
+    <resultMap id="BaseResultMap" type="com.arctel.oms.biz.job.domain.OmsJob">
             <id property="id" column="id" />
             <result property="jobId" column="job_id" />
             <result property="taskType" column="task_type" />

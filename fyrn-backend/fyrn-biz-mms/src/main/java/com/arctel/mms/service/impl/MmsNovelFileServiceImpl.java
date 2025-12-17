@@ -17,11 +17,11 @@
 
 package com.arctel.mms.service.impl;
 
-import com.arctel.common.baseDTO.QueryPage;
-import com.arctel.common.utils.FileUtil;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.utils.FileUtil;
 import com.arctel.common.utils.NovelUtil;
-import com.arctel.common.utils.PagingUtil;
-import com.arctel.common.utils.Result;
+import com.arctel.oms.utils.PagingUtil;
+import com.arctel.oms.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
@@ -29,8 +29,8 @@ import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
-import com.arctel.oms.oos.OosSupport;
-import com.arctel.oms.pms.utils.PublicParamSupport;
+import com.arctel.oms.biz.oos.OosSupport;
+import com.arctel.oms.support.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -60,15 +60,15 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     OosSupport oosSupport;
 
     @Override
-    public Result<QueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
+    public Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
         String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
         List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
 
-        QueryPage<Path> page = PagingUtil.page(
+        BaseQueryPage<Path> page = PagingUtil.page(
                 allTxtFiles, input.getPageNo(), input.getPageSize(),
                 Comparator.comparing(Path::getFileName), Objects::nonNull
         );
-        QueryPage<LocalFileSimpleDTO> localFileSimpleDTOQueryPage = new QueryPage<>();
+        BaseQueryPage<LocalFileSimpleDTO> localFileSimpleDTOQueryPage = new BaseQueryPage<>();
         localFileSimpleDTOQueryPage.setCurrentPage(page.getCurrentPage());
         localFileSimpleDTOQueryPage.setPageSize(page.getPageSize());
         localFileSimpleDTOQueryPage.setTotal(page.getTotal());

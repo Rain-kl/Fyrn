@@ -77,6 +77,12 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.14.0</version>
+            </dependency>
+
             <!--
       Source - https://stackoverflow.com/a
       Posted by jcompetence, modified by community. See post 'Timeline' for change history
