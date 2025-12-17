@@ -22,8 +22,8 @@ import cn.hutool.core.bean.BeanUtil;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.domain.OmsParameter;
-import com.arctel.oms.domain.dto.AddParameterInput;
-import com.arctel.oms.domain.dto.QueryParameterInput;
+import com.arctel.oms.domain.input.AddParameterInput;
+import com.arctel.oms.domain.input.QueryParameterInput;
 import com.arctel.oms.service.OmsParameterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +60,7 @@ public class OmsParameterController {
      * @return 分页结果
      */
     @PostMapping("/edit")
-    public Result<String> add(@RequestBody AddParameterInput input) {
+    public Result<String> addParameter(@RequestBody AddParameterInput input) {
         OmsParameter omsParameterOld = omsParameterService.getById(input.getParamCode());
         if(omsParameterOld!=null){
             BeanUtil.copyProperties(input, omsParameterOld);

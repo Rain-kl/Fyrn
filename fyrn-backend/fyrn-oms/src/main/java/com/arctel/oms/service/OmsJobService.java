@@ -17,17 +17,25 @@
 
 package com.arctel.oms.service;
 
-import com.arctel.oms.domain.OmsJob;
 import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.domain.OmsJob;
+import com.arctel.oms.domain.input.GetJobDetailInput;
+import com.arctel.oms.domain.input.UpdateJobInput;
+import com.arctel.oms.domain.input.UpdateJobProgressInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
-* @author hspcadmin
-* @description 针对表【oms_job(任务表)】的数据库操作Service
-* @createDate 2025-12-16 11:27:56
-*/
+ * @author hspcadmin
+ * @description 针对表【oms_job(任务表)】的数据库操作Service
+ * @createDate 2025-12-16 11:27:56
+ */
 public interface OmsJobService extends IService<OmsJob> {
 
     BaseQueryPage<OmsJob> pageJob(OmsJob omsJob, Integer pageNo, Integer pageSize);
 
+    OmsJob getJobDetail(GetJobDetailInput input);
+
+    boolean updateJobProgress(UpdateJobProgressInput input);
+
+    boolean updateJob(UpdateJobInput input);
 }

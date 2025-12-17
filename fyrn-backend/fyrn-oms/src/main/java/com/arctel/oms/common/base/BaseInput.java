@@ -20,7 +20,7 @@ package com.arctel.oms.common.base;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@Data
+
 public class BaseInput {
 
     /**

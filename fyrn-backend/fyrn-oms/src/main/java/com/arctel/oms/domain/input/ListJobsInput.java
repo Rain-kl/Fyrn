@@ -15,16 +15,15 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.dto;
+package com.arctel.oms.domain.input;
 
 import com.arctel.oms.common.base.BaseQueryPageInput;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class listJobsInput extends BaseQueryPageInput {
+public class ListJobsInput extends BaseQueryPageInput {
 
     /**
      * 业务任务ID(对外返回)

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.dto;
+package com.arctel.oms.domain.input;
 
 import com.arctel.oms.common.base.BaseInput;
 import lombok.Data;
