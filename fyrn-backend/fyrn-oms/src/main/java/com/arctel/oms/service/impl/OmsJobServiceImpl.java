@@ -24,6 +24,7 @@ import com.arctel.oms.common.constants.JobStatus;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.domain.OmsJob;
 import com.arctel.oms.domain.dto.JobProgressDto;
+import com.arctel.oms.domain.input.CreateJobInput;
 import com.arctel.oms.domain.input.GetJobDetailInput;
 import com.arctel.oms.domain.input.UpdateJobInput;
 import com.arctel.oms.domain.input.UpdateJobProgressInput;
@@ -81,7 +82,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
                                 OmsJob::getTaskType, omsJob.getTaskType())
                         .like(omsJob.getStatus() != null,
                                 OmsJob::getStatus, omsJob.getStatus())
-                        .orderByDesc(OmsJob::getId)
+                        .orderByDesc(OmsJob::getJobId)
         );
 //
         List<OmsJob> ordersList = result.getRecords();
@@ -101,6 +102,18 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     }
 
     @Override
+    public OmsJob createJob(CreateJobInput input) {
+        String taskType = input.getTask_type();
+        String message = input.getMessage();
+        OmsJob omsJob = new OmsJob();
+        omsJob.setStatus(JobStatus.PENDING.getValue());
+        omsJob.setTaskType(taskType);
+        omsJob.setMessage(message);
+        save(omsJob);
+        return omsJob;
+    }
+
+    @Override
     public boolean updateJobProgress(UpdateJobProgressInput input) {
         String key = JOB_PROGRESS_KEY_PREFIX + input.getJobId();
         redisTemplate.opsForValue().set(key, input.getJobProgressDto());
@@ -110,12 +123,18 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     @Override
     public boolean updateJob(UpdateJobInput input) {
         OmsJob omsJob = getJobById(input.getJobId());
-        omsJob.setStatus(input.getStatus());
-        omsJob.setMessage(input.getMessage());
-        // 任务完成
-        if (input.getStatus().equals(JobStatus.SUCCESS.getValue())) {
-            omsJob.setFinishedTime(new Date());
+        Integer newStatus = input.getStatus();
+        if (newStatus.equals(JobStatus.SUCCESS.getValue())) {
+            if(omsJob.getStatus().equals(JobStatus.RUNNING.getValue())){
+                omsJob.setFinishedTime(new Date());
+            } else {
+                throw new BizException(ErrorConstant.COMMON_ERROR, "只有运行中的任务才能设置为成功");
+            }
         }
+        omsJob.setStatus(newStatus);
+        String newMessage = input.getMessage();
+        String newUpdateMessage = omsJob.getMessage()+"\n" + "[" + new Date() + "] " + newMessage;
+        omsJob.setMessage(newUpdateMessage);
         return updateById(omsJob);
     }
 }

@@ -2,11 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.arctel.oms.mapper.OmsJobMapper">
+<mapper namespace="generator.mapper.OmsJobMapper">
 
-    <resultMap id="BaseResultMap" type="com.arctel.oms.domain.OmsJob">
-            <id property="id" column="id" />
-            <result property="jobId" column="job_id" />
+    <resultMap id="BaseResultMap" type="generator.domain.OmsJob">
+            <id property="jobId" column="job_id" />
             <result property="taskType" column="task_type" />
             <result property="status" column="status" />
             <result property="message" column="message" />
@@ -18,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,job_id,task_type,status,message,created_user,
-        started_time,finished_time,create_time,update_time
+        job_id,task_type,status,message,created_user,started_time,
+        finished_time,create_time,update_time
     </sql>
 </mapper>

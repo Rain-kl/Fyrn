@@ -32,8 +32,7 @@ CREATE TABLE `oms_parameter`
 DROP TABLE IF EXISTS `oms_job`;
 CREATE TABLE oms_job
 (
-    `id`            BIGINT UNSIGNED NOT NULL,
-    `job_id`        VARCHAR(64)     NOT NULL COMMENT '业务任务ID(对外返回)',
+    `job_id`        VARCHAR(64)     NOT NULL COMMENT '业务任务ID',
     `task_type`     VARCHAR(64)     NOT NULL COMMENT '任务类型，如 file_batch',
     `status`        TINYINT         NOT NULL COMMENT '0=queued,1=running,2=success,3=failed,4=canceled',
     `message`       VARCHAR(1024)   NULL COMMENT '状态说明/失败摘要',
@@ -43,8 +42,7 @@ CREATE TABLE oms_job
     `create_time`   DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
 
-    PRIMARY KEY (id),
-    UNIQUE KEY uk_job_id (job_id),
+    PRIMARY KEY (job_id),
     KEY idx_status_updated (status, update_time),
     KEY idx_task_type_created (task_type, create_time)
 ) ENGINE = InnoDB

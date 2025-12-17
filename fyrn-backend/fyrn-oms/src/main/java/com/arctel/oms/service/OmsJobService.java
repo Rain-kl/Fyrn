@@ -19,6 +19,7 @@ package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.domain.OmsJob;
+import com.arctel.oms.domain.input.CreateJobInput;
 import com.arctel.oms.domain.input.GetJobDetailInput;
 import com.arctel.oms.domain.input.UpdateJobInput;
 import com.arctel.oms.domain.input.UpdateJobProgressInput;
@@ -34,6 +35,8 @@ public interface OmsJobService extends IService<OmsJob> {
     BaseQueryPage<OmsJob> pageJob(OmsJob omsJob, Integer pageNo, Integer pageSize);
 
     OmsJob getJobDetail(GetJobDetailInput input);
+
+    OmsJob createJob(CreateJobInput input);
 
     boolean updateJobProgress(UpdateJobProgressInput input);
 

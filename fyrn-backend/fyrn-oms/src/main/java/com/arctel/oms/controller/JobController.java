@@ -20,10 +20,7 @@ package com.arctel.oms.controller;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.domain.OmsJob;
-import com.arctel.oms.domain.input.GetJobDetailInput;
-import com.arctel.oms.domain.input.ListJobsInput;
-import com.arctel.oms.domain.input.UpdateJobInput;
-import com.arctel.oms.domain.input.UpdateJobProgressInput;
+import com.arctel.oms.domain.input.*;
 import com.arctel.oms.service.OmsJobService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +59,11 @@ public class JobController {
     @PostMapping("/updateJob")
     public Result<Boolean> updateJobInput(UpdateJobInput input) {
         return Result.success(omsJobService.updateJob(input));
+    }
+
+    @PostMapping("/create")
+    public Result<OmsJob> createJob(CreateJobInput input) {
+        return Result.success(omsJobService.createJob(input));
     }
 
 }
