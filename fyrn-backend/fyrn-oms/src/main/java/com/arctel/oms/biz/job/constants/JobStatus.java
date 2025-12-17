@@ -4,17 +4,20 @@ import lombok.Getter;
 
 @Getter
 public enum JobStatus {
-    PENDING("PENDING", "等待中"),
-    RUNNING("RUNNING", "运行中"),
-    SUCCESS("SUCCESS", "成功"),
-    FAILED("FAILED", "失败"),
-    CANCELLED("CANCELLED", "已取消");
+    PENDING("QUEUED",0, "列队中"),
+    RUNNING("RUNNING", 1,"运行中"),
+    SUCCESS("SUCCESS",2, "成功"),
+    FAILED("FAILED",3, "失败"),
+    CANCELLED("CANCELLED", 4,"已取消");
 
     private final String code;
     private final String description;
+    private final int value;
 
-    JobStatus(String code, String description) {
+
+    JobStatus(String code,int value, String description) {
         this.code = code;
+        this.value = value;
         this.description = description;
     }
 

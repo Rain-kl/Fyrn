@@ -1,6 +1,7 @@
 package com.arctel.oms.biz.job.controller;
 
 import com.arctel.oms.biz.job.domain.OmsJob;
+import com.arctel.oms.biz.job.domain.dto.listJobsInput;
 import com.arctel.oms.biz.job.service.OmsJobService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.utils.Result;
@@ -19,9 +20,11 @@ public class JobController {
     OmsJobService omsJobService;
 
     @GetMapping("/list")
-    public Result<BaseQueryPage<OmsJob>> listJobs() {
-
-        return null;
+    public Result<BaseQueryPage<OmsJob>> listJobs(listJobsInput input) {
+        OmsJob omsJob = new OmsJob();
+        omsJob.setJobId(input.getJobId());
+        omsJob.setTaskType(input.getTaskType());
+        omsJob.setStatus(input.getStatus());
+        return Result.success(omsJobService.pageJob(omsJob, input.getPageNo(), input.getPageSize()));
     }
-
 }
