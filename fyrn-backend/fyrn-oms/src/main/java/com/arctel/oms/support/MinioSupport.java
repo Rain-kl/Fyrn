@@ -18,8 +18,9 @@
 package com.arctel.oms.support;
 
 import com.arctel.oms.common.exception.BizException;
-import com.arctel.oms.biz.oos.OosSupport;
-import com.arctel.oms.biz.oos.OssProperties;
+import com.arctel.oms.config.OssProperties;
+import com.arctel.oms.service.OosService;
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import jakarta.annotation.PostConstruct;
@@ -28,11 +29,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
-
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Slf4j
 @Component
-public class MinioSupport implements OosSupport {
+public class MinioSupport implements OosService {
 
     @Resource
     OssProperties ossProperties;
@@ -48,26 +54,27 @@ public class MinioSupport implements OosSupport {
         log.info("MinIO client initialized with endpoint: {}", ossProperties.getEndpoint());
     }
 
-
     /**
-     * 文件上传
-     *
-     * @param bytes
-     * @param objectName
-     * @return
+     * 文件上传（byte[]）
      */
     public String upload(byte[] bytes, String objectName) {
+        return upload(bytes, objectName, "application/octet-stream");
+    }
+
+    /**
+     * 文件上传（byte[] + contentType）
+     */
+    public String upload(byte[] bytes, String objectName, String contentType) {
         String endpoint = ossProperties.getEndpoint();
         String bucketName = ossProperties.getBucketName();
 
         try {
-            // 上传文件
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
                             .object(objectName)
                             .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
-                            .contentType("application/octet-stream")
+                            .contentType(contentType == null ? "application/octet-stream" : contentType)
                             .build()
             );
         } catch (Exception e) {
@@ -75,23 +82,90 @@ public class MinioSupport implements OosSupport {
             throw new BizException("文件上传失败:" + e.getMessage());
         }
 
-        // 文件访问路径规则 http://endpoint/bucketName/objectName
-        StringBuilder stringBuilder = new StringBuilder();
+        String path = "/" + bucketName + "/" + objectName;
+        log.info("文件上传到:{}", path);
+        return path;
+    }
 
-        // 处理endpoint，如果没有http://或https://前缀，默认添加http://
-        if (!endpoint.startsWith("http://") && !endpoint.startsWith("https://")) {
-            stringBuilder.append("http://");
+    /**
+     * 下载文件（流式传输）
+     * <p>
+     * 返回 InputStream（实际类型 GetObjectResponse），调用方用完必须 close。
+     */
+    public InputStream downloadStream(String objectName) {
+        String bucketName = ossProperties.getBucketName();
+        try {
+            // GetObjectResponse extends InputStream
+            return minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error("文件下载失败: {}", e.getMessage(), e);
+            throw new BizException("文件下载失败:" + e.getMessage());
         }
+    }
 
-        stringBuilder
-                .append(endpoint.replaceFirst("^https?://", ""))
-                .append("/")
-                .append(bucketName)
-                .append("/")
-                .append(objectName);
+    /**
+     * 辅助：下载并返回 byte[]
+     * 注意：大文件不建议用此方法（会占用大量内存），优先用 downloadStream()。
+     */
+    public byte[] downloadBytes(String objectName) {
+        try (InputStream in = downloadStream(objectName);
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            copy(in, out);
+            return out.toByteArray();
+        } catch (Exception e) {
+            log.error("文件下载为字节数组失败: {}", e.getMessage(), e);
+            throw new BizException("文件下载为字节数组失败:" + e.getMessage());
+        }
+    }
 
-        log.info("文件上传到:{}", stringBuilder.toString());
+    /**
+     * 辅助：下载并保存到本地文件
+     *
+     * @return 保存后的目标路径
+     */
+    public Path downloadToFile(String objectName, Path targetFile) {
+        try {
+            // 确保父目录存在
+            Path parent = targetFile.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
 
-        return stringBuilder.toString();
+            try (InputStream in = downloadStream(objectName);
+                 OutputStream out = Files.newOutputStream(
+                         targetFile,
+                         StandardOpenOption.CREATE,
+                         StandardOpenOption.TRUNCATE_EXISTING,
+                         StandardOpenOption.WRITE
+                 )) {
+                copy(in, out);
+            }
+
+            log.info("文件已保存到本地: {}", targetFile.toAbsolutePath());
+            return targetFile;
+        } catch (Exception e) {
+            log.error("文件下载并保存本地失败: {}", e.getMessage(), e);
+            throw new BizException("文件下载并保存本地失败:" + e.getMessage());
+        }
+    }
+
+    /**
+     * 通用 copy（8KB buffer）
+     */
+    private static long copy(InputStream in, OutputStream out) throws Exception {
+        byte[] buffer = new byte[8192];
+        long total = 0;
+        int len;
+        while ((len = in.read(buffer)) != -1) {
+            out.write(buffer, 0, len);
+            total += len;
+        }
+        out.flush();
+        return total;
     }
 }

@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.service;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.oms.domain.OmsJob;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
+/**
+* @author hspcadmin
+* @description 针对表【oms_job(任务表)】的数据库操作Service
+* @createDate 2025-12-16 11:27:56
+*/
+public interface OmsJobService extends IService<OmsJob> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
+    BaseQueryPage<OmsJob> pageJob(OmsJob omsJob, Integer pageNo, Integer pageSize);
 
 }

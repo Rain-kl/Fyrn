@@ -15,19 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.mapper;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.oms.domain.OmsJob;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
+/**
+* @author hspcadmin
+* @description 针对表【oms_job(任务表)】的数据库操作Mapper
+* @createDate 2025-12-16 11:27:56
+* @Entity generator.domain.OmsJob
+*/
+public interface OmsJobMapper extends BaseMapper<OmsJob> {
 
 }
+
+
+
+

@@ -15,22 +15,35 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.support;
+package com.arctel.oms.service;
 
+import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.domain.OmsParameter;
-import com.arctel.oms.mapper.OmsParameterMapper;
-import org.springframework.stereotype.Component;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-import javax.annotation.Resource;
+import java.io.Serializable;
 
-@Component
-public class PublicParamSupport {
+/**
+* @author ryan
+* @description 针对表【oms_parameter(系统参数表)】的数据库操作Service
+* @createDate 2025-12-14 15:12:52
+*/
+public interface OmsParameterService extends IService<OmsParameter> {
 
-    @Resource
-    private OmsParameterMapper omsParameterMapper;
+    BaseQueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 
-    public Object getParamValueByCode(int paramCode) {
-        OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
-        return omsParameter.getParamValue();
+    @Override
+    default boolean save(OmsParameter entity) {
+        return IService.super.save(entity);
+    }
+
+    @Override
+    default boolean updateById(OmsParameter entity) {
+        return IService.super.updateById(entity);
+    }
+
+    @Override
+    default OmsParameter getById(Serializable id) {
+        return IService.super.getById(id);
     }
 }

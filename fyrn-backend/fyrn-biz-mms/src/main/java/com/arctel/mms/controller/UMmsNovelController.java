@@ -18,7 +18,7 @@
 package com.arctel.mms.controller;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.utils.Result;
+import com.arctel.oms.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;

@@ -15,42 +15,33 @@
  * limitations under the License.
  */
 
-package com.arctel.mms.controller;
+package com.arctel.oms.controller;
 
+import com.arctel.oms.domain.OmsJob;
+import com.arctel.oms.domain.dto.listJobsInput;
+import com.arctel.oms.service.OmsJobService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.domain.dao.entity.MmsNovel;
-import com.arctel.domain.dto.input.MmsPageInput;
-import com.arctel.mms.service.MmsNovelService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.validation.annotation.Validated;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-
-@RequestMapping("/mms")
+/**
+ * 任务调度控制器
+ */
+@RequestMapping("/oms/job")
 @RestController
-@Validated
-public class MmsNovelController {
-
+public class JobController {
     @Resource
-    MmsNovelService mmsNovelService;
+    OmsJobService omsJobService;
 
-    /**
-     * 小说分页列表
-     * @param input 分页输入对象
-     * @return 分页结果
-     */
-    @GetMapping("/page")
-    public Result<BaseQueryPage<MmsNovel>> page(MmsPageInput input) {
-
-        MmsNovel mmsNovel = new MmsNovel();
-        BeanUtils.copyProperties(input, mmsNovel);
-
-        BaseQueryPage<MmsNovel> mmsNovelQueryPage = mmsNovelService.pageMmsNovel(
-                mmsNovel, input.getPageNo(), input.getPageSize());
-        return Result.success(mmsNovelQueryPage);
+    @GetMapping("/list")
+    public Result<BaseQueryPage<OmsJob>> listJobs(listJobsInput input) {
+        OmsJob omsJob = new OmsJob();
+        omsJob.setJobId(input.getJobId());
+        omsJob.setTaskType(input.getTaskType());
+        omsJob.setStatus(input.getStatus());
+        return Result.success(omsJobService.pageJob(omsJob, input.getPageNo(), input.getPageSize()));
     }
 }

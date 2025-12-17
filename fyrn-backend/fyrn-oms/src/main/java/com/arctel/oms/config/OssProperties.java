@@ -15,19 +15,18 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.config;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
-
+@Data
+@Component
+@ConfigurationProperties(prefix = "minio")
+public class OssProperties {
+    private String endpoint;
+    private String accessKeyId;
+    private String accessKeySecret;
+    private String bucketName;
 }

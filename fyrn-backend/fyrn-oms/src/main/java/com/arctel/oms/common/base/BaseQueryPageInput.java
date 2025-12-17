@@ -18,11 +18,11 @@
 package com.arctel.oms.common.base;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 封装分页查询结果
  */
-@Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,12 +31,25 @@ public class BaseQueryPageInput extends BaseInput {
     /**
      * 当前页码
      */
-    private int pageNo;
+    private Integer pageNo = 1;
 
     /**
      * 每页记录数
      */
-    private int pageSize;
+    private Integer pageSize = 20;
 
+    /**
+     * 获取当前页码，如果为空则返回默认值1
+     */
+    public Integer getPageNo() {
+        return pageNo == null ? 1 : pageNo;
+    }
+
+    /**
+     * 获取每页记录数，如果为空则返回默认值20
+     */
+    public Integer getPageSize() {
+        return pageSize == null ? 20 : pageSize;
+    }
 
 }

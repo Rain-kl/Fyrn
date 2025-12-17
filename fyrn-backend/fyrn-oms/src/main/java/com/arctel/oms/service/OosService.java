@@ -15,19 +15,10 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.service;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+public interface OosService {
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
+    String upload(byte[] bytes, String objectName);
 
 }

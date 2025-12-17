@@ -15,19 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.domain.dto;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Data;
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
+@Data
+public class QueryParameterInput extends BaseQueryPageInput {
 
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
+    /**
+     * 主键
+     */
+    private Long paramCode = null;
 
+    /**
+     * 参数名称
+     */
+    private String paramName = null;
+
+    /**
+     * 是否启用
+     */
+    private Integer enabledFlag = 1;
 }

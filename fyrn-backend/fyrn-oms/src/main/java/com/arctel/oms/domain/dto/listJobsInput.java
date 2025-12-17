@@ -15,19 +15,30 @@
  * limitations under the License.
  */
 
-package com.arctel.oms;
+package com.arctel.oms.domain.dto;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@SpringBootApplication
-@MapperScan("com.arctel.oms.mapper")
-class OmsApplication {
+@Getter
+@Setter
+public class listJobsInput extends BaseQueryPageInput {
 
-    public static void main(String[] args) {
-        SpringApplication.run(OmsApplication.class, args);
-    }
+    /**
+     * 业务任务ID(对外返回)
+     */
+    private String jobId = null;
+
+    /**
+     * 任务类型，如 file_batch
+     */
+    private String taskType = null;
+
+    /**
+     * 0=queued,1=running,2=success,3=failed,4=canceled
+     */
+    private Integer status = null;
 
 }
