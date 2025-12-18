@@ -17,5 +17,74 @@
 
 package com.arctel.oms.support;
 
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.common.utils.Result;
+import com.arctel.oms.domain.OmsJob;
+import com.arctel.oms.domain.input.*;
+import com.arctel.oms.service.OmsJobService;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Component;
+
+@Component
 public class JobSupport {
+
+
+    @Resource
+    OmsJobService omsJobService;
+
+
+    /**
+     * 创建新任务
+     *
+     * @param input
+     * @return
+     */
+    public Result<OmsJob> createJob(CreateJobInput input) {
+        return Result.success(omsJobService.createJob(input));
+    }
+
+
+    /**
+     * 获取任务列表
+     *
+     * @param input
+     * @return
+     */
+    public Result<BaseQueryPage<OmsJob>> listJobs(ListJobsInput input) {
+        OmsJob omsJob = new OmsJob();
+        omsJob.setJobId(input.getJobId());
+        omsJob.setTaskType(input.getTaskType());
+        omsJob.setStatus(input.getStatus());
+        return Result.success(omsJobService.pageJob(omsJob, input.getPageNo(), input.getPageSize()));
+    }
+
+    /**
+     * 获取任务详情
+     *
+     * @param input
+     * @return
+     */
+    public Result<OmsJob> getJobDetail(GetJobDetailInput input) {
+        return Result.success(omsJobService.getJobDetail(input));
+    }
+
+    /**
+     * 更新任务进度
+     *
+     * @param input
+     * @return
+     */
+    public Result<Boolean> updateJobProgress(UpdateJobProgressInput input) {
+        return Result.success(omsJobService.updateJobProgress(input));
+    }
+
+    /**
+     * 更新任务信息
+     *
+     * @param input
+     * @return
+     */
+    public Result<Boolean> updateJobInput(UpdateJobInput input) {
+        return Result.success(omsJobService.updateJob(input));
+    }
 }

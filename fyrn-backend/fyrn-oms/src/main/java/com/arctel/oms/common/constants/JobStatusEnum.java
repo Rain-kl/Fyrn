@@ -20,7 +20,7 @@ package com.arctel.oms.common.constants;
 import lombok.Getter;
 
 @Getter
-public enum JobStatus {
+public enum JobStatusEnum {
     PENDING("QUEUED",0, "列队中"),
     RUNNING("RUNNING", 1,"运行中"),
     SUCCESS("SUCCESS",2, "成功"),
@@ -32,7 +32,7 @@ public enum JobStatus {
     private final int value;
 
 
-    JobStatus(String code,int value, String description) {
+    JobStatusEnum(String code, int value, String description) {
         this.code = code;
         this.value = value;
         this.description = description;
@@ -51,11 +51,11 @@ public enum JobStatus {
      * @param code 状态码
      * @return 对应的枚举，若未找到则返回 null
      */
-    public static JobStatus fromCode(String code) {
+    public static JobStatusEnum fromCode(String code) {
         if (code == null || code.isEmpty()) {
             return null;
         }
-        for (JobStatus status : JobStatus.values()) {
+        for (JobStatusEnum status : JobStatusEnum.values()) {
             if (status.code.equals(code)) {
                 return status;
             }

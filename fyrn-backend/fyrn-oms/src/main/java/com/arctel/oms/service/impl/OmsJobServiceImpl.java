@@ -20,7 +20,7 @@ package com.arctel.oms.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
-import com.arctel.oms.common.constants.JobStatus;
+import com.arctel.oms.common.constants.JobStatusEnum;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.domain.OmsJob;
 import com.arctel.oms.domain.dto.JobProgressDto;
@@ -43,6 +43,8 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
+import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_PROGRESS_KEY_PREFIX;
+
 /**
  * @author hspcadmin
  * @description 针对表【oms_job(任务表)】的数据库操作Service实现
@@ -55,7 +57,6 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    private static final String JOB_PROGRESS_KEY_PREFIX = "oms:job:progress:";
 
     private OmsJob getJobById(String jobId) {
         OmsJob omsJob = getBaseMapper().selectOne(
@@ -106,7 +107,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
         String taskType = input.getTask_type();
         String message = input.getMessage();
         OmsJob omsJob = new OmsJob();
-        omsJob.setStatus(JobStatus.PENDING.getValue());
+        omsJob.setStatus(JobStatusEnum.PENDING.getValue());
         omsJob.setTaskType(taskType);
         omsJob.setMessage(message);
         save(omsJob);
@@ -124,8 +125,8 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     public boolean updateJob(UpdateJobInput input) {
         OmsJob omsJob = getJobById(input.getJobId());
         Integer newStatus = input.getStatus();
-        if (newStatus.equals(JobStatus.SUCCESS.getValue())) {
-            if(omsJob.getStatus().equals(JobStatus.RUNNING.getValue())){
+        if (newStatus.equals(JobStatusEnum.SUCCESS.getValue())) {
+            if(omsJob.getStatus().equals(JobStatusEnum.RUNNING.getValue())){
                 omsJob.setFinishedTime(new Date());
             } else {
                 throw new BizException(ErrorConstant.COMMON_ERROR, "只有运行中的任务才能设置为成功");

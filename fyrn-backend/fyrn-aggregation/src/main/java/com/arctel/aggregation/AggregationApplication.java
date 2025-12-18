@@ -21,12 +21,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@MapperScan({
-        "com.arctel.domain.dao.mapper",
-        "com.arctel.oms.mapper"
-})
+@EnableScheduling
+@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.oms.mapper"})
 @ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
 class AggregationApplication {
 

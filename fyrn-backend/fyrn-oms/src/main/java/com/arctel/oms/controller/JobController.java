@@ -34,9 +34,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/oms/job")
 @RestController
 public class JobController {
+
     @Resource
     OmsJobService omsJobService;
 
+
+    /**
+     * 创建新任务
+     *
+     * @param input
+     * @return
+     */
+    @PostMapping("/create")
+    public Result<OmsJob> createJob(CreateJobInput input) {
+        return Result.success(omsJobService.createJob(input));
+    }
+
+
+    /**
+     * 获取任务列表
+     *
+     * @param input
+     * @return
+     */
     @GetMapping("/list")
     public Result<BaseQueryPage<OmsJob>> listJobs(ListJobsInput input) {
         OmsJob omsJob = new OmsJob();
@@ -46,24 +66,37 @@ public class JobController {
         return Result.success(omsJobService.pageJob(omsJob, input.getPageNo(), input.getPageSize()));
     }
 
+    /**
+     * 获取任务详情
+     *
+     * @param input
+     * @return
+     */
     @GetMapping("/detail")
     public Result<OmsJob> getJobDetail(GetJobDetailInput input) {
         return Result.success(omsJobService.getJobDetail(input));
     }
 
+    /**
+     * 更新任务进度
+     *
+     * @param input
+     * @return
+     */
     @PostMapping("/updateProgress")
     public Result<Boolean> updateJobProgress(UpdateJobProgressInput input) {
         return Result.success(omsJobService.updateJobProgress(input));
     }
 
+    /**
+     * 更新任务信息
+     *
+     * @param input
+     * @return
+     */
     @PostMapping("/updateJob")
     public Result<Boolean> updateJobInput(UpdateJobInput input) {
         return Result.success(omsJobService.updateJob(input));
-    }
-
-    @PostMapping("/create")
-    public Result<OmsJob> createJob(CreateJobInput input) {
-        return Result.success(omsJobService.createJob(input));
     }
 
 }
