@@ -68,26 +68,16 @@ public class ThreadPoolJobSupport extends JobSupport {
                 taskFutures.remove(omsJob.getJobId());
             }
         };
-        submitTask(omsJob, wrapper);
-        return Result.success(omsJob);
 
-    }
-
-
-    /**
-     * 提交一个可取消的任务
-     *
-     * @param omsJob 任务obj
-     * @param task   要执行的任务（必须支持中断！）
-     */
-    public void submitTask(OmsJob omsJob, Runnable task) {
         String jobId = omsJob.getJobId();
         if (taskFutures.containsKey(jobId)) {
             throw new IllegalArgumentException("Job ID already exists: " + jobId);
         }
 
-        Future<?> future = taskExecutor.submit(task);
+        Future<?> future = taskExecutor.submit(wrapper);
         taskFutures.put(jobId, future);
+        return Result.success(omsJob);
+
     }
 
     /**

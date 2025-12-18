@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: prod
   main:
     allow-circular-references: true
     banner-mode: off
@@ -27,7 +27,6 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
-
 
 minio:
   access-key-id: ${fyrn.minio.access-key-id}

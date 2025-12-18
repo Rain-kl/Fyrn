@@ -40,6 +40,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     @Override
     public boolean updateJobProgress(UpdateJobProgressInput input) {
         String key = JOB_PROGRESS_KEY_PREFIX + input.getJobId();
-        redisTemplate.opsForValue().set(key, input.getJobProgressDto());
+        redisTemplate.opsForValue().set(key, input.getJobProgressDto(), Duration.ofMinutes(10));
         return true;
     }
 
@@ -126,7 +127,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
         OmsJob omsJob = getJobById(input.getJobId());
         Integer newStatus = input.getStatus();
         if (newStatus.equals(JobStatusEnum.SUCCESS.getValue())) {
-            if(omsJob.getStatus().equals(JobStatusEnum.RUNNING.getValue())){
+            if (omsJob.getStatus().equals(JobStatusEnum.RUNNING.getValue())) {
                 omsJob.setFinishedTime(new Date());
             } else {
                 throw new BizException(ErrorConstant.COMMON_ERROR, "只有运行中的任务才能设置为成功");
@@ -134,7 +135,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
         }
         omsJob.setStatus(newStatus);
         String newMessage = input.getMessage();
-        String newUpdateMessage = omsJob.getMessage()+"\n" + "[" + new Date() + "] " + newMessage;
+        String newUpdateMessage = omsJob.getMessage() + "\n" + "[" + new Date() + "] " + newMessage;
         omsJob.setMessage(newUpdateMessage);
         return updateById(omsJob);
     }

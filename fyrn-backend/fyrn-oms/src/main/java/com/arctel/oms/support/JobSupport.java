@@ -84,7 +84,7 @@ public class JobSupport {
      * @param input
      * @return
      */
-    public Result<Boolean> updateJobInput(UpdateJobInput input) {
+    public Result<Boolean> updateJob(UpdateJobInput input) {
         return Result.success(omsJobService.updateJob(input));
     }
 }
