@@ -17,6 +17,7 @@
 
 package com.arctel.mms.service.impl;
 
+import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.service.OosService;
 import com.arctel.oms.common.utils.FileUtil;
@@ -33,6 +34,7 @@ import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.oms.support.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -85,6 +87,23 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         localFileSimpleDTOQueryPage.setRows(localFileSimpleDTOS);
 
         return Result.success(localFileSimpleDTOQueryPage);
+    }
+
+    @Override
+    public Result<String> syncMaterial(SyncMaterialInput input) throws IOException {
+        Integer size = input.getSize();
+        if(size == null || size <= 0) {
+            size = Integer.MAX_VALUE;
+        }
+        UMmsPageInput uMmsPageInput = new UMmsPageInput();
+        uMmsPageInput.setPageSize(size);
+        uMmsPageInput.setPageNo(1);
+        getUnprocessedLocalFile(uMmsPageInput);
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public void deleteProcessedFile() {
+
     }
 
     public void syncJob() throws IOException {

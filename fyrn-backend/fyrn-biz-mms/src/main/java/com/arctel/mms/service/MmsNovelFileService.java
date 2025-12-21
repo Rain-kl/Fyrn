@@ -17,6 +17,7 @@
 
 package com.arctel.mms.service;
 
+import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
@@ -41,4 +42,5 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
      */
     Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
+    Result<String> syncMaterial(SyncMaterialInput input) throws IOException;
 }

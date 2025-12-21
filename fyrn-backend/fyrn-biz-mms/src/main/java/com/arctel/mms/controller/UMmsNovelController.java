@@ -17,6 +17,7 @@
 
 package com.arctel.mms.controller;
 
+import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
@@ -49,6 +50,18 @@ public class UMmsNovelController {
     public Result<BaseQueryPage<LocalFileSimpleDTO>> localPage(UMmsPageInput input) throws IOException {
         return uMmsNovelService.getUnprocessedLocalFile(input);
     }
+
+    /**
+     * 同步素材到 oos
+     * @param input
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/syncMaterial")
+    public Result<String> syncMaterial(SyncMaterialInput input) throws IOException {
+        return uMmsNovelService.syncMaterial(input);
+    }
+
 
     @GetMapping("/noevl/page")
     public Result<BaseQueryPage<MmsNovelFile>> novelPage(UMmsPageInput input) throws IOException {
