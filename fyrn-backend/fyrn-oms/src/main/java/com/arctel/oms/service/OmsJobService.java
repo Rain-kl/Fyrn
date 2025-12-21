@@ -41,4 +41,8 @@ public interface OmsJobService extends IService<OmsJob> {
     boolean updateJobProgress(UpdateJobProgressInput input);
 
     boolean updateJob(UpdateJobInput input);
+
+    void updateLog(String jobId, String logMessage);
+
+    String getLog(String jobId);
 }

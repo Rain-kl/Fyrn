@@ -32,13 +32,13 @@ CREATE TABLE `oms_parameter`
 DROP TABLE IF EXISTS `oms_job`;
 CREATE TABLE oms_job
 (
-    `job_id`        VARCHAR(64)     NOT NULL COMMENT '业务任务ID',
-    `task_type`     VARCHAR(64)     NOT NULL COMMENT '任务类型，如 file_batch',
-    `status`        TINYINT         NOT NULL COMMENT '0=queued,1=running,2=success,3=failed,4=canceled',
-    `message`       VARCHAR(1024)   NULL COMMENT '状态说明/失败摘要',
-    `created_user`  VARCHAR(64)     NULL COMMENT '触发人',
-    `started_time`  DATETIME(3)     NULL COMMENT '任务开始时间',
-    `finished_time` DATETIME(3)     NULL COMMENT '任务结束时间',
+    `job_id`        VARCHAR(64)   NOT NULL COMMENT '业务任务ID',
+    `task_type`     VARCHAR(64)   NOT NULL COMMENT '任务类型，如 file_batch',
+    `status`        TINYINT       NOT NULL COMMENT '0=queued,1=running,2=success,3=failed,4=canceled',
+    `message`       VARCHAR(4096) NULL COMMENT '执行消息',
+    `created_user`  VARCHAR(64)   NULL COMMENT '触发人',
+    `started_time`  DATETIME(3)   NULL COMMENT '任务开始时间',
+    `finished_time` DATETIME(3)   NULL COMMENT '任务结束时间',
     `create_time`   DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
 

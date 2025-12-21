@@ -1,29 +1,21 @@
 package com.arctel.oms.support;
 
-import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.JobStatusEnum;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.domain.OmsJob;
 import com.arctel.oms.domain.dto.JobRunnable;
-import com.arctel.oms.domain.dto.ThreadPoolMetricsDTO;
-import com.arctel.oms.domain.input.*;
+import com.arctel.oms.domain.input.CreateJobInput;
+import com.arctel.oms.domain.input.UpdateJobInput;
 import com.arctel.oms.service.OmsJobService;
-import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import static com.arctel.oms.common.constants.RedisPrefixConstant.DEFAULT_THREAD_POOL_PREFIX;
 
 @Component
 public class ThreadPoolJobSupport extends JobSupport {
@@ -57,7 +49,8 @@ public class ThreadPoolJobSupport extends JobSupport {
                                 JobStatusEnum.RUNNING.getValue(),
                                 "Task is running")
                 );
-                task.run();
+
+                task.run(omsJob);
                 omsJobService.updateJob(
                         new UpdateJobInput(omsJob.getJobId(),
                                 JobStatusEnum.SUCCESS.getValue(),
