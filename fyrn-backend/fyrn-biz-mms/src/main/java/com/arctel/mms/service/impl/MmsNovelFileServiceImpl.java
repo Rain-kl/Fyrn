@@ -19,6 +19,10 @@ package com.arctel.mms.service.impl;
 
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.domain.dto.JobProgressDto;
+import com.arctel.oms.domain.dto.JobRunnable;
+import com.arctel.oms.domain.input.CreateJobInput;
+import com.arctel.oms.domain.input.UpdateJobProgressInput;
 import com.arctel.oms.service.OosService;
 import com.arctel.oms.common.utils.FileUtil;
 import com.arctel.common.utils.NovelUtil;
@@ -32,10 +36,12 @@ import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.oms.support.PublicParamSupport;
+import com.arctel.oms.support.ThreadPoolJobSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -44,6 +50,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Arctel
@@ -52,6 +59,11 @@ import java.util.Objects;
 @Service
 public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile>
         implements MmsNovelFileService {
+
+    @Resource
+    private MmsNovelFileService self; // 自注入自己（通过接口或实现类）
+
+
     @Resource
     PublicParamSupport publicParamSupport;
 
@@ -60,6 +72,9 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
     @Resource
     OosService oosSupport;
+
+    @Resource
+    ThreadPoolJobSupport threadPoolJobSupport;
 
     @Override
     public Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
@@ -92,18 +107,78 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     @Override
     public Result<String> syncMaterial(SyncMaterialInput input) throws IOException {
         Integer size = input.getSize();
-        if(size == null || size <= 0) {
+        if (size == null || size <= 0) {
             size = Integer.MAX_VALUE;
         }
         UMmsPageInput uMmsPageInput = new UMmsPageInput();
         uMmsPageInput.setPageSize(size);
         uMmsPageInput.setPageNo(1);
-        getUnprocessedLocalFile(uMmsPageInput);
-        throw new UnsupportedOperationException("Not implemented yet");
+        Result<BaseQueryPage<LocalFileSimpleDTO>> unprocessedLocalFile = getUnprocessedLocalFile(uMmsPageInput);
+        List<LocalFileSimpleDTO> rows = unprocessedLocalFile.getData().getRows();
+
+        CreateJobInput createJobInput = new CreateJobInput();
+        createJobInput.setMessage("同步物料到OOS");
+        createJobInput.setTask_type("sync material");
+
+        threadPoolJobSupport.createJob(createJobInput, new JobRunnable(threadPoolJobSupport) {
+            @Override
+            public void taskRun() {
+                AtomicInteger i = new AtomicInteger();
+                rows.forEach(f -> {
+                    JobProgressDto jobProgressDto = new JobProgressDto();
+                    jobProgressDto.setCurrent(i.get() + 1);
+                    jobProgressDto.setTotal(rows.size()); // 修正 total
+
+                    try {
+                        // 通过 self 调用，确保走 Spring 代理，事务生效
+                        self.syncLocalFile(f, input.getOperator());
+                    } catch (Exception e) {
+                        // 记录失败日志或更新 job 状态，但不中断其他文件处理
+                        threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
+                                omsJob.getJobId(),
+                                "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage(),
+                                jobProgressDto
+                        ));
+                        return;
+                    }
+
+                    threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
+                            omsJob.getJobId(),
+                            "Processed: " + f.getFileName(),
+                            jobProgressDto
+                    ));
+
+                    i.getAndIncrement();
+                });
+            }
+        });
+
+        return Result.success("Job started to sync material to OOS.");
     }
 
     public void deleteProcessedFile() {
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException {
+        String fileName = localFileSimpleDTO.getFileName();
+        String filePath = localFileSimpleDTO.getFilePath();
+        File file = new File(filePath);
+
+        List<String> novelBaseInfo = NovelUtil.extractTitleAndAuthor(fileName);
+        MmsNovelFile mmsNovelFile = new MmsNovelFile();
+        mmsNovelFile.setFileName(fileName);
+        mmsNovelFile.setFilePath(filePath);
+        mmsNovelFile.setFileSize(FileUtil.getFileSize(file.toPath()));
+        mmsNovelFile.setWordCount(NovelUtil.countWordsInFile(file));
+        mmsNovelFile.setCreatedUser(operator);
+        mmsNovelFile.setUpdatedUser(operator);
+        baseMapper.insert(mmsNovelFile);
+
+        byte[] fileBytes = FileUtil.fileToByteArray(file);
+        oosSupport.upload(fileBytes, fileName);
     }
 
     public void syncJob() throws IOException {

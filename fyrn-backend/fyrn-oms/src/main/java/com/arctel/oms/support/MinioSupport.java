@@ -65,7 +65,6 @@ public class MinioSupport implements OosService {
      * 文件上传（byte[] + contentType）
      */
     public String upload(byte[] bytes, String objectName, String contentType) {
-        String endpoint = ossProperties.getEndpoint();
         String bucketName = ossProperties.getBucketName();
 
         try {

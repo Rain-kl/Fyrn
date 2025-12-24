@@ -200,6 +200,11 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 文件转字节数组
+     * @param file 文件
+     * @return 字节数组
+     */
     public static byte[] fileToByteArray(File file) {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
              FileInputStream fis = new FileInputStream(file)) {

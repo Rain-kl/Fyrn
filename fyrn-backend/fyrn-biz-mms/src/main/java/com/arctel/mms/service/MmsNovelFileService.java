@@ -43,4 +43,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
     Result<String> syncMaterial(SyncMaterialInput input) throws IOException;
+
+    void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException;
 }

@@ -36,7 +36,7 @@ public class MmsNovelFile {
     private Long id;
 
     /**
-     * 小说ID
+     * 小说ID, 关联 mms_novel.id
      */
     private Long novelId;
 
