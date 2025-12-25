@@ -41,6 +41,8 @@ import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.oms.support.PublicParamSupport;
 import com.arctel.oms.support.ThreadPoolJobSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -82,6 +84,31 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
     @Resource
     ThreadPoolJobSupport threadPoolJobSupport;
+
+    /**
+     * 查询物料分页列表
+     * @param mmsNovelFile 接受filename, novelId查询条件
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public BaseQueryPage<MmsNovelFile> pageMmsNovelFile(MmsNovelFile mmsNovelFile, Integer pageNo, Integer pageSize) {
+        IPage<MmsNovelFile> page = new Page<>(pageNo, pageSize);
+
+        IPage<MmsNovelFile> result = page(
+                page,
+                new LambdaQueryWrapper<MmsNovelFile>()
+                        .like(mmsNovelFile.getFileName() != null,
+                                MmsNovelFile::getFileName, mmsNovelFile.getFileName())
+                        .like(mmsNovelFile.getNovelId() != null,
+                                MmsNovelFile::getNovelId, mmsNovelFile.getNovelId())
+                        .orderByDesc(MmsNovelFile::getId)
+        );
+
+        List<MmsNovelFile> ordersList = result.getRecords();
+        return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
+    }
 
     @Override
     public Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {

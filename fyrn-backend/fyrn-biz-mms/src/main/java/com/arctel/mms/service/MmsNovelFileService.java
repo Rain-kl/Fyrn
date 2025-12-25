@@ -17,6 +17,7 @@
 
 package com.arctel.mms.service;
 
+import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
@@ -35,11 +36,8 @@ import java.io.IOException;
  */
 public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
-    /**
-     * 获取本地小说文件分页列表, 未处理的小说文件
-     * @param input
-     * @return
-     */
+    BaseQueryPage<MmsNovelFile> pageMmsNovelFile(MmsNovelFile mmsNovelFile, Integer pageNo, Integer pageSize);
+
     Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
     Result<String> syncMaterial(SyncMaterialInput input) throws IOException;

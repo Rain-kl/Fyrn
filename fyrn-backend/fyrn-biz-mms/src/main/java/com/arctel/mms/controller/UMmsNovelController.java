@@ -17,13 +17,16 @@
 
 package com.arctel.mms.controller;
 
+import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dto.input.SyncMaterialInput;
+import com.arctel.domain.dto.input.UMmsNovelPageInput;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +55,26 @@ public class UMmsNovelController {
     }
 
     /**
+     * 查询物料分页列表
+     *
+     * @param input
+     * @return
+     */
+    @GetMapping("/noevl/page")
+    public Result<BaseQueryPage<MmsNovelFile>> novelPage(UMmsNovelPageInput input) {
+
+        MmsNovelFile mmsNovelFile = new MmsNovelFile();
+        BeanUtils.copyProperties(input, mmsNovelFile);
+
+        BaseQueryPage<MmsNovelFile> mmsNovelQueryPage = uMmsNovelService.pageMmsNovelFile(
+                mmsNovelFile, input.getPageNo(), input.getPageSize());
+        return Result.success(mmsNovelQueryPage);
+    }
+
+
+    /**
      * 同步素材到 oos
+     *
      * @param input
      * @return
      * @throws IOException
@@ -62,10 +84,17 @@ public class UMmsNovelController {
         return uMmsNovelService.syncMaterial(input);
     }
 
-
-    @GetMapping("/noevl/page")
-    public Result<BaseQueryPage<MmsNovelFile>> novelPage(UMmsPageInput input) throws IOException {
-        return null;
+    /**
+     * 同步小说到 mms
+     *
+     * @param input
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/syncNovel")
+    public Result<String> syncNovel(SyncMaterialInput input) throws IOException {
+        return uMmsNovelService.syncMaterial(input);
     }
+
 
 }
