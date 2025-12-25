@@ -17,20 +17,42 @@
 
 package com.arctel.oms.support;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.arctel.oms.api.PublicParamSupportAPI;
 import com.arctel.oms.domain.OmsParameter;
 import com.arctel.oms.mapper.OmsParameterMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
 @Component
-public class PublicParamSupport {
+public class PublicParamSupport extends PublicParamSupportAPI {
 
     @Resource
     private OmsParameterMapper omsParameterMapper;
 
+    /**
+     * 通过参数代码获取参数值
+     *
+     * @param paramCode
+     * @return
+     */
+    @Override
     public Object getParamValueByCode(int paramCode) {
         OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
-        return omsParameter.getParamValue();
+        if (ObjectUtil.isNull(omsParameter)) {
+            return null;
+        }
+        String paramValue = omsParameter.getParamValue();
+        if (StringUtils.isBlank(paramValue)) {
+            return null;
+        }
+        return paramValue;
+    }
+
+    @Override
+    public Object getParamValueByCode(String paramCode) {
+        return getParamValueByCode(Integer.parseInt(paramCode));
     }
 }

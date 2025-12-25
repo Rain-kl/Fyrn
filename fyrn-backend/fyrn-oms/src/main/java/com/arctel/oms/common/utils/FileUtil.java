@@ -56,6 +56,26 @@ public class FileUtil {
     }
 
     /**
+     * 删除文件或目录
+     *
+     * @param file
+     */
+    public static void deleteFile(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    deleteFile(f);
+                }
+            }
+        }
+        if (!file.delete()) {
+            log.warn("Failed to delete file: {}", file.getAbsolutePath());
+        }
+    }
+
+
+    /**
      * 计算两个输入流的综合相似度
      * 结合余弦相似度(权重6)和文件大小相似度(权重4)
      *
@@ -202,6 +222,7 @@ public class FileUtil {
 
     /**
      * 文件转字节数组
+     *
      * @param file 文件
      * @return 字节数组
      */

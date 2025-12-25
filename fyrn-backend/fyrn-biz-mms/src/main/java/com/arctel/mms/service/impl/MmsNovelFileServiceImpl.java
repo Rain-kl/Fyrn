@@ -42,6 +42,7 @@ import com.arctel.oms.support.PublicParamSupport;
 import com.arctel.oms.support.ThreadPoolJobSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
@@ -160,9 +162,6 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         return Result.success(job.getData().getJobId());
     }
 
-    public void deleteProcessedFile() {
-
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
@@ -184,6 +183,32 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
         byte[] fileBytes = FileUtil.fileToByteArray(file);
         oosSupport.upload(fileBytes, oosPath);
+        deleteProcessedFile(file);
+    }
+
+    /**
+     * 删除已处理的本地文件
+     *
+     * @param file
+     */
+    public void deleteProcessedFile(File file) throws IOException {
+        String rubbishPath = (String) publicParamSupport.getParamValueByCode(1002);
+        if (StringUtils.isBlank(rubbishPath)) {
+            FileUtil.deleteFile(file);
+        } else {
+            try {
+                Files.move(
+                        file.toPath(),
+                        Path.of(rubbishPath, file.getName())
+                );
+            } catch (Exception e) {
+                // 移动失败则重命名 +.bk
+                File renamedFile = new File(file.getAbsolutePath() + ".bk");
+                if (!file.renameTo(renamedFile)) {
+                    throw new IOException("Failed to rename file: " + file.getAbsolutePath());
+                }
+            }
+        }
     }
 
     @Override
@@ -194,7 +219,6 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         System.out.println("File preview (first 100 characters):");
         System.out.println(preview);
     }
-
 
 
     public void syncJob() throws IOException {
