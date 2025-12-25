@@ -57,6 +57,7 @@ public class MinioSupport implements OosService {
     /**
      * 文件上传（byte[]）
      */
+    @Override
     public String upload(byte[] bytes, String objectName) {
         return upload(bytes, objectName, "application/octet-stream");
     }
@@ -81,7 +82,7 @@ public class MinioSupport implements OosService {
             throw new BizException("文件上传失败:" + e.getMessage());
         }
 
-        String path = "/" + bucketName + "/" + objectName;
+        String path = "/" + bucketName + objectName;
         log.info("文件上传到:{}", path);
         return path;
     }
@@ -91,6 +92,7 @@ public class MinioSupport implements OosService {
      * <p>
      * 返回 InputStream（实际类型 GetObjectResponse），调用方用完必须 close。
      */
+    @Override
     public InputStream downloadStream(String objectName) {
         String bucketName = ossProperties.getBucketName();
         try {
@@ -111,6 +113,7 @@ public class MinioSupport implements OosService {
      * 辅助：下载并返回 byte[]
      * 注意：大文件不建议用此方法（会占用大量内存），优先用 downloadStream()。
      */
+    @Override
     public byte[] downloadBytes(String objectName) {
         try (InputStream in = downloadStream(objectName);
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -127,6 +130,7 @@ public class MinioSupport implements OosService {
      *
      * @return 保存后的目标路径
      */
+    @Override
     public Path downloadToFile(String objectName, Path targetFile) {
         try {
             // 确保父目录存在

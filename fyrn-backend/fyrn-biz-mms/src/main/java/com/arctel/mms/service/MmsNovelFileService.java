@@ -45,4 +45,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     Result<String> syncMaterial(SyncMaterialInput input) throws IOException;
 
     void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException;
+
+    void downloadNovelFile(String filePath);
 }

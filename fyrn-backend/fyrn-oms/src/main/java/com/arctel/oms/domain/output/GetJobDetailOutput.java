@@ -33,4 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 public class GetJobDetailOutput extends OmsJob {
 
     JobProgressDto jobProgressDto;
+
+    String jobLog;
 }

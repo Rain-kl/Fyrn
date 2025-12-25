@@ -17,8 +17,16 @@
 
 package com.arctel.oms.service;
 
+import java.io.InputStream;
+import java.nio.file.Path;
+
 public interface OosService {
 
     String upload(byte[] bytes, String objectName);
 
+    InputStream downloadStream(String objectName);
+
+    byte[] downloadBytes(String objectName);
+
+    Path downloadToFile(String objectName, Path targetFile);
 }

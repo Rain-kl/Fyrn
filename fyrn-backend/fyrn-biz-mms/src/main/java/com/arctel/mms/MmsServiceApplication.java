@@ -21,10 +21,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@MapperScan("com.arctel.domain.mapper")
-@ComponentScan(basePackages = {"com.arctel.mms","com.arctel.domain","com.arctel.common"})
+@EnableScheduling
+@EnableTransactionManagement
+@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.oms.mapper"})
+@ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
 class MmsServiceApplication {
 
     public static void main(String[] args) {

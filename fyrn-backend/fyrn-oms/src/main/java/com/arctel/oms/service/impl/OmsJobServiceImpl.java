@@ -98,9 +98,11 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
         OmsJob omsJob = getJobById(input.getJobId());
         JobProgressDto jobProgressDto = (JobProgressDto) redisTemplate.opsForValue()
                 .get(JOB_PROGRESS_KEY_PREFIX + input.getJobId());
+        String jobLog = getLog(input.getJobId());
         GetJobDetailOutput output = new GetJobDetailOutput();
         BeanUtils.copyProperties(omsJob, output);
         output.setJobProgressDto(jobProgressDto);
+        output.setJobLog(jobLog);
         return output;
     }
 
@@ -119,7 +121,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     @Override
     public synchronized boolean updateJobProgress(UpdateJobProgressInput input) {
         String bizLog = input.getLog();
-        if (StringUtils.isNotBlank(bizLog)){
+        if (StringUtils.isNotBlank(bizLog)) {
             updateLog(input.getJobId(), bizLog);
         }
         String key = JOB_PROGRESS_KEY_PREFIX + input.getJobId();
@@ -158,7 +160,7 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     public void updateLog(String jobId, String bizLog) {
         String key = JOB_LOG_KEY_PREFIX + jobId;
         // 追加到头部（最新在前）
-        String formatLog = "[" + new Date() + "] " + bizLog ;
+        String formatLog = "[" + new Date() + "] " + bizLog;
         redisTemplate.opsForList().leftPush(key, formatLog);
         // 只保留最近1万条
         redisTemplate.opsForList().trim(key, 0, 9999);

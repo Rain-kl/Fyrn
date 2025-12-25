@@ -99,4 +99,15 @@ public class JobController {
         return Result.success(omsJobService.updateJob(input));
     }
 
+    /**
+     * 获取任务日志
+     *
+     * @param logId
+     * @return
+     */
+    @PostMapping("/log")
+    public Result<String> getJobLog(String logId) {
+        return Result.success(omsJobService.getLog(logId));
+    }
+
 }

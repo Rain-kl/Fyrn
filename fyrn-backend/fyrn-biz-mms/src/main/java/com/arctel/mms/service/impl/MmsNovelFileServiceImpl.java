@@ -17,8 +17,11 @@
 
 package com.arctel.mms.service.impl;
 
+import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.lang.UUID;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.domain.OmsJob;
 import com.arctel.oms.domain.dto.JobProgressDto;
 import com.arctel.oms.domain.dto.JobRunnable;
 import com.arctel.oms.domain.input.CreateJobInput;
@@ -59,6 +62,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile>
         implements MmsNovelFileService {
+
+    public static final String OOS_FILE_PATH = "/novels";
 
     @Resource
     private MmsNovelFileService self; // 自注入自己（通过接口或实现类）
@@ -120,7 +125,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         createJobInput.setMessage("同步物料到OOS");
         createJobInput.setTask_type("sync material");
 
-        threadPoolJobSupport.createJob(createJobInput, new JobRunnable(threadPoolJobSupport) {
+        Result<OmsJob> job = threadPoolJobSupport.createJob(createJobInput, new JobRunnable(threadPoolJobSupport) {
             @Override
             public void taskRun() {
                 AtomicInteger i = new AtomicInteger();
@@ -141,7 +146,6 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
                         ));
                         return;
                     }
-
                     threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
                             omsJob.getJobId(),
                             "Processed: " + f.getFileName(),
@@ -153,7 +157,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
             }
         });
 
-        return Result.success("Job started to sync material to OOS.");
+        return Result.success(job.getData().getJobId());
     }
 
     public void deleteProcessedFile() {
@@ -166,11 +170,12 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         String fileName = localFileSimpleDTO.getFileName();
         String filePath = localFileSimpleDTO.getFilePath();
         File file = new File(filePath);
-
-        List<String> novelBaseInfo = NovelUtil.extractTitleAndAuthor(fileName);
+        String suffix = FileNameUtil.getSuffix(fileName);
+        UUID uuid = UUID.randomUUID();
+        String oosPath = OOS_FILE_PATH + "/" + uuid + (suffix.isEmpty() ? "" : "." + suffix);
         MmsNovelFile mmsNovelFile = new MmsNovelFile();
         mmsNovelFile.setFileName(fileName);
-        mmsNovelFile.setFilePath(filePath);
+        mmsNovelFile.setFilePath(oosPath);
         mmsNovelFile.setFileSize(FileUtil.getFileSize(file.toPath()));
         mmsNovelFile.setWordCount(NovelUtil.countWordsInFile(file));
         mmsNovelFile.setCreatedUser(operator);
@@ -178,8 +183,19 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         baseMapper.insert(mmsNovelFile);
 
         byte[] fileBytes = FileUtil.fileToByteArray(file);
-        oosSupport.upload(fileBytes, fileName);
+        oosSupport.upload(fileBytes, oosPath);
     }
+
+    @Override
+    public void downloadNovelFile(String filePath) {
+        byte[] fileBytes = oosSupport.downloadBytes(filePath);
+        System.out.printf("Downloaded file size: %d bytes%n", fileBytes.length);
+        String preview = new String(fileBytes, 0, Math.min(fileBytes.length, 100));
+        System.out.println("File preview (first 100 characters):");
+        System.out.println(preview);
+    }
+
+
 
     public void syncJob() throws IOException {
         String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);

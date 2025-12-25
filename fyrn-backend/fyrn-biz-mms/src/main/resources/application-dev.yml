@@ -6,3 +6,14 @@ fyrn:
     database: fyrn
     username: root
     password: root
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: root
+
+  minio:
+    access-key-id: eZkIBk8WaWlfxjCx5OAW
+    access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
+    bucket-name: fyrn
+    endpoint: http://localhost:9000
