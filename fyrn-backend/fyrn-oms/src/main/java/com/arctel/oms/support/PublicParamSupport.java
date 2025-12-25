@@ -21,11 +21,15 @@ import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.api.PublicParamSupportAPI;
 import com.arctel.oms.domain.OmsParameter;
 import com.arctel.oms.mapper.OmsParameterMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+@Slf4j
 @Component
 public class PublicParamSupport extends PublicParamSupportAPI {
 
@@ -39,6 +43,7 @@ public class PublicParamSupport extends PublicParamSupportAPI {
      * @return
      */
     @Override
+    @Cacheable(value = "OmsParameter", key = "'ParamValueByCode:'+#paramCode", unless = "#result == null")
     public Object getParamValueByCode(int paramCode) {
         OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
         if (ObjectUtil.isNull(omsParameter)) {
@@ -52,7 +57,15 @@ public class PublicParamSupport extends PublicParamSupportAPI {
     }
 
     @Override
+    @Cacheable(value = "OmsParameter", key = "'ParamValueByCode:'+#paramCode", unless = "#result == null")
     public Object getParamValueByCode(String paramCode) {
         return getParamValueByCode(Integer.parseInt(paramCode));
     }
+
+    @CacheEvict(value = "OmsParameter", allEntries = true)
+    public boolean clearCache() {
+        log.info("Cleared OmsParameter cache");
+        return true;
+    }
+
 }
