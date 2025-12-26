@@ -38,6 +38,8 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
     BaseQueryPage<MmsNovelFile> pageMmsNovelFile(MmsNovelFile mmsNovelFile, Integer pageNo, Integer pageSize);
 
+    BaseQueryPage<MmsNovelFile> getUnlinkedMmsNovelFile(Integer pageNo, Integer pageSize);
+
     Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
     Result<String> syncMaterial(SyncMaterialInput input) throws IOException;

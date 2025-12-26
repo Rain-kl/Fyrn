@@ -25,10 +25,8 @@ import com.arctel.oms.biz.job.ThreadPoolJobService;
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 
-import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
-import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
@@ -52,6 +50,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.Resource;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -72,14 +71,10 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     public static final String OOS_FILE_PATH = "/novels";
 
     @Resource
-    private MmsNovelFileService self; // 自注入自己（通过接口或实现类）
-
+    private MmsNovelFileService self;
 
     @Resource
     PublicParamSupport publicParamSupport;
-
-    @Resource
-    MmsNovelMapper mmsNovelMapper;
 
     @Resource
     OosService oosSupport;
@@ -89,6 +84,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
     /**
      * 查询物料分页列表
+     *
      * @param mmsNovelFile 接受filename, novelId查询条件
      * @param pageNo
      * @param pageSize
@@ -111,6 +107,22 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         List<MmsNovelFile> ordersList = result.getRecords();
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
+
+    @Override
+    public BaseQueryPage<MmsNovelFile> getUnlinkedMmsNovelFile(Integer pageNo, Integer pageSize) {
+        IPage<MmsNovelFile> page = new Page<>(pageNo, pageSize);
+
+        IPage<MmsNovelFile> result = page(
+                page,
+                new LambdaQueryWrapper<MmsNovelFile>()
+                        .isNull(MmsNovelFile::getNovelId)
+                        .orderByDesc(MmsNovelFile::getId)
+        );
+
+        List<MmsNovelFile> ordersList = result.getRecords();
+        return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
+    }
+
 
     @Override
     public Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
@@ -248,41 +260,5 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         System.out.println("File preview (first 100 characters):");
         System.out.println(preview);
     }
-
-
-    public void syncJob() throws IOException {
-        String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
-        List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
-        allTxtFiles.forEach(file -> {
-            Path fileName = file.getFileName();
-            System.out.println(fileName);
-            List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName.toString());
-
-            // 查询小说是否存在
-            MmsNovel mmsNovel = mmsNovelMapper.selectOne(
-                    new LambdaQueryWrapper<MmsNovel>()
-                            .eq(MmsNovel::getNovelTitle, novelBasicMetadata.get(0))
-                            .eq(MmsNovel::getNovelAuthor, novelBasicMetadata.get(1))
-            );
-            // 如果小说不存在，则新增小说记录, 并且直接上传 OOS
-            if (mmsNovel == null) {
-                MmsNovelFile mmsNovelFile = new MmsNovelFile();
-                mmsNovelFile.setFileName(fileName.toString());
-                mmsNovelFile.setFileSize(FileUtil.getFileSize(file));
-                mmsNovelFile.setWordCount(NovelUtil.countWordsInFile(new File(file.toString())));
-
-                String oosPath = oosSupport.upload(
-                        FileUtil.fileToByteArray(file.toFile()),
-                        fileName.toString()
-                );
-                mmsNovelFile.setFilePath(oosPath);
-
-            } else {
-                //如果小说存在, 则下载文件进行对比, 如果相似度高于 0.95, 则认为是重复文件, 否则新增为其他插入 OOS 库中, 更新小说下载地址记录
-            }
-
-        });
-    }
-
 
 }

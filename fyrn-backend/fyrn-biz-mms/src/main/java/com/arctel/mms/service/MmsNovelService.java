@@ -30,4 +30,5 @@ public interface MmsNovelService   {
 
     BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
 
+    void syncJob();
 }
