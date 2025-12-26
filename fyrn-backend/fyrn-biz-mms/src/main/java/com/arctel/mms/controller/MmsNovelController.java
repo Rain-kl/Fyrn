@@ -17,18 +17,19 @@
 
 package com.arctel.mms.controller;
 
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
+
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dto.input.MmsPageInput;
 import com.arctel.mms.service.MmsNovelService;
+import com.arctel.pub.base.BaseQueryPage;
+import com.arctel.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @RequestMapping("/mms")
 @RestController

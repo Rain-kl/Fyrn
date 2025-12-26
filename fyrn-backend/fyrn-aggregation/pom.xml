@@ -33,9 +33,15 @@
             <artifactId>fyrn-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-oms</artifactId>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-biz-impl</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-support</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

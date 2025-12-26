@@ -20,19 +20,19 @@ package com.arctel.mms.controller;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.domain.dto.input.UMmsNovelPageInput;
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
+import com.arctel.pub.base.BaseQueryPage;
+import com.arctel.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.IOException;
 
 @RequestMapping("/umms")
@@ -87,9 +87,9 @@ public class UMmsNovelController {
     /**
      * 同步小说到 mms
      *
-     * @param input
-     * @return
-     * @throws IOException
+     * @param input 同步小说输入参数
+     * @return 同步结果
+     * @throws IOException IO异常
      */
     @GetMapping("/syncNovel")
     public Result<String> syncNovel(SyncMaterialInput input) throws IOException {

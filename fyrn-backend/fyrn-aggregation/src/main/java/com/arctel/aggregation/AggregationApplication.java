@@ -29,8 +29,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
-@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.oms.mapper"})
-@ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
+@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.biz.impl.mapper"})
+@ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.biz", "com.arctel.support", "com.arctel.pub" })
 class AggregationApplication {
 
     public static void main(String[] args) {

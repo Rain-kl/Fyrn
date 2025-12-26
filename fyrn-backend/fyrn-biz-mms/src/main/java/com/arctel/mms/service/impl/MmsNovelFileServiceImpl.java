@@ -19,18 +19,12 @@ package com.arctel.mms.service.impl;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
-import com.arctel.domain.dto.input.SyncMaterialInput;
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.domain.OmsJob;
-import com.arctel.oms.domain.dto.JobProgressDto;
-import com.arctel.oms.domain.dto.JobRunnable;
-import com.arctel.oms.domain.input.CreateJobInput;
-import com.arctel.oms.domain.input.UpdateJobProgressInput;
-import com.arctel.oms.service.OosService;
-import com.arctel.oms.common.utils.FileUtil;
+import com.arctel.biz.file.OosService;
+import com.arctel.biz.job.JobRunnable;
+import com.arctel.biz.job.ThreadPoolJobService;
 import com.arctel.common.utils.NovelUtil;
-import com.arctel.oms.common.utils.PagingUtil;
-import com.arctel.oms.common.utils.Result;
+import com.arctel.domain.dto.input.SyncMaterialInput;
+
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
@@ -38,8 +32,17 @@ import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
-import com.arctel.oms.support.PublicParamSupport;
-import com.arctel.oms.support.ThreadPoolJobSupport;
+
+import com.arctel.pub.base.BaseQueryPage;
+import com.arctel.pub.domain.OmsJob;
+import com.arctel.pub.domain.dto.JobProgressDto;
+import com.arctel.pub.domain.input.CreateJobInput;
+import com.arctel.pub.domain.input.UpdateJobProgressInput;
+import com.arctel.pub.utils.FileUtil;
+import com.arctel.pub.utils.PagingUtil;
+import com.arctel.pub.utils.Result;
+import com.arctel.support.PublicParamSupport;
+import com.arctel.support.ThreadPoolJobSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -49,7 +52,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,7 +64,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Arctel
- * @date 2024-06-10
+ * @since 2024-06-10
  */
 @Service
 public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile>
@@ -83,7 +86,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     OosService oosSupport;
 
     @Resource
-    ThreadPoolJobSupport threadPoolJobSupport;
+    ThreadPoolJobService threadPoolJobService;
 
     /**
      * 查询物料分页列表
@@ -154,7 +157,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         createJobInput.setMessage("同步物料到OOS");
         createJobInput.setTask_type("sync material");
 
-        Result<OmsJob> job = threadPoolJobSupport.createJob(createJobInput, new JobRunnable(threadPoolJobSupport) {
+        OmsJob job = threadPoolJobService.createJob(createJobInput, new JobRunnable(threadPoolJobService) {
             @Override
             public void taskRun() {
                 AtomicInteger i = new AtomicInteger();
@@ -168,14 +171,14 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
                         self.syncLocalFile(f, input.getOperator());
                     } catch (Exception e) {
                         // 记录失败日志或更新 job 状态，但不中断其他文件处理
-                        threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
+                        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
                                 omsJob.getJobId(),
                                 "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage(),
                                 jobProgressDto
                         ));
                         return;
                     }
-                    threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
+                    threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
                             omsJob.getJobId(),
                             "Processed: " + f.getFileName(),
                             jobProgressDto
@@ -186,7 +189,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
             }
         });
 
-        return Result.success(job.getData().getJobId());
+        return Result.success(job.getJobId());
     }
 
 
@@ -216,7 +219,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     /**
      * 删除已处理的本地文件
      *
-     * @param file
+     * @param file 文件
      */
     public void deleteProcessedFile(File file) throws IOException {
         String rubbishPath = (String) publicParamSupport.getParamValueByCode(1002);

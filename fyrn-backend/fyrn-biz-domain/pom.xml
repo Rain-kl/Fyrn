@@ -8,7 +8,6 @@
         <artifactId>fyrn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-
     <artifactId>fyrn-biz-domain</artifactId>
 
     <properties>

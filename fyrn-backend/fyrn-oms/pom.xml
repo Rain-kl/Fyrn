@@ -9,12 +9,23 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>fyrn-oms</artifactId>
+    <groupId>com.arctel.platform</groupId>
+    <artifactId>oms</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>运维管理系统</name>
     <description>运维管理系统, 包含redis管理, 系统参数管理, 用户认证, 任务管理</description>
+    <modules>
+        <module>oms-pub</module>
+        <module>oms-support</module>
+        <module>oms-biz</module>
+        <module>oms-biz-impl</module>
+        <module>oms-deploy</module>
+    </modules>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

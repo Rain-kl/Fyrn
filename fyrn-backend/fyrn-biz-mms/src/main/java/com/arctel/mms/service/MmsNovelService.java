@@ -17,8 +17,8 @@
 
 package com.arctel.mms.service;
 
-import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.pub.base.BaseQueryPage;
 
 /**
  * MmsNovelBizService, 本地小说业务服务

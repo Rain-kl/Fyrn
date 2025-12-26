@@ -17,7 +17,7 @@
 
 package com.arctel.domain.dto.input;
 
-import com.arctel.oms.common.base.BaseInput;
+import com.arctel.pub.base.BaseInput;
 import lombok.Getter;
 import lombok.Setter;
 
