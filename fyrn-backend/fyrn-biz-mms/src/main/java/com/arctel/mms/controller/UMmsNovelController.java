@@ -17,15 +17,14 @@
 
 package com.arctel.mms.controller;
 
-import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.domain.dto.input.UMmsNovelPageInput;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
-import com.arctel.pub.base.BaseQueryPage;
-import com.arctel.pub.utils.Result;
+import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

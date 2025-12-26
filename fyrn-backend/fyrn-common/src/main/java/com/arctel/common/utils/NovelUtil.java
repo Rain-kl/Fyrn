@@ -17,7 +17,7 @@
 
 package com.arctel.common.utils;
 
-import com.arctel.pub.utils.CharsetUtil;
+import com.arctel.oms.pub.utils.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

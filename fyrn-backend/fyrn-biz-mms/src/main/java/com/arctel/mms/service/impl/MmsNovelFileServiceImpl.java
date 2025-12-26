@@ -19,9 +19,9 @@ package com.arctel.mms.service.impl;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
-import com.arctel.biz.file.OosService;
-import com.arctel.biz.job.JobRunnable;
-import com.arctel.biz.job.ThreadPoolJobService;
+import com.arctel.oms.biz.file.OosService;
+import com.arctel.oms.biz.job.JobRunnable;
+import com.arctel.oms.biz.job.ThreadPoolJobService;
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 
@@ -33,16 +33,15 @@ import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
 
-import com.arctel.pub.base.BaseQueryPage;
-import com.arctel.pub.domain.OmsJob;
-import com.arctel.pub.domain.dto.JobProgressDto;
-import com.arctel.pub.domain.input.CreateJobInput;
-import com.arctel.pub.domain.input.UpdateJobProgressInput;
-import com.arctel.pub.utils.FileUtil;
-import com.arctel.pub.utils.PagingUtil;
-import com.arctel.pub.utils.Result;
-import com.arctel.support.PublicParamSupport;
-import com.arctel.support.ThreadPoolJobSupport;
+import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.domain.OmsJob;
+import com.arctel.oms.pub.domain.dto.JobProgressDto;
+import com.arctel.oms.pub.domain.input.CreateJobInput;
+import com.arctel.oms.pub.domain.input.UpdateJobProgressInput;
+import com.arctel.oms.pub.utils.FileUtil;
+import com.arctel.oms.pub.utils.PagingUtil;
+import com.arctel.oms.pub.utils.Result;
+import com.arctel.oms.support.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

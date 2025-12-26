@@ -17,7 +17,7 @@
 
 package com.arctel.common.utils;
 
-import com.arctel.pub.utils.FileUtil;
+import com.arctel.oms.pub.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

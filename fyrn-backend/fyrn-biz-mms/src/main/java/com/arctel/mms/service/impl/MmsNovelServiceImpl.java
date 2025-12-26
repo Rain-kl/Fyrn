@@ -20,7 +20,7 @@ package com.arctel.mms.service.impl;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelService;
-import com.arctel.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.base.BaseQueryPage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
