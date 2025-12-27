@@ -2,6 +2,7 @@
 import type { ColumnDef, RowSelectionState, Table } from '@tanstack/vue-table'
 import type { OmsParameter } from '~/api/models'
 import { useApi } from '~/api/useApi'
+import {formatToYMD} from "~/utils/date";
 
 const { OmsParameterApi } = useApi()
 
@@ -46,6 +47,7 @@ const columns: ColumnDef<OmsParameter>[] = [
   {
     header: '更新时间',
     accessorKey: 'updateTime',
+    cell: (info) => formatToYMD(info.row.original.createTime)
   },
   {
     header: '操作',
