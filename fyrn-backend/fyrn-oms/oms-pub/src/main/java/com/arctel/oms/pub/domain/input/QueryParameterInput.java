@@ -36,5 +36,5 @@ public class QueryParameterInput extends BaseQueryPageInput {
     /**
      * 是否启用
      */
-    private Integer enabledFlag = 1;
+    private Integer enabledFlag = null;
 }

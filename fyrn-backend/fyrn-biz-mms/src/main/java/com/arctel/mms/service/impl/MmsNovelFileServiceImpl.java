@@ -102,10 +102,10 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         IPage<MmsNovelFile> result = page(
                 page,
                 new LambdaQueryWrapper<MmsNovelFile>()
+                        .eq(mmsNovelFile.getNovelId() != null,
+                                MmsNovelFile::getNovelId, mmsNovelFile.getNovelId())
                         .like(mmsNovelFile.getFileName() != null,
                                 MmsNovelFile::getFileName, mmsNovelFile.getFileName())
-                        .like(mmsNovelFile.getNovelId() != null,
-                                MmsNovelFile::getNovelId, mmsNovelFile.getNovelId())
                         .orderByDesc(MmsNovelFile::getId)
         );
 

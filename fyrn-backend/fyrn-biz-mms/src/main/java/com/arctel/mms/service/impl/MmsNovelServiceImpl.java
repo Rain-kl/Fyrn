@@ -76,6 +76,8 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         IPage<MmsNovel> result = page(
                 page,
                 new LambdaQueryWrapper<MmsNovel>()
+                        .eq(mmsNovel.getId() != null,
+                                MmsNovel::getId, mmsNovel.getId())
                         .like(mmsNovel.getNovelTitle() != null,
                                 MmsNovel::getNovelTitle, mmsNovel.getNovelTitle())
                         .like(mmsNovel.getNovelAuthor() != null,
