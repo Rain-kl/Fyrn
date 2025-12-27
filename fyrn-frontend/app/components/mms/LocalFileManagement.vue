@@ -4,6 +4,7 @@ import type { LocalFileSimpleDto } from "~/api/models";
 import { useApi } from "~/api/useApi";
 import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
+import SyncConfigDialog from "~/components/mms/SyncConfigDialog.vue";
 
 const { uMmsNovelApi } = useApi();
 
@@ -11,6 +12,7 @@ const data = ref<LocalFileSimpleDto[]>([]);
 const loading = ref(false);
 const syncing = ref(false);
 const total = ref(0);
+const syncDialogOpen = ref(false);
 
 const columns: ColumnDef<LocalFileSimpleDto>[] = [
   {
@@ -48,7 +50,7 @@ const fetchData = async () => {
   try {
     const pageIndex = table.value?.getState().pagination.pageIndex ?? 0;
     const pageSize = table.value?.getState().pagination.pageSize ?? 10;
-    
+
     const result = await uMmsNovelApi.ummsLocalPageGet({
       operator: "admin",
       pageNo: pageIndex + 1,
@@ -66,12 +68,16 @@ const fetchData = async () => {
   }
 };
 
-const handleSync = async () => {
+const handleSyncClick = () => {
+  syncDialogOpen.value = true;
+};
+
+const handleSync = async (size: number) => {
   syncing.value = true;
   try {
     const result = await uMmsNovelApi.ummsSyncMaterialGet({
       operator: "admin",
-      size: 10,
+      size: size,
     });
     if (result.code === 200) {
       fetchData();
@@ -119,7 +125,7 @@ onMounted(() => {
           leading="i-tabler-refresh"
           class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
           :loading="syncing"
-          @click="handleSync"
+          @click="handleSyncClick"
         />
         <NButton
           label="刷新"
@@ -165,12 +171,15 @@ onMounted(() => {
               class: 'w-15',
             }"
             :model-value="table?.getState().pagination.pageSize"
-            @update:model-value="table?.setPageSize($event as unknown as number)"
+            @update:model-value="
+              table?.setPageSize($event as unknown as number)
+            "
           />
         </div>
 
         <div class="flex items-center justify-center text-sm font-medium">
-          第 {{ (table?.getState().pagination.pageIndex ?? 0) + 1 }} 页，共 {{ table?.getPageCount().toLocaleString() }} 页
+          第 {{ (table?.getState().pagination.pageIndex ?? 0) + 1 }} 页，共
+          {{ table?.getPageCount().toLocaleString() }} 页
         </div>
 
         <NPagination
@@ -182,5 +191,8 @@ onMounted(() => {
         />
       </div>
     </div>
+
+    <!-- Sync Config Dialog -->
+    <SyncConfigDialog v-model:open="syncDialogOpen" @confirm="handleSync" />
   </div>
 </template>
