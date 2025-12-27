@@ -24,10 +24,9 @@ import com.arctel.oms.pub.domain.OmsParameter;
 import com.arctel.oms.pub.domain.input.AddParameterInput;
 import com.arctel.oms.pub.domain.input.QueryParameterInput;
 import com.arctel.oms.pub.utils.Result;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.annotation.Resource;
 
 @RequestMapping("/oms/parameter")
 @RestController
@@ -54,18 +53,14 @@ public class OmsParameterController {
 
     /**
      * 修改系统参数
+     * 如果参数不存在，返回失败,目前不支持新增
      *
      * @param input 分页输入对象
      * @return 分页结果
      */
     @PostMapping("/edit")
-    public Result<String> addParameter(@RequestBody AddParameterInput input) {
-        OmsParameter omsParameterOld = omsParameterService.getById(input.getParamCode());
-        if(omsParameterOld!=null){
-            BeanUtil.copyProperties(input, omsParameterOld);
-            omsParameterService.updateById(omsParameterOld);
-            return Result.success("修改成功");
-        }
-        return Result.fail("参数不存在，修改失败");
+    public Result<Boolean> editParameter(@RequestBody AddParameterInput input) {
+
+        return Result.success(omsParameterService.editParameter(input));
     }
 }

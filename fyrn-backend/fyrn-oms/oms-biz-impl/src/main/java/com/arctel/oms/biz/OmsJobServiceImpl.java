@@ -18,8 +18,8 @@
 package com.arctel.oms.biz;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.arctel.oms.biz.mapper.OmsJobMapper;
 import com.arctel.oms.biz.job.OmsJobService;
+import com.arctel.oms.biz.mapper.OmsJobMapper;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.constants.ErrorConstant;
 import com.arctel.oms.pub.constants.JobStatusEnum;
@@ -35,12 +35,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -140,6 +140,10 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
             } else {
                 throw new BizException(ErrorConstant.COMMON_ERROR, "只有运行中的任务才能设置为成功");
             }
+        }
+        if (newStatus.equals(JobStatusEnum.RUNNING.getValue()) &&
+                omsJob.getStatus().equals(JobStatusEnum.PENDING.getValue())) {
+            omsJob.setStartedTime(new Date());
         }
         omsJob.setStatus(newStatus);
         String newMessage = input.getMessage();

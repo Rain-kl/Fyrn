@@ -18,22 +18,24 @@
 package com.arctel.oms.biz;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.biz.mapper.OmsParameterMapper;
 import com.arctel.oms.biz.ppc.OmsParameterService;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsParameter;
+import com.arctel.oms.pub.domain.input.AddParameterInput;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -94,6 +96,18 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
     public boolean clearCache() {
         log.info("Cleared OmsParameter cache");
         return true;
+    }
+
+    @CacheEvict(value = "OmsParameter", allEntries = true)
+    @Override
+    public boolean editParameter(AddParameterInput input) {
+        OmsParameter omsParameterOld = getById(input.getParamCode());
+        if (omsParameterOld != null) {
+            BeanUtil.copyProperties(input, omsParameterOld);
+            updateById(omsParameterOld);
+            return true;
+        }
+        return false;
     }
 }
 

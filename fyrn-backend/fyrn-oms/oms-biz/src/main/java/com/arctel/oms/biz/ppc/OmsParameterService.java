@@ -20,6 +20,7 @@ package com.arctel.oms.biz.ppc;
 
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsParameter;
+import com.arctel.oms.pub.domain.input.AddParameterInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.io.Serializable;
@@ -51,4 +52,6 @@ public interface OmsParameterService extends IService<OmsParameter> {
     Object getParamValueByCode(int paramCode);
 
     boolean clearCache();
+
+    boolean editParameter(AddParameterInput input);
 }
