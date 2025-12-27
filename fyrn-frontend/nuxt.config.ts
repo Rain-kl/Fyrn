@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     global: true,
   },
   colorMode: {
-    preference: 'dark',
+    preference: 'light',
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:8080', // 替换为你的后端地址
+    },
   },
 })
