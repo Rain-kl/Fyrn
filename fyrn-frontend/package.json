@@ -1,0 +1,25 @@
+{
+  "name": "una-ui-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
+    "@iconify-json/lucide": "^1.2.82",
+    "@iconify-json/radix-icons": "^1.2.6",
+    "@iconify-json/tabler": "^1.2.25",
+    "@una-ui/nuxt": "npm:@una-ui/nuxt-edge@latest",
+    "nuxt": "^3.16.0",
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@tanstack/vue-table": "^8.21.3",
+    "vue-router": "^4.6.4"
+  }
+}
