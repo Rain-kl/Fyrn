@@ -26,6 +26,11 @@ const items = [
         label: '系统参数管理',
         description: '系统参数的维护与配置',
         to: '/oms/ppc',
+      },
+      {
+        label: '任务管理系统',
+        description: '进程任务的状态与监控',
+        to: '/oms/job',
       }
     ],
   },

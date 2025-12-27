@@ -73,7 +73,7 @@ export interface OmsJobUpdateProgressPostRequest {
 /**
  * 
  */
-export class DefaultApi extends runtime.BaseAPI {
+export class JobControllerApi extends runtime.BaseAPI {
 
     /**
      * 
