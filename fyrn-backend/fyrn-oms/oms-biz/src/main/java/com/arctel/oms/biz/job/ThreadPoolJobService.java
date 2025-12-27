@@ -23,7 +23,13 @@ import com.arctel.oms.pub.domain.input.CreateJobInput;
 
 public interface ThreadPoolJobService extends OmsJobService{
 
-
+    /**
+     * 创建新任务
+     *
+     * @param input 创建任务输入参数
+     * @param task 任务逻辑
+     * @return 创建的任务对象
+     */
     OmsJob createJob(CreateJobInput input, JobRunnable task);
 
     /**

@@ -18,9 +18,11 @@
 package com.arctel.oms.pub.domain.input;
 
 import com.arctel.oms.pub.base.BaseInput;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class CreateJobInput extends BaseInput {
 
     String task_type;

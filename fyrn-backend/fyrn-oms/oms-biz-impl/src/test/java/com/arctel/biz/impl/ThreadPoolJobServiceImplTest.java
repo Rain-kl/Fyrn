@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ThreadPoolJobSupportTest {
+class ThreadPoolJobServiceImplTest {
 
     @Resource
     ThreadPoolJobService threadPoolJobSupport;
@@ -41,10 +41,9 @@ class ThreadPoolJobSupportTest {
 
     @Test
     void createJob() {
-        CreateJobInput createJobInput = new CreateJobInput();
-        createJobInput.setMessage("test message");
-        createJobInput.setTask_type("test_task");
-        OmsJob job = threadPoolJobSupport.createJob(createJobInput);
+        OmsJob job = threadPoolJobSupport.createJob(
+                new CreateJobInput("test_message", "test_task")
+        );
         this.omsJob = job;
         this.jobId = job.getJobId();
     }
@@ -52,34 +51,26 @@ class ThreadPoolJobSupportTest {
 
     @Test
     void createJobAsync() {
-        CreateJobInput createJobInput = new CreateJobInput();
-        createJobInput.setMessage("test message");
-        createJobInput.setTask_type("test_task");
 
-        OmsJob job = threadPoolJobSupport.createJob(createJobInput, new JobRunnable(threadPoolJobSupport) {
-            @Override
-            public void taskRun() {
-                System.out.println("Async job running for jobId: " + omsJob.getJobId());
-                // Simulate some work with sleep
-                try {
-                    for (int i = 0; i < 100; i++) {
-                        Thread.sleep(500);
-                        System.out.println("JobId: " + omsJob.getJobId() + " - Progress: " + (i + 1) + "%");
-                        JobProgressDto jobProgressDto = new JobProgressDto();
-                        jobProgressDto.setCurrent(i + 1);
-                        jobProgressDto.setTotal(100);
-                        threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(
-                                omsJob.getJobId(),
-                                "Progress updated to " + (i + 1) + "%",
-                                jobProgressDto
-                        ));
+
+        OmsJob job = threadPoolJobSupport.createJob(new CreateJobInput("test_message", "test_task"),
+                new JobRunnable(threadPoolJobSupport) {
+                    @Override
+                    public void taskRun() {
+                        System.out.println("Async job running for jobId: " + omsJob.getJobId());
+                        // Simulate some work with sleep
+                        try {
+                            for (int i = 0; i < 100; i++) {
+                                Thread.sleep(500);
+                                System.out.println("JobId: " + omsJob.getJobId() + " - Progress: " + (i + 1) + "%");
+                                this.updateProgress(i + 1, 100, "Progress updated to " + (i + 1) + "%");
+                            }
+                        } catch (InterruptedException e) {
+                            System.out.println("Main thread interrupted: " + e.getMessage());
+                        }
+                        System.out.println("Async job completed for jobId: " + omsJob.getJobId());
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Async job completed for jobId: " + omsJob.getJobId());
-            }
-        });
+                });
         this.omsJob = job;
         this.jobId = job.getJobId();
 
@@ -87,7 +78,7 @@ class ThreadPoolJobSupportTest {
         try {
             Thread.sleep(120000);
         } catch (InterruptedException e) {
-
+            System.out.println("Main thread interrupted: " + e.getMessage());
         }
     }
 
@@ -103,9 +94,7 @@ class ThreadPoolJobSupportTest {
 
     @Test
     void updateTaskProgress() {
-        JobProgressDto jobProgressDto = new JobProgressDto();
-        jobProgressDto.setTotal(100);
-        jobProgressDto.setCurrent(5);
+        JobProgressDto jobProgressDto = new JobProgressDto(5, 100);
         threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(jobId, "", jobProgressDto));
     }
 

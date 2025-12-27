@@ -24,7 +24,11 @@ import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.mms.service.MmsNovelService;
 import com.arctel.oms.biz.file.OosService;
+import com.arctel.oms.biz.job.JobRunnable;
+import com.arctel.oms.biz.job.ThreadPoolJobService;
 import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.domain.OmsJob;
+import com.arctel.oms.pub.domain.input.CreateJobInput;
 import com.arctel.oms.support.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -46,6 +50,9 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
 
     @Resource
     PublicParamSupport publicParamSupport;
+
+    @Resource
+    ThreadPoolJobService threadPoolJobService;
 
     @Resource
     MmsNovelFileService mmsNovelFileService;
@@ -71,7 +78,7 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                                 MmsNovel::getNovelAuthor, mmsNovel.getNovelAuthor())
                         .orderByDesc(MmsNovel::getId)
         );
-//
+
         List<MmsNovel> ordersList = result.getRecords();
 
 
@@ -80,47 +87,54 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
 
 
     @Override
-    public void syncJob() {
-        int pageSize = 100;
-        int pageNum = 1;
-        while (true) {
-            BaseQueryPage<MmsNovelFile> unlinkedMmsNovelFile = mmsNovelFileService.getUnlinkedMmsNovelFile(pageNum, pageSize);
-            if (unlinkedMmsNovelFile.getTotal() <= 0) {
-                break;
-            }
-            List<MmsNovelFile> novelFiles = unlinkedMmsNovelFile.getRows();
-            unlinkedMmsNovelFile.getRows().forEach(novelFile -> {
-                String fileName = novelFile.getFileName();
-                List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName);
-
-                // 查询小说是否存在
-                String title = novelBasicMetadata.get(0);
-                String author = novelBasicMetadata.get(1);
-                MmsNovel mmsNovel = mmsNovelMapper.selectOne(
-                        new LambdaQueryWrapper<MmsNovel>()
-                                .eq(MmsNovel::getNovelTitle, title)
-                                .eq(MmsNovel::getNovelAuthor, author)
-                );
-                // 如果小说不存在，则新增小说记录
-                if (mmsNovel == null) {
-                    MmsNovel newmmsNovel = new MmsNovel();
-                    newmmsNovel.setNovelTitle(title);
-                    newmmsNovel.setNovelAuthor(author);
-                    novelFile.setNovelId(newmmsNovel.getId());
-                    try {
-                        self.createNovel(newmmsNovel, novelFile);
-                    } catch (Exception e) {
-                        log.error("创建小说失败, 跳过!", e);
+    public OmsJob syncJobAsync() {
+        return threadPoolJobService.createJob(new CreateJobInput("sync-mms", "同步umms到mms"), new JobRunnable(threadPoolJobService) {
+            @Override
+            protected void taskRun() {
+                int pageSize = 100;
+                int pageNum = 1;
+                while (true) {
+                    BaseQueryPage<MmsNovelFile> unlinkedMmsNovelFile = mmsNovelFileService.getUnlinkedMmsNovelFile(pageNum, pageSize);
+                    if (unlinkedMmsNovelFile.getTotal() <= 0) {
+                        break;
                     }
-                } else {
-                    novelFile.setNovelId(mmsNovel.getId());
-                    mmsNovelFileService.update(novelFile,
-                            new LambdaQueryWrapper<MmsNovelFile>()
-                                    .eq(MmsNovelFile::getId, novelFile.getId())
-                    );
+                    unlinkedMmsNovelFile.getRows().forEach(novelFile -> {
+                        String fileName = novelFile.getFileName();
+                        List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName);
+
+                        // 查询小说是否存在
+                        String title = novelBasicMetadata.get(0);
+                        String author = novelBasicMetadata.get(1);
+                        MmsNovel mmsNovel = mmsNovelMapper.selectOne(
+                                new LambdaQueryWrapper<MmsNovel>()
+                                        .eq(MmsNovel::getNovelTitle, title)
+                                        .eq(MmsNovel::getNovelAuthor, author)
+                        );
+                        // 如果小说不存在，则新增小说记录
+                        if (mmsNovel == null) {
+                            MmsNovel newmmsNovel = new MmsNovel();
+                            newmmsNovel.setNovelTitle(title);
+                            newmmsNovel.setNovelAuthor(author);
+                            novelFile.setNovelId(newmmsNovel.getId());
+                            try {
+                                self.createNovel(newmmsNovel, novelFile);
+                                updateProgress("新增物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
+                            } catch (Exception e) {
+                                log.error("创建物料失败，文件名: " + fileName, e);
+                                updateLog("创建物料失败，文件名: " + fileName + ", 错误信息: " + e.getMessage());
+                            }
+                        } else {
+                            novelFile.setNovelId(mmsNovel.getId());
+                            mmsNovelFileService.update(novelFile,
+                                    new LambdaQueryWrapper<MmsNovelFile>()
+                                            .eq(MmsNovelFile::getId, novelFile.getId())
+                            );
+                            updateProgress("更新物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 
     @Transactional(rollbackFor = Exception.class)

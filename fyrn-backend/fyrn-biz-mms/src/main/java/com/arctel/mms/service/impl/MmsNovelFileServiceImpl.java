@@ -164,42 +164,23 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         Result<BaseQueryPage<LocalFileSimpleDTO>> unprocessedLocalFile = getUnprocessedLocalFile(uMmsPageInput);
         List<LocalFileSimpleDTO> rows = unprocessedLocalFile.getData().getRows();
 
-        CreateJobInput createJobInput = new CreateJobInput();
-        createJobInput.setMessage("同步物料到OOS");
-        createJobInput.setTask_type("sync material");
-
-        OmsJob job = threadPoolJobService.createJob(createJobInput, new JobRunnable(threadPoolJobService) {
-            @Override
-            public void taskRun() {
-                AtomicInteger i = new AtomicInteger();
-                rows.forEach(f -> {
-                    JobProgressDto jobProgressDto = new JobProgressDto();
-                    jobProgressDto.setCurrent(i.get() + 1);
-                    jobProgressDto.setTotal(rows.size()); // 修正 total
-
-                    try {
-                        // 通过 self 调用，确保走 Spring 代理，事务生效
-                        self.syncLocalFile(f, input.getOperator());
-                    } catch (Exception e) {
-                        // 记录失败日志或更新 job 状态，但不中断其他文件处理
-                        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                                omsJob.getJobId(),
-                                "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage(),
-                                jobProgressDto
-                        ));
-                        return;
+        OmsJob job = threadPoolJobService.createJob(new CreateJobInput("sync_material", "同步物料到OOS"),
+                new JobRunnable(threadPoolJobService) {
+                    @Override
+                    public void taskRun() {
+                        rows.forEach(f -> {
+                            try {
+                                // 通过 self 调用，确保走 Spring 代理，事务生效
+                                self.syncLocalFile(f, input.getOperator());
+                            } catch (Exception e) {
+                                // 记录失败日志或更新 job 状态，但不中断其他文件处理
+                                updateProgress(rows.size(),"Failed to process file: " + f.getFileName() + ", error: " + e.getMessage());
+                                return;
+                            }
+                            updateProgress(rows.size(),"Processed: " + f.getFileName());
+                        });
                     }
-                    threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                            omsJob.getJobId(),
-                            "Processed: " + f.getFileName(),
-                            jobProgressDto
-                    ));
-
-                    i.getAndIncrement();
                 });
-            }
-        });
-
         return Result.success(job.getJobId());
     }
 

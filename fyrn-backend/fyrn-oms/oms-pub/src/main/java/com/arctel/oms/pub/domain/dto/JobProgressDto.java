@@ -17,9 +17,11 @@
 
 package com.arctel.oms.pub.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class JobProgressDto {
 
     Integer current;

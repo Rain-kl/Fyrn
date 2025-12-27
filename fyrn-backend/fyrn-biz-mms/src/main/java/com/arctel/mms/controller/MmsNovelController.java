@@ -19,17 +19,22 @@ package com.arctel.mms.controller;
 
 
 import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.input.MmsPageInput;
 import com.arctel.mms.service.MmsNovelService;
 import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.domain.OmsJob;
 import com.arctel.oms.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.annotation.Resource;
+
+import java.util.List;
 
 @RequestMapping("/mms")
 @RestController
@@ -41,6 +46,7 @@ public class MmsNovelController {
 
     /**
      * 小说分页列表
+     *
      * @param input 分页输入对象
      * @return 分页结果
      */
@@ -54,4 +60,23 @@ public class MmsNovelController {
                 mmsNovel, input.getPageNo(), input.getPageSize());
         return Result.success(mmsNovelQueryPage);
     }
+
+    /**
+     * 同步小说任务
+     *
+     * @return
+     */
+    @PostMapping("/sync")
+    public Result<OmsJob> sync() {
+        return Result.success(mmsNovelService.syncJobAsync());
+    }
+
+    /**
+     * 查询物料文件列表
+     */
+    @GetMapping("/file")
+    public Result<List<MmsNovelFile>> getMmsNovelFile(String mmsNovelId) {
+        return null;
+    }
+
 }

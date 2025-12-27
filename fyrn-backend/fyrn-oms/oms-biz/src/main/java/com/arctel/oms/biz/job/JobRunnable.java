@@ -19,6 +19,10 @@ package com.arctel.oms.biz.job;
 
 
 import com.arctel.oms.pub.domain.OmsJob;
+import com.arctel.oms.pub.domain.dto.JobProgressDto;
+import com.arctel.oms.pub.domain.input.UpdateJobProgressInput;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class JobRunnable {
 
@@ -26,11 +30,37 @@ public abstract class JobRunnable {
 
     ThreadPoolJobService threadPoolJobService;
 
+    private final AtomicInteger currentProgress = new AtomicInteger(0);
+
     public JobRunnable(ThreadPoolJobService threadPoolJobService) {
         this.threadPoolJobService = threadPoolJobService;
     }
 
+    public void updateLog(String logMessage) {
+        threadPoolJobService.updateLog(omsJob.getJobId(), logMessage);
+    }
+
+    public void updateProgress(int current, int total, String logMessage) {
+        currentProgress.set(current);
+        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
+                omsJob.getJobId(), logMessage, new JobProgressDto(currentProgress.incrementAndGet(), total)
+        ));
+    }
+
+    public void updateProgress(int total, String logMessage) {
+        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
+                omsJob.getJobId(), logMessage, new JobProgressDto(currentProgress.incrementAndGet(), total)
+        ));
+    }
+
+    public void updateProgress(String logMessage) {
+        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
+                omsJob.getJobId(), logMessage, new JobProgressDto(currentProgress.incrementAndGet(), 0)
+        ));
+    }
+
     protected abstract void taskRun();
+
 
     public void run(OmsJob omsJob) {
         this.omsJob = omsJob;

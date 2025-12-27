@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `mms_novel_file`;
 CREATE TABLE `mms_novel_file`
 (
     `id`           BIGINT(20) NOT NULL COMMENT '主键',
-    `novel_id`     BIGINT(20)   DEFAULT NULL COMMENT '小说ID',
+    `novel_id`     BIGINT(20)   DEFAULT NULL COMMENT '小说ID, 关联mms_novel表的主键',
     `file_name`    VARCHAR(100) DEFAULT NULL COMMENT '文件名称',
     `file_path`    VARCHAR(200) DEFAULT NULL COMMENT '文件路径',
     `file_size`    BIGINT(20)   DEFAULT NULL COMMENT '文件大小，单位：字节',
