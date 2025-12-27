@@ -7,6 +7,7 @@ import { formatWordCount } from "~/utils/number";
 import SyncConfigDialog from "~/components/mms/SyncConfigDialog.vue";
 
 const { uMmsNovelApi } = useApi();
+const { toast } = useToast();
 
 const data = ref<LocalFileSimpleDto[]>([]);
 const loading = ref(false);
@@ -59,7 +60,7 @@ const fetchData = async () => {
 
     if (result.code === 200) {
       data.value = result.data?.rows || [];
-      total.value = result.data?.total || 0;
+      total.value = Number(result.data?.total) || 0;
     }
   } catch (error) {
     console.error("Failed to fetch local files:", error);
@@ -80,6 +81,15 @@ const handleSync = async (size: number) => {
       size: size,
     });
     if (result.code === 200) {
+      // Show success toast with jobId
+      toast({
+        title: "开始同步任务",
+        description: `任务 ID: ${result.data}`,
+        toast: "soft-success",
+        progress: "success",
+        showProgress: true,
+        closable: true,
+      });
       fetchData();
     }
   } catch (error) {
