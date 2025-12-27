@@ -45,7 +45,7 @@ export interface UmmsNoevlPageGetRequest {
     operator: string;
     pageNo?: number;
     pageSize?: number;
-    novelId?: number;
+    novelId?: string;
     fileName?: string;
 }
 

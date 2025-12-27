@@ -17,7 +17,7 @@ const columnVisibility = ref<VisibilityState>({
 })
 
 const filters = reactive({
-  id: '' as string,
+  novelId: '' as string,
   novelTitle: '' as string,
   novelAuthor: '' as string,
   status: '' as '' | '2' | '4',
@@ -82,7 +82,7 @@ const fetchData = async () => {
       operator: 'admin',
       pageNo: pageNo.value,
       pageSize: pageSize.value,
-      id: filters.id ? Number(filters.id) : undefined,
+      novelId: filters.novelId || undefined,
       novelTitle: filters.novelTitle || undefined,
       novelAuthor: filters.novelAuthor || undefined,
     })
@@ -130,7 +130,7 @@ watch(filters, () => {
 onMounted(() => {
   const route = useRoute()
   if (route.query.id) {
-    filters.id = route.query.id as string
+    filters.novelId = route.query.id as string
   }
   fetchData()
 })
@@ -138,11 +138,16 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col space-y-4">
+
+    <div class="flex items-center gap-x-2">
+      <h2 class="text-lg font-semibold">物料管理</h2>
+    </div>
+
     <!-- header -->
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div class="grid w-full gap-2 md:grid-cols-4">
         <NInput
-            v-model="filters.id"
+            v-model="filters.novelId"
             placeholder="小说ID"
         />
 

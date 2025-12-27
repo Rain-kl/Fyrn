@@ -21,16 +21,16 @@ import { mapValues } from '../runtime';
 export interface MmsNovelFile {
     /**
      * 主键
-     * @type {number}
+     * @type {string}
      * @memberof MmsNovelFile
      */
-    id?: number;
+    id?: string;
     /**
      * 小说ID
-     * @type {number}
+     * @type {string}
      * @memberof MmsNovelFile
      */
-    novelId?: number;
+    novelId?: string;
     /**
      * 文件名称
      * @type {string}

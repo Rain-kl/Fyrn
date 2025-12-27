@@ -23,7 +23,7 @@ const isOpen = computed({
 
 const filesLoading = ref(false)
 const files = ref<MmsNovelFile[]>([])
-const downloadingIds = ref(new Set<number>())
+const downloadingIds = ref(new Set<string>())
 
 const handleDownload = async (file: MmsNovelFile) => {
   if (!file.id)
