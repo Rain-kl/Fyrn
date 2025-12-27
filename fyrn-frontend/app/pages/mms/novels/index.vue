@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import type { ColumnDef, RowSelectionState, Table } from '@tanstack/vue-table'
+import type { ColumnDef, RowSelectionState, Table, VisibilityState } from '@tanstack/vue-table'
 import type { MmsNovel, MmsNovelFile } from '~/api/models'
 import { useApi } from '~/api/useApi'
 import { formatToYMD } from '~/utils/date'
 import { formatBytes } from '~/utils/file'
 
-const { mmsNovelApi } = useApi()
+const { mmsNovelApi, uMmsNovelApi } = useApi()
 
 const data = ref<MmsNovel[]>([])
 const loading = ref(false)
 const total = ref(0)
 const pageNo = ref(1)
 const pageSize = ref(10)
+
+const columnVisibility = ref<VisibilityState>({
+  id: false,
+})
 
 const filters = reactive({
   novelTitle: '' as string,
@@ -72,6 +76,34 @@ const isFilesDialogOpen = ref(false)
 const selectedNovel = ref<MmsNovel | null>(null)
 const filesLoading = ref(false)
 const files = ref<MmsNovelFile[]>([])
+const downloadingIds = ref(new Set<number>())
+
+const handleDownload = async (file: MmsNovelFile) => {
+  if (!file.id)
+    return
+  
+  downloadingIds.value.add(file.id)
+  try {
+    const response = await uMmsNovelApi.ummsDownloadMaterialGetRaw({
+      mmsNovelFileId: String(file.id),
+    })
+    const blob = await response.raw.blob()
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', file.fileName || 'download')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }
+  catch (error) {
+    console.error('Failed to download file:', error)
+  }
+  finally {
+    downloadingIds.value.delete(file.id)
+  }
+}
 
 const filesColumns: ColumnDef<MmsNovelFile>[] = [
   {
@@ -91,6 +123,23 @@ const filesColumns: ColumnDef<MmsNovelFile>[] = [
     header: '更新时间',
     accessorKey: 'updateTime',
     cell: (info) => formatToYMD(info.row.original.updateTime),
+  },
+  {
+    header: '操作',
+    id: 'actions',
+    cell: (info) => {
+      return h('div', { class: 'flex gap-2' }, [
+        h(resolveComponent('NButton'), {
+          label: '下载',
+          btn: 'ghost-primary',
+          size: 'sm',
+          loading: info.row.original.id ? downloadingIds.value.has(info.row.original.id) : false,
+          onClick: () => {
+            handleDownload(info.row.original)
+          },
+        }),
+      ])
+    },
   },
 ]
 
@@ -216,10 +265,23 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- column visibility -->
+    <div class="flex flex-wrap items-center gap-4 px-1">
+      <span class="text-sm font-medium text-muted">显示列：</span>
+      <NCheckbox
+        v-for="tableColumn in table?.getAllLeafColumns().filter(c => typeof c.columnDef.header === 'string' && c.id !== 'actions')"
+        :key="tableColumn.id"
+        :model-value="tableColumn.getIsVisible()"
+        :label="String(tableColumn.columnDef.header)"
+        @update:model-value="tableColumn.toggleVisibility()"
+      />
+    </div>
+
     <!-- table -->
     <NTable
         ref="table"
         v-model:row-selection="select"
+        v-model:column-visibility="columnVisibility"
     :loading
         :columns
         :data
