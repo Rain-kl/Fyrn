@@ -1,12 +1,83 @@
-<template>
-  <div class="container flex py-6 px-4 justify-between">
-    <h1 class="font-bold text-xl">
-      Una <span class="text-primary">UI</span>
-    </h1>
+<script setup lang="ts">
+import ColorMode from "~/components/button/ColorMode.vue";
 
-    <div class="inline-flex space-x-2">
-      <ColorMode/>
-      <NThemeSwitcher/>
+const items = [
+  {
+    label: '物料管理',
+    leading: 'i-lucide:book-open',
+    items: [
+      {
+        label: '物料管理系统',
+        description: '物料信息的维护与管理',
+        to: '/mms/novels',
+      },
+      {
+        label: '文件管理系统',
+        description: 'OOS文件存储同步与管理',
+        to: '/mms/files',
+      }
+    ],
+  },
+  {
+    label: '运营管理系统',
+    leading: 'i-lucide:box',
+    items: [
+      {
+        label: '系统参数管理',
+        description: '系统参数的维护与配置',
+        to: '/oms/ppc',
+      }
+    ],
+  },
+  {
+    label: 'Help',
+    leading: 'i-lucide-circle-help',
+    disabled: true,
+  },
+]
+</script>
+
+<template>
+  <header class="app-header">
+    <div>
+      <NNavigationMenu :items indicator />
     </div>
-  </div>
+
+    <div class="app-header__actions">
+      <ColorMode />
+      <NThemeSwitcher />
+    </div>
+  </header>
 </template>
+
+<style scoped>
+.app-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+
+  /* spacing */
+  padding: 0.65rem 0.5rem;
+  margin-bottom: 1rem;
+
+  /* visual */
+  //border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 768px) {
+  .app-header {
+    padding: 0.7rem 0.1rem;
+  }
+}
+
+
+.app-header__actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+</style>
