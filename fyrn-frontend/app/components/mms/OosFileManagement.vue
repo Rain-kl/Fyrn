@@ -215,9 +215,7 @@ onMounted(() => {
     <div class="flex items-center justify-between px-2">
       <div class="hidden text-sm text-muted sm:block">
         已选择
-        {{
-          table?.getFilteredSelectedRowModel().rows.length.toLocaleString()
-        }}
+        {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }}
         / {{ total.toLocaleString() }}
         条记录
       </div>
@@ -233,7 +231,12 @@ onMounted(() => {
               class: 'w-15',
             }"
             :model-value="pageSize"
-            @update:model-value="pageSize = $event as unknown as number"
+            @update:model-value="
+              (val) => {
+                pageSize = Number(val);
+                pageNo = 1;
+              }
+            "
           />
         </div>
 

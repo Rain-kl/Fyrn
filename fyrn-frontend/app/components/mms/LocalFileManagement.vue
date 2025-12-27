@@ -11,8 +11,6 @@ const data = ref<LocalFileSimpleDto[]>([]);
 const loading = ref(false);
 const syncing = ref(false);
 const total = ref(0);
-const pageNo = ref(1);
-const pageSize = ref(10);
 
 const columns: ColumnDef<LocalFileSimpleDto>[] = [
   {
@@ -48,10 +46,13 @@ const table = useTemplateRef<Table<LocalFileSimpleDto>>("table");
 const fetchData = async () => {
   loading.value = true;
   try {
+    const pageIndex = table.value?.getState().pagination.pageIndex ?? 0;
+    const pageSize = table.value?.getState().pagination.pageSize ?? 10;
+    
     const result = await uMmsNovelApi.ummsLocalPageGet({
       operator: "admin",
-      pageNo: pageNo.value,
-      pageSize: pageSize.value,
+      pageNo: pageIndex + 1,
+      pageSize: pageSize,
     });
 
     if (result.code === 200) {
@@ -82,9 +83,18 @@ const handleSync = async () => {
   }
 };
 
-watch([pageNo, pageSize], () => {
-  fetchData();
-});
+// 监听 table 的分页状态变化
+watch(
+  () => [
+    table.value?.getState().pagination.pageIndex,
+    table.value?.getState().pagination.pageSize,
+  ],
+  () => {
+    if (table.value) {
+      fetchData();
+    }
+  }
+);
 
 onMounted(() => {
   fetchData();
@@ -129,6 +139,8 @@ onMounted(() => {
       :loading
       :columns
       :data
+      :row-count="total"
+      manual-pagination
       enable-row-selection
       row-id="fileName"
     />
@@ -137,9 +149,7 @@ onMounted(() => {
     <div class="flex items-center justify-between px-2">
       <div class="hidden text-sm text-muted sm:block">
         已选择
-        {{
-          table?.getFilteredSelectedRowModel().rows.length.toLocaleString()
-        }}
+        {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }}
         / {{ total.toLocaleString() }}
         条记录
       </div>
@@ -154,21 +164,21 @@ onMounted(() => {
             :_select-trigger="{
               class: 'w-15',
             }"
-            :model-value="pageSize"
-            @update:model-value="pageSize = $event as unknown as number"
+            :model-value="table?.getState().pagination.pageSize"
+            @update:model-value="table?.setPageSize($event as unknown as number)"
           />
         </div>
 
         <div class="flex items-center justify-center text-sm font-medium">
-          第 {{ pageNo }} 页，共 {{ Math.ceil(total / pageSize) }} 页
+          第 {{ (table?.getState().pagination.pageIndex ?? 0) + 1 }} 页，共 {{ table?.getPageCount().toLocaleString() }} 页
         </div>
 
         <NPagination
-          :page="pageNo"
+          :page="(table?.getState().pagination.pageIndex ?? 0) + 1"
           :total="total"
           :show-list-item="false"
-          :items-per-page="pageSize"
-          @update:page="pageNo = $event"
+          :items-per-page="table?.getState().pagination.pageSize ?? 10"
+          @update:page="table?.setPageIndex($event - 1)"
         />
       </div>
     </div>
