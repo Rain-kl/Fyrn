@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { OmsParameter } from '~/api/models'
+import type {OmsParameter} from '~/api/models'
 
 const props = defineProps<{
   parameter: OmsParameter | null
@@ -15,9 +15,9 @@ const form = ref<OmsParameter>({})
 
 watch(() => props.parameter, (newVal) => {
   if (newVal) {
-    form.value = { ...newVal }
+    form.value = {...newVal}
   }
-}, { immediate: true })
+}, {immediate: true})
 
 const handleSave = () => {
   emit('save', form.value)
@@ -37,19 +37,19 @@ const handleSave = () => {
 
       <div class="flex flex-col gap-4 py-4">
         <NFormGroup label="参数名称">
-          <NInput v-model="form.paramName" placeholder="请输入参数名称" />
+          <NInput v-model="form.paramName" placeholder="请输入参数名称"/>
         </NFormGroup>
         <NFormGroup label="参数值">
-          <NInput v-model="form.paramValue" placeholder="请输入参数值" />
+          <NInput v-model="form.paramValue" placeholder="请输入参数值"/>
         </NFormGroup>
         <NFormGroup label="参数描述">
-          <NInput v-model="form.paramDesc" placeholder="请输入参数描述" />
+          <NInput v-model="form.paramDesc" placeholder="请输入参数描述"/>
         </NFormGroup>
         <NFormGroup label="状态">
           <NSelect
-            :items="['启用', '禁用']"
-            :model-value="form.enabledFlag === 1 ? '启用' : '禁用'"
-            @update:model-value="form.enabledFlag = $event === '启用' ? 1 : 0"
+              :items="['启用', '禁用']"
+              :model-value="form.enabledFlag === 1 ? '启用' : '禁用'"
+              @update:model-value="form.enabledFlag = $event === '启用' ? 1 : 0"
           />
         </NFormGroup>
       </div>

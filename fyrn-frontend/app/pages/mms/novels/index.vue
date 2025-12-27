@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import type { ColumnDef, RowSelectionState, Table, VisibilityState } from '@tanstack/vue-table'
-import type { MmsNovel, MmsNovelFile } from '~/api/models'
-import { useApi } from '~/api/useApi'
-import { formatToYMD } from '~/utils/date'
-import { formatBytes } from '~/utils/file'
+import type {ColumnDef, RowSelectionState, Table, VisibilityState} from '@tanstack/vue-table'
+import type {MmsNovel} from '~/api/models'
+import {useApi} from '~/api/useApi'
+import {formatToYMD} from '~/utils/date'
 
-const { mmsNovelApi, uMmsNovelApi } = useApi()
+const {mmsNovelApi} = useApi()
 
 const data = ref<MmsNovel[]>([])
 const loading = ref(false)
@@ -54,7 +53,7 @@ const columns: ColumnDef<MmsNovel>[] = [
     header: '操作',
     id: 'actions',
     cell: (info) => {
-      return h('div', { class: 'flex gap-2' }, [
+      return h('div', {class: 'flex gap-2'}, [
         h(resolveComponent('NButton'), {
           label: '查看文件',
           btn: 'ghost-primary',
@@ -74,74 +73,6 @@ const table = useTemplateRef<Table<MmsNovel>>('table')
 
 const isFilesDialogOpen = ref(false)
 const selectedNovel = ref<MmsNovel | null>(null)
-const filesLoading = ref(false)
-const files = ref<MmsNovelFile[]>([])
-const downloadingIds = ref(new Set<number>())
-
-const handleDownload = async (file: MmsNovelFile) => {
-  if (!file.id)
-    return
-  
-  downloadingIds.value.add(file.id)
-  try {
-    const response = await uMmsNovelApi.ummsDownloadMaterialGetRaw({
-      mmsNovelFileId: String(file.id),
-    })
-    const blob = await response.raw.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', file.fileName || 'download')
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
-  }
-  catch (error) {
-    console.error('Failed to download file:', error)
-  }
-  finally {
-    downloadingIds.value.delete(file.id)
-  }
-}
-
-const filesColumns: ColumnDef<MmsNovelFile>[] = [
-  {
-    header: '文件名',
-    accessorKey: 'fileName',
-  },
-  {
-    header: '大小',
-    accessorKey: 'fileSize',
-    cell: (info) => formatBytes(info.row.original.fileSize),
-  },
-  {
-    header: '字数',
-    accessorKey: 'wordCount',
-  },
-  {
-    header: '更新时间',
-    accessorKey: 'updateTime',
-    cell: (info) => formatToYMD(info.row.original.updateTime),
-  },
-  {
-    header: '操作',
-    id: 'actions',
-    cell: (info) => {
-      return h('div', { class: 'flex gap-2' }, [
-        h(resolveComponent('NButton'), {
-          label: '下载',
-          btn: 'ghost-primary',
-          size: 'sm',
-          loading: info.row.original.id ? downloadingIds.value.has(info.row.original.id) : false,
-          onClick: () => {
-            handleDownload(info.row.original)
-          },
-        }),
-      ])
-    },
-  },
-]
 
 const fetchData = async () => {
   loading.value = true
@@ -184,27 +115,9 @@ const handleSync = async () => {
   }
 }
 
-const handleOpenFiles = async (row: MmsNovel) => {
+const handleOpenFiles = (row: MmsNovel) => {
   selectedNovel.value = row
   isFilesDialogOpen.value = true
-  files.value = []
-
-  // 接口参数是 string，这里统一转 string
-  const mmsNovelId = row.id == null ? undefined : String(row.id)
-  if (!mmsNovelId)
-    return
-
-  filesLoading.value = true
-  try {
-    const result = await mmsNovelApi.mmsFileGet({ mmsNovelId })
-    if (result.code === 200) {
-      files.value = result.data || []
-    }
-  } catch (error) {
-    console.error('Failed to fetch novel files:', error)
-  } finally {
-    filesLoading.value = false
-  }
 }
 
 watch([pageNo, pageSize], () => {
@@ -215,7 +128,7 @@ watch(filters, () => {
   // 过滤条件变化时回到第一页
   pageNo.value = 1
   fetchData()
-}, { deep: true })
+}, {deep: true})
 
 onMounted(() => {
   fetchData()
@@ -228,19 +141,19 @@ onMounted(() => {
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div class="grid w-full gap-2 md:grid-cols-4">
         <NInput
-          v-model="filters.novelTitle"
-          placeholder="小说名称"
+            v-model="filters.novelTitle"
+            placeholder="小说名称"
         />
 
         <NInput
-          v-model="filters.novelAuthor"
-          placeholder="小说作者"
+            v-model="filters.novelAuthor"
+            placeholder="小说作者"
         />
 
         <NSelect
-          :items="['全部状态', '正常', '删除']"
-          :model-value="filters.status === '' ? '全部状态' : filters.status === '2' ? '正常' : '删除'"
-          @update:model-value="filters.status = $event === '正常' ? '2' : $event === '删除' ? '4' : ''"
+            :items="['全部状态', '正常', '删除']"
+            :model-value="filters.status === '' ? '全部状态' : filters.status === '2' ? '正常' : '删除'"
+            @update:model-value="filters.status = $event === '正常' ? '2' : $event === '删除' ? '4' : ''"
         />
       </div>
 
@@ -269,11 +182,11 @@ onMounted(() => {
     <div class="flex flex-wrap items-center gap-4 px-1">
       <span class="text-sm font-medium text-muted">显示列：</span>
       <NCheckbox
-        v-for="tableColumn in table?.getAllLeafColumns().filter(c => typeof c.columnDef.header === 'string' && c.id !== 'actions')"
-        :key="tableColumn.id"
-        :model-value="tableColumn.getIsVisible()"
-        :label="String(tableColumn.columnDef.header)"
-        @update:model-value="tableColumn.toggleVisibility()"
+          v-for="tableColumn in table?.getAllLeafColumns().filter(c => typeof c.columnDef.header === 'string' && c.id !== 'actions')"
+          :key="tableColumn.id"
+          :model-value="tableColumn.getIsVisible()"
+          :label="String(tableColumn.columnDef.header)"
+          @update:model-value="tableColumn.toggleVisibility()"
       />
     </div>
 
@@ -282,7 +195,7 @@ onMounted(() => {
         ref="table"
         v-model:row-selection="select"
         v-model:column-visibility="columnVisibility"
-    :loading
+        :loading
         :columns
         :data
         enable-row-selection
@@ -308,7 +221,8 @@ onMounted(() => {
       <div
           class="hidden text-sm text-muted sm:block"
       >
-        已选择 {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }} / {{ total.toLocaleString() }} 条记录
+        已选择 {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }} / {{ total.toLocaleString() }}
+        条记录
       </div>
       <div class="flex items-center space-x-6 lg:space-x-8">
         <div
@@ -345,37 +259,9 @@ onMounted(() => {
     </div>
 
     <!-- files dialog -->
-    <NDialog v-model:open="isFilesDialogOpen" :title="`物料文件列表：${selectedNovel?.novelTitle || ''}`">
-      <div class="space-y-3">
-        <div class="text-sm text-muted">
-          小说ID：{{ selectedNovel?.id }}
-        </div>
-
-        <div v-if="filesLoading" class="text-sm">
-          加载中...
-        </div>
-
-        <div v-else>
-          <div v-if="files.length === 0" class="text-sm text-muted">
-            暂无文件
-          </div>
-
-          <div v-else class="overflow-auto">
-            <NTable
-              :loading="filesLoading"
-              :columns="filesColumns"
-              :data="files"
-              row-id="id"
-            />
-          </div>
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="flex justify-end gap-2">
-          <NButton label="关闭" btn="solid-gray" @click="isFilesDialogOpen = false" />
-        </div>
-      </template>
-    </NDialog>
+    <MmsNovelFilesDialog
+        v-model="isFilesDialogOpen"
+        :novel="selectedNovel"
+    />
   </div>
 </template>

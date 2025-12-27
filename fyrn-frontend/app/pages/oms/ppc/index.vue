@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { ColumnDef, RowSelectionState, Table } from '@tanstack/vue-table'
-import type { OmsParameter } from '~/api/models'
-import { useApi } from '~/api/useApi'
+import type {ColumnDef, RowSelectionState, Table} from '@tanstack/vue-table'
+import type {OmsParameter} from '~/api/models'
+import {useApi} from '~/api/useApi'
 import {formatToYMD} from "~/utils/date";
+import ParameterEditDialog from "~/components/oms/ParameterEditDialog.vue";
 
-const { OmsParameterApi } = useApi()
+const {OmsParameterApi} = useApi()
 
 const data = ref<OmsParameter[]>([])
 const loading = ref(false)
@@ -53,7 +54,7 @@ const columns: ColumnDef<OmsParameter>[] = [
     header: '操作',
     id: 'actions',
     cell: (info) => {
-      return h('div', { class: 'flex gap-2' }, [
+      return h('div', {class: 'flex gap-2'}, [
         h(resolveComponent('NButton'), {
           label: '编辑',
           btn: 'ghost-primary',
@@ -90,8 +91,8 @@ const fetchData = async () => {
     if (result.code === 200) {
       const rows = result.data?.rows || []
       data.value = filters.kindCode
-        ? rows.filter(r => (r.kindCode || '').toLowerCase().includes(filters.kindCode.toLowerCase()))
-        : rows
+          ? rows.filter(r => (r.kindCode || '').toLowerCase().includes(filters.kindCode.toLowerCase()))
+          : rows
       total.value = result.data?.total || 0
     }
   } catch (error) {
@@ -126,7 +127,7 @@ watch(filters, () => {
   // 过滤条件变化时回到第一页
   pageNo.value = 1
   fetchData()
-}, { deep: true })
+}, {deep: true})
 
 onMounted(() => {
   fetchData()
@@ -139,25 +140,25 @@ onMounted(() => {
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div class="grid w-full gap-2 md:grid-cols-4">
         <NInput
-          v-model="filters.paramCode"
-          type="number"
-          placeholder="参数代码"
+            v-model="filters.paramCode"
+            type="number"
+            placeholder="参数代码"
         />
 
         <NInput
-          v-model="filters.paramName"
-          placeholder="参数名称"
+            v-model="filters.paramName"
+            placeholder="参数名称"
         />
 
         <NInput
-          v-model="filters.kindCode"
-          placeholder="参数类型"
+            v-model="filters.kindCode"
+            placeholder="参数类型"
         />
 
         <NSelect
-          :items="['全部状态', '启用', '禁用']"
-          :model-value="filters.enabledFlag === '' ? '全部状态' : filters.enabledFlag === '1' ? '启用' : '禁用'"
-          @update:model-value="filters.enabledFlag = $event === '启用' ? '1' : $event === '禁用' ? '0' : ''"
+            :items="['全部状态', '启用', '禁用']"
+            :model-value="filters.enabledFlag === '' ? '全部状态' : filters.enabledFlag === '1' ? '启用' : '禁用'"
+            @update:model-value="filters.enabledFlag = $event === '启用' ? '1' : $event === '禁用' ? '0' : ''"
         />
       </div>
 
@@ -177,7 +178,7 @@ onMounted(() => {
     <NTable
         ref="table"
         v-model:row-selection="select"
-    :loading
+        :loading
         :columns
         :data
         enable-row-selection
@@ -203,7 +204,8 @@ onMounted(() => {
       <div
           class="hidden text-sm text-muted sm:block"
       >
-        已选择 {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }} / {{ total.toLocaleString() }} 条记录
+        已选择 {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }} / {{ total.toLocaleString() }}
+        条记录
       </div>
       <div class="flex items-center space-x-6 lg:space-x-8">
         <div
@@ -240,9 +242,9 @@ onMounted(() => {
     </div>
 
     <ParameterEditDialog
-      v-model:open="isEditDialogOpen"
-      :parameter="selectedParameter"
-      @save="handleEdit"
+        v-model:open="isEditDialogOpen"
+        :parameter="selectedParameter"
+        @save="handleEdit"
     />
   </div>
 </template>
