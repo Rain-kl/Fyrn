@@ -20,6 +20,7 @@ package com.arctel.mms.service.impl;
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
+import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.mms.service.MmsNovelService;
@@ -35,6 +36,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,8 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
 
     @Resource
     MmsNovelServiceImpl self;
+    @Autowired
+    private MmsNovelFileMapper mmsNovelFileMapper;
 
 
     @Override
@@ -85,6 +89,13 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
 
+    @Override
+    public List<MmsNovelFile> getMmsNovelFile(String mmsNovelId) {
+        return mmsNovelFileMapper.selectList(
+                new LambdaQueryWrapper<MmsNovelFile>()
+                        .eq(MmsNovelFile::getNovelId, mmsNovelId
+                        ));
+    }
 
     @Override
     public OmsJob syncJobAsync() {
@@ -136,6 +147,7 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
             }
         });
     }
+
 
     @Transactional(rollbackFor = Exception.class)
     public void createNovel(MmsNovel newmmsNovel, MmsNovelFile mmsNovelFile) {

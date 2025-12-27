@@ -27,6 +27,7 @@ import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsJob;
 import com.arctel.oms.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,8 +91,8 @@ public class UMmsNovelController {
      * 下载物料
      */
     @GetMapping("/downloadMaterial")
-    public Result<String> downloadMaterial(String mmsNovelFileId) {
-        return null;
+    public ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId) {
+        return uMmsNovelService.downloadMaterial(mmsNovelFileId);
     }
 
 

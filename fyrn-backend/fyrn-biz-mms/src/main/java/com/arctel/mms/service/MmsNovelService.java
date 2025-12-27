@@ -18,8 +18,11 @@
 package com.arctel.mms.service;
 
 import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsJob;
+
+import java.util.List;
 
 /**
  * MmsNovelBizService, 本地小说业务服务
@@ -32,4 +35,6 @@ public interface MmsNovelService   {
     BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
 
     OmsJob syncJobAsync();
+
+    List<MmsNovelFile> getMmsNovelFile(String mmsNovelId);
 }

@@ -24,4 +24,8 @@ public class ErrorConstant {
     public static final String UPLOAD_FAILED = "4003";
     public static final String DATA_NOT_EXIST = "4004";
     public static final String PERMISSION_DENIED = "4005";
+
+    public static final String DOWNLOAD_FAILED = "5001";
+
+
 }

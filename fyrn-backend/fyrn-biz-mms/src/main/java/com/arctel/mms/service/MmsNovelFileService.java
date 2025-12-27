@@ -25,6 +25,7 @@ import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.utils.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
@@ -47,4 +48,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException;
 
     void downloadNovelFile(String filePath);
+
+    ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId);
 }

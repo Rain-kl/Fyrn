@@ -32,10 +32,10 @@ import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
 
 import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.pub.constants.ErrorConstant;
 import com.arctel.oms.pub.domain.OmsJob;
-import com.arctel.oms.pub.domain.dto.JobProgressDto;
 import com.arctel.oms.pub.domain.input.CreateJobInput;
-import com.arctel.oms.pub.domain.input.UpdateJobProgressInput;
+import com.arctel.oms.pub.exception.BizException;
 import com.arctel.oms.pub.utils.FileUtil;
 import com.arctel.oms.pub.utils.PagingUtil;
 import com.arctel.oms.pub.utils.Result;
@@ -45,6 +45,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,12 +57,13 @@ import jakarta.annotation.Resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Arctel
@@ -174,10 +179,10 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
                                 self.syncLocalFile(f, input.getOperator());
                             } catch (Exception e) {
                                 // 记录失败日志或更新 job 状态，但不中断其他文件处理
-                                updateProgress(rows.size(),"Failed to process file: " + f.getFileName() + ", error: " + e.getMessage());
+                                updateProgress(rows.size(), "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage());
                                 return;
                             }
-                            updateProgress(rows.size(),"Processed: " + f.getFileName());
+                            updateProgress(rows.size(), "Processed: " + f.getFileName());
                         });
                     }
                 });
@@ -242,4 +247,39 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         System.out.println(preview);
     }
 
+    @Override
+    public ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId) {
+        // 1. 获取数据库记录
+        MmsNovelFile mmsNovelFile = getById(mmsNovelFileId);
+        if (mmsNovelFile == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 2. 从对象存储下载字节数组
+        byte[] fileBytes;
+        try {
+            fileBytes = oosSupport.downloadBytes(mmsNovelFile.getFilePath());
+        } catch (Exception e) {
+            throw new BizException(ErrorConstant.DOWNLOAD_FAILED, e, "Failed to download file from OOS");
+        }
+
+        if (fileBytes == null || fileBytes.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 3. 设置响应头：强制下载 + 文件名（建议对文件名做 URL 编码）
+        String fileName = mmsNovelFile.getFileName(); // 如 "我的小说.txt"
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20"); // 防止空格变加号
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 通用二进制流
+        headers.setContentDispositionFormData("attachment", encodedFileName);
+        headers.setContentLength(fileBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(fileBytes);
+    }
 }
+

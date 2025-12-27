@@ -76,7 +76,7 @@ public class MmsNovelController {
      */
     @GetMapping("/file")
     public Result<List<MmsNovelFile>> getMmsNovelFile(String mmsNovelId) {
-        return null;
+        return Result.success(mmsNovelService.getMmsNovelFile(mmsNovelId));
     }
 
 }
