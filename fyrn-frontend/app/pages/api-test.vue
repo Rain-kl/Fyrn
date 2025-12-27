@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useApi} from "~/lib/useApi";
+import {useApi} from "~/api/useApi";
 
 const { mmsNovel } = useApi()
 
