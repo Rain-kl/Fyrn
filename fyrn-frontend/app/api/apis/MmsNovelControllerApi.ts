@@ -36,6 +36,7 @@ export interface MmsPageGetRequest {
     operator: string;
     pageNo?: number;
     pageSize?: number;
+    id?: number;
     novelTitle?: string;
     novelAuthor?: string;
 }
@@ -101,6 +102,10 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
 
         if (requestParameters['pageSize'] != null) {
             queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['id'] != null) {
+            queryParameters['id'] = requestParameters['id'];
         }
 
         if (requestParameters['novelTitle'] != null) {
