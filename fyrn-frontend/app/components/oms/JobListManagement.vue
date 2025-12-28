@@ -20,7 +20,7 @@ const pageSize = ref(10);
 const columnVisibility = ref<VisibilityState>({
   jobId: false,
   createdUser: false,
-  createTime: false
+  createTime: false,
 });
 
 const filters = reactive({
@@ -117,6 +117,22 @@ const columns: ColumnDef<OmsJob>[] = [
     cell: (info) => {
       const time = info.row.original.finishedTime;
       return time ? formatToYMDHMS(time) : "-";
+    },
+  },
+  {
+    header: "操作",
+    id: "actions",
+    cell: (info) => {
+      const jobId = info.row.original.jobId;
+      return h(resolveComponent("NButton"), {
+        label: "详情",
+        btn: "soft-info",
+        size: "xs",
+        leading: "i-heroicons-eye",
+        onClick: () => {
+          if (jobId) navigateTo(`/oms/job/${jobId}`);
+        },
+      });
     },
   },
 ];

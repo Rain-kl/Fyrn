@@ -73,6 +73,18 @@ export interface OmsJob {
      * @memberof OmsJob
      */
     updateTime?: string;
+    /**
+     * 任务日志
+     * @type {string}
+     * @memberof OmsJob
+     */
+    jobLog?: string;
+     /**
+     * 任务进度
+     * @type {object}
+     * @memberof OmsJob
+     */
+    jobProgressDto?: any;
 }
 
 /**
@@ -101,6 +113,8 @@ export function OmsJobFromJSONTyped(json: any, ignoreDiscriminator: boolean): Om
         'finishedTime': json['finishedTime'] == null ? undefined : json['finishedTime'],
         'createTime': json['createTime'] == null ? undefined : json['createTime'],
         'updateTime': json['updateTime'] == null ? undefined : json['updateTime'],
+        'jobLog': json['jobLog'] == null ? undefined : json['jobLog'],
+        'jobProgressDto': json['jobProgressDto'] == null ? undefined : json['jobProgressDto'],
     };
 }
 
@@ -124,6 +138,8 @@ export function OmsJobToJSONTyped(value?: OmsJob | null, ignoreDiscriminator: bo
         'finishedTime': value['finishedTime'],
         'createTime': value['createTime'],
         'updateTime': value['updateTime'],
+        'jobLog': value['jobLog'],
+        'jobProgressDto': value['jobProgressDto'],
     };
 }
 

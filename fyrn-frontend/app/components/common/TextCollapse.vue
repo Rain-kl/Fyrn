@@ -37,7 +37,7 @@ const toggleExpand = () => {
     <span
       :class="[
         'text-sm',
-        isExpanded ? 'whitespace-pre-wrap' : 'truncate',
+        shouldCollapse && !isExpanded ? 'truncate' : 'whitespace-pre-wrap',
         shouldCollapse ? 'cursor-pointer hover:text-primary' : '',
       ]"
       @click="toggleExpand"
