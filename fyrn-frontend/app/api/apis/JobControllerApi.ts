@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ResultBaseQueryPageOmsJob,
   ResultBoolean,
+  ResultJobMonitorOutput,
   ResultOmsJob,
   ResultString,
 } from '../models/index';
@@ -25,6 +26,8 @@ import {
     ResultBaseQueryPageOmsJobToJSON,
     ResultBooleanFromJSON,
     ResultBooleanToJSON,
+    ResultJobMonitorOutputFromJSON,
+    ResultJobMonitorOutputToJSON,
     ResultOmsJobFromJSON,
     ResultOmsJobToJSON,
     ResultStringFromJSON,
@@ -253,6 +256,34 @@ export class JobControllerApi extends runtime.BaseAPI {
      */
     async omsJobLogPost(requestParameters: OmsJobLogPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
         const response = await this.omsJobLogPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * 任务监控
+     */
+    async omsJobMonitorGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultJobMonitorOutput>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/oms/job/monitor`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultJobMonitorOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 任务监控
+     */
+    async omsJobMonitorGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultJobMonitorOutput> {
+        const response = await this.omsJobMonitorGetRaw(initOverrides);
         return await response.value();
     }
 

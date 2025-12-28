@@ -17,15 +17,15 @@ import * as runtime from '../runtime';
 import type {
   AddParameterInput,
   ResultBaseQueryPageOmsParameter,
-  ResultString,
+  ResultBoolean,
 } from '../models/index';
 import {
     AddParameterInputFromJSON,
     AddParameterInputToJSON,
     ResultBaseQueryPageOmsParameterFromJSON,
     ResultBaseQueryPageOmsParameterToJSON,
-    ResultStringFromJSON,
-    ResultStringToJSON,
+    ResultBooleanFromJSON,
+    ResultBooleanToJSON,
 } from '../models/index';
 
 export interface OmsParameterEditPostRequest {
@@ -47,10 +47,10 @@ export interface OmsParameterPageGetRequest {
 export class OmsParameterControllerApi extends runtime.BaseAPI {
 
     /**
-     * 
+     * 如果参数不存在，返回失败,目前不支持新增
      * 修改系统参数
      */
-    async omsParameterEditPostRaw(requestParameters: OmsParameterEditPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
+    async omsParameterEditPostRaw(requestParameters: OmsParameterEditPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBoolean>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -65,14 +65,14 @@ export class OmsParameterControllerApi extends runtime.BaseAPI {
             body: AddParameterInputToJSON(requestParameters['addParameterInput']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultStringFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
     }
 
     /**
-     * 
+     * 如果参数不存在，返回失败,目前不支持新增
      * 修改系统参数
      */
-    async omsParameterEditPost(requestParameters: OmsParameterEditPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
+    async omsParameterEditPost(requestParameters: OmsParameterEditPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
         const response = await this.omsParameterEditPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

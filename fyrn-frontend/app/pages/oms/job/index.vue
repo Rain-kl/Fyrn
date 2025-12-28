@@ -2,7 +2,7 @@
 const items = ref([
   {
     value: "jobList",
-    name: "Job List",
+    name: "任务列表",
     _tabsTrigger: {
       leading: "i-lucide-list-checks",
     },

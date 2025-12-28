@@ -1,20 +1,20 @@
 <script setup lang="ts">
 const items = ref([
   {
-    value: 'oss',
-    name: 'OSS管理',
+    value: "oss",
+    name: "OSS管理",
     _tabsTrigger: {
-      leading: 'i-lucide-cloud',
+      leading: "i-lucide-cloud",
     },
   },
   {
-    value: 'local',
-    name: '本地文件管理',
+    value: "local",
+    name: "本地文件管理",
     _tabsTrigger: {
-      leading: 'i-lucide-hard-drive',
+      leading: "i-lucide-hard-drive",
     },
   },
-])
+]);
 </script>
 
 <template>
