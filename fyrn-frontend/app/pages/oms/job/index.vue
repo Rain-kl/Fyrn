@@ -34,8 +34,7 @@ const items = ref([
       </div>
 
       <div v-if="item.value === 'threadStatus'">
-        <!-- Thread Status 暂时为空 -->
-        <div class="text-center text-muted py-10">Thread Status 功能待实现</div>
+        <OmsThreadStatus />
       </div>
     </template>
   </NTabs>
