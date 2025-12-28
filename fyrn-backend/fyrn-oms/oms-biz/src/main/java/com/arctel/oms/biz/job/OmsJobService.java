@@ -23,6 +23,7 @@ import com.arctel.oms.pub.domain.input.CreateJobInput;
 import com.arctel.oms.pub.domain.input.GetJobDetailInput;
 import com.arctel.oms.pub.domain.input.UpdateJobInput;
 import com.arctel.oms.pub.domain.input.UpdateJobProgressInput;
+import com.arctel.oms.pub.domain.output.JobMonitorOutput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -45,4 +46,6 @@ public interface OmsJobService extends IService<OmsJob> {
     void updateLog(String jobId, String logMessage);
 
     String getLog(String jobId);
+
+    JobMonitorOutput monitorJob();
 }

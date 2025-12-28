@@ -21,6 +21,7 @@ package com.arctel.oms.biz.job;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsJob;
 import com.arctel.oms.pub.domain.input.*;
+import com.arctel.oms.pub.domain.output.JobMonitorOutput;
 import com.arctel.oms.pub.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,4 +108,12 @@ public class JobController {
         return Result.success(omsJobService.getLog(logId));
     }
 
+
+    /**
+     * 任务监控
+     */
+    @GetMapping("/monitor")
+    public Result<JobMonitorOutput> monitorJob() {
+        return Result.success(omsJobService.monitorJob());
+    }
 }

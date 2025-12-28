@@ -20,16 +20,20 @@ package com.arctel.oms.biz;
 import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.biz.job.OmsJobService;
 import com.arctel.oms.biz.mapper.OmsJobMapper;
+import com.arctel.oms.biz.scheduled.ThreadPoolMetricsPublisher;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.constants.ErrorConstant;
 import com.arctel.oms.pub.constants.JobStatusEnum;
 import com.arctel.oms.pub.domain.OmsJob;
+import com.arctel.oms.pub.domain.dto.JobOverviewDto;
 import com.arctel.oms.pub.domain.dto.JobProgressDto;
+import com.arctel.oms.pub.domain.dto.ThreadPoolMetricsDTO;
 import com.arctel.oms.pub.domain.input.CreateJobInput;
 import com.arctel.oms.pub.domain.input.GetJobDetailInput;
 import com.arctel.oms.pub.domain.input.UpdateJobInput;
 import com.arctel.oms.pub.domain.input.UpdateJobProgressInput;
 import com.arctel.oms.pub.domain.output.GetJobDetailOutput;
+import com.arctel.oms.pub.domain.output.JobMonitorOutput;
 import com.arctel.oms.pub.exception.BizException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -59,6 +63,9 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    private ThreadPoolMetricsPublisher threadPoolMetricsPublisher;
 
     public static final Integer MESSAGE_MAX_LENGTH = 4096;
 
@@ -184,6 +191,42 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
             sb.append(bizLog.get(i)).append("\n");
         }
         return sb.toString();
+    }
+
+    @Override
+    public JobMonitorOutput monitorJob() {
+        JobMonitorOutput jobMonitorOutput = new JobMonitorOutput();
+        ThreadPoolMetricsDTO currentMetrics = threadPoolMetricsPublisher.getCurrentMetrics();
+
+        jobMonitorOutput.setThreadPoolMetricsDTO(currentMetrics);
+
+        JobOverviewDto jobOverviewDto = new JobOverviewDto();
+
+        LambdaQueryWrapper<OmsJob> qw = new LambdaQueryWrapper<>();
+        qw.select(OmsJob::getJobId, OmsJob::getStatus, OmsJob::getStartedTime, OmsJob::getFinishedTime);
+
+        List<OmsJob> list = baseMapper.selectList(qw);
+
+        jobOverviewDto.setTotalJobCount(list.size());
+        int runningCount = 0;
+        int successCount = 0;
+        int failedCount = 0;
+        for (OmsJob job : list) {
+            if (JobStatusEnum.RUNNING.getValue().equals(job.getStatus())) {
+                runningCount++;
+            } else if (JobStatusEnum.SUCCESS.getValue().equals(job.getStatus())) {
+                successCount++;
+            } else if (JobStatusEnum.FAILED.getValue().equals(job.getStatus())) {
+                failedCount++;
+            }
+        }
+        jobOverviewDto.setRunningJobCount(runningCount);
+        jobOverviewDto.setSuccessJobCount(successCount);
+        jobOverviewDto.setFailedJobCount(failedCount);
+
+        jobMonitorOutput.setJobOverviewDto(jobOverviewDto);
+
+        return jobMonitorOutput;
     }
 
 }
