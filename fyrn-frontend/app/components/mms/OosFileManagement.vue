@@ -6,10 +6,12 @@ import { formatToYMD } from "~/utils/date";
 import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
 
-const { uMmsNovelApi } = useApi();
+const { uMmsNovelApi, mmsNovelApi } = useApi();
+const { toast } = useToast();
 
 const data = ref<MmsNovelFile[]>([]);
 const loading = ref(false);
+const syncing = ref(false);
 const total = ref(0);
 const pageNo = ref(1);
 const pageSize = ref(10);
@@ -142,6 +144,36 @@ const handleDownload = async (file: MmsNovelFile) => {
   }
 };
 
+const handleSync = async () => {
+  syncing.value = true;
+  try {
+    const result = await mmsNovelApi.mmsSyncPost();
+    if (result.code === 200) {
+      toast({
+        title: "开始同步任务",
+        description: `任务 ID: ${result.data?.jobId}`,
+        toast: "soft-success",
+        progress: "success",
+        showProgress: true,
+        closable: true,
+      });
+      fetchData();
+    }
+  } catch (error) {
+    console.error("Failed to sync novels:", error);
+    toast({
+      title: "同步失败",
+      description: "同步文件时发生错误",
+      toast: "soft-error",
+      progress: "error",
+      showProgress: true,
+      closable: true,
+    });
+  } finally {
+    syncing.value = false;
+  }
+};
+
 watch([pageNo, pageSize], () => {
   fetchData();
 });
@@ -181,6 +213,15 @@ onMounted(() => {
           class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
           :loading="loading"
           @click="fetchData"
+        />
+
+        <NButton
+          label="同步"
+          btn="solid-primary"
+          leading="i-radix-icons-download"
+          class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
+          :loading="syncing"
+          @click="handleSync"
         />
       </div>
     </div>

@@ -109,12 +109,9 @@ watch(
     if (table.value) {
       fetchData();
     }
-  }
+  },
+  { flush: "post" }
 );
-
-onMounted(() => {
-  fetchData();
-});
 </script>
 
 <template>
