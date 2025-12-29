@@ -26,17 +26,29 @@ const columnVisibility = ref<VisibilityState>({
 const filters = reactive({
   jobId: "" as string,
   taskType: "" as string,
-  status: undefined as number | undefined,
+  status: "全部状态" as string,
 });
 
 const statusOptions = [
-  { value: undefined, label: "全部状态" },
-  { value: 0, label: "排队中" },
-  { value: 1, label: "运行中" },
-  { value: 2, label: "成功" },
-  { value: 3, label: "失败" },
-  { value: 4, label: "已取消" },
+  "全部状态",
+  "排队中",
+  "运行中",
+  "成功",
+  "失败",
+  "已取消",
 ];
+
+const statusLabelToValue = (label: string): number | undefined => {
+  const map: Record<string, number | undefined> = {
+    全部状态: undefined,
+    排队中: 0,
+    运行中: 1,
+    成功: 2,
+    失败: 3,
+    已取消: 4,
+  };
+  return map[label];
+};
 
 const getStatusLabel = (status?: number) => {
   const statusMap: Record<number, string> = {
@@ -150,7 +162,7 @@ const fetchData = async () => {
       pageSize: pageSize.value,
       jobId: filters.jobId || undefined,
       taskType: filters.taskType || undefined,
-      status: filters.status,
+      status: statusLabelToValue(filters.status),
     });
 
     if (result.code === 200) {
@@ -198,7 +210,6 @@ onMounted(() => {
           v-model="filters.status"
           :items="statusOptions"
           placeholder="选择状态"
-          value-attribute="value"
           :_select-trigger="{
             class: 'w-full',
           }"
