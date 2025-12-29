@@ -5,7 +5,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Run stage
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-ea-5-jdk-alpine
 WORKDIR /app
 
 # Copy the jar file
