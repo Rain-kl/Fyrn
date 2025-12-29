@@ -35,7 +35,8 @@ public class NovelUtil {
 
     /**
      * 从文件名中提取小说标题和作者
-     * @param fileName  {title} 作者 {author}.txt
+     *
+     * @param fileName {title} 作者 {author}.txt
      * @return [title, author] 或 null 如果格式不正确
      */
     public static List<String> extractTitleAndAuthor(String fileName) {
@@ -83,7 +84,10 @@ public class NovelUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public static String buildNovelFileName(String title, String author) {
+        return title.trim() + " 作者 " + author.trim() + ".txt";
     }
 
 
