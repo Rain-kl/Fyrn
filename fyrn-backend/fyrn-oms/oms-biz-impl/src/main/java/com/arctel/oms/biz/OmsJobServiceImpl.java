@@ -166,7 +166,6 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
         return updateById(omsJob);
     }
 
-
     @Override
     public void updateLog(String jobId, String bizLog) {
         String key = JOB_LOG_KEY_PREFIX + jobId;
@@ -181,8 +180,13 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
 
     @Override
     public String getLog(String jobId) {
+        return getLog(jobId, 200);
+    }
+
+    @Override
+    public String getLog(String jobId, int limit) {
         String key = JOB_LOG_KEY_PREFIX + jobId;
-        List<Object> bizLog = redisTemplate.opsForList().range(key, 0, -1);
+        List<Object> bizLog = redisTemplate.opsForList().range(key, 0, limit);
         if (bizLog == null || bizLog.isEmpty()) {
             return "";
         }

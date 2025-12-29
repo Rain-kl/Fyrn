@@ -47,5 +47,7 @@ public interface OmsJobService extends IService<OmsJob> {
 
     String getLog(String jobId);
 
+    String getLog(String jobId, int limit);
+
     JobMonitorOutput monitorJob();
 }
