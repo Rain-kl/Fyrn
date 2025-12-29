@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   fyrn-backend:
     build: .
@@ -11,4 +11,3 @@ services:
       - ./config/application-prod.yml:/app/config/application-prod.yml
     environment:
       - TZ=Asia/Shanghai
-

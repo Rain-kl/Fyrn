@@ -24,7 +24,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.0.13</version>
                 <configuration>
-                    <mainClass>com.arctel.platform.oms.pub.Application</mainClass>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

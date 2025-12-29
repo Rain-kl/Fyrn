@@ -71,6 +71,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.arctel.aggregation.AggregationApplication</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
