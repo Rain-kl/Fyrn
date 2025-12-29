@@ -20,9 +20,20 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'light',
   },
+  vite: {
+    server: {
+      proxy: {
+        '/api': {
+          target: process.env.PROXY_TARGET || 'http://localhost:45600',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        }
+      }
+    }
+  },
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8080', // 替换为你的后端地址
+      apiBase: '/api', // 替换为你的后端地址
     },
   },
 })
