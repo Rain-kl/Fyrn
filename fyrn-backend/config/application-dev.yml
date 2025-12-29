@@ -1,0 +1,20 @@
+fyrn:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: host.docker.internal
+    port: 3306
+    database: fyrn
+    username: root
+    password: root
+
+  redis:
+    host: host.docker.internal
+    port: 6379
+    password: root
+
+  minio:
+    access-key-id: eZkIBk8WaWlfxjCx5OAW
+    access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
+    bucket-name: fyrn
+    endpoint: http://host.docker.internal:9000
+
