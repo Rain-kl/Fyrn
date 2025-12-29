@@ -3,7 +3,7 @@ services:
   fyrn-backend:
     build: .
     ports:
-      - "45600:8080"
+      - "45600:45600"
     restart: always
     volumes:
       - ./config/application-prod.yml:/app/config/application-prod.yml
