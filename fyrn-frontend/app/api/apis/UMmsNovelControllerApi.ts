@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ResultBaseQueryPageLocalFileSimpleDto,
   ResultBaseQueryPageMmsNovelFile,
+  ResultBoolean,
   ResultOmsJob,
   ResultString,
 } from '../models/index';
@@ -25,6 +26,8 @@ import {
     ResultBaseQueryPageLocalFileSimpleDtoToJSON,
     ResultBaseQueryPageMmsNovelFileFromJSON,
     ResultBaseQueryPageMmsNovelFileToJSON,
+    ResultBooleanFromJSON,
+    ResultBooleanToJSON,
     ResultOmsJobFromJSON,
     ResultOmsJobToJSON,
     ResultStringFromJSON,
@@ -42,6 +45,21 @@ export interface UmmsLocalPageGetRequest {
 }
 
 export interface UmmsNoevlPageGetRequest {
+    operator: string;
+    pageNo?: number;
+    pageSize?: number;
+    novelId?: string;
+    fileName?: string;
+}
+
+export interface UmmsNovelBindPostRequest {
+    fileId?: string;
+    novelId?: string;
+    novelTitle?: string;
+    novelAuthor?: string;
+}
+
+export interface UmmsNovelPageGetRequest {
     operator: string;
     pageNo?: number;
     pageSize?: number;
@@ -218,6 +236,105 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      */
     async ummsNoevlPageGet(requestParameters: UmmsNoevlPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
         const response = await this.ummsNoevlPageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 不存在则新增，存在则更新
+     * 物料文件绑定
+     */
+    async ummsNovelBindPostRaw(requestParameters: UmmsNovelBindPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBoolean>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['fileId'] != null) {
+            queryParameters['fileId'] = requestParameters['fileId'];
+        }
+
+        if (requestParameters['novelId'] != null) {
+            queryParameters['novelId'] = requestParameters['novelId'];
+        }
+
+        if (requestParameters['novelTitle'] != null) {
+            queryParameters['novelTitle'] = requestParameters['novelTitle'];
+        }
+
+        if (requestParameters['novelAuthor'] != null) {
+            queryParameters['novelAuthor'] = requestParameters['novelAuthor'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/umms/novel/bind`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
+    }
+
+    /**
+     * 不存在则新增，存在则更新
+     * 物料文件绑定
+     */
+    async ummsNovelBindPost(requestParameters: UmmsNovelBindPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
+        const response = await this.ummsNovelBindPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * 查询物料分页列表
+     */
+    async ummsNovelPageGetRaw(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageMmsNovelFile>> {
+        if (requestParameters['operator'] == null) {
+            throw new runtime.RequiredError(
+                'operator',
+                'Required parameter "operator" was null or undefined when calling ummsNovelPageGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['operator'] != null) {
+            queryParameters['operator'] = requestParameters['operator'];
+        }
+
+        if (requestParameters['pageNo'] != null) {
+            queryParameters['pageNo'] = requestParameters['pageNo'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['novelId'] != null) {
+            queryParameters['novelId'] = requestParameters['novelId'];
+        }
+
+        if (requestParameters['fileName'] != null) {
+            queryParameters['fileName'] = requestParameters['fileName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/umms/novel/page`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBaseQueryPageMmsNovelFileFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 查询物料分页列表
+     */
+    async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
+        const response = await this.ummsNovelPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
