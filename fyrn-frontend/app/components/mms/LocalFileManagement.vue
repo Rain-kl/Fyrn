@@ -127,20 +127,20 @@ watch(
 
       <div class="flex items-center gap-x-2 sm:ml-auto">
         <NButton
-          label="同步到 OOS"
-          btn="solid-primary"
-          leading="i-tabler-refresh"
-          class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
-          :loading="syncing"
-          @click="handleSyncClick"
-        />
-        <NButton
           label="刷新"
           btn="solid-gray"
           leading="i-radix-icons-update"
           class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
           :loading="loading"
           @click="fetchData"
+        />
+        <NButton
+            label="同步文件"
+            btn="solid-primary"
+            leading="i-tabler-refresh"
+            class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
+            :loading="syncing"
+            @click="handleSyncClick"
         />
       </div>
     </div>

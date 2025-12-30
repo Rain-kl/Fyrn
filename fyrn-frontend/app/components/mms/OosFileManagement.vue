@@ -101,7 +101,7 @@ const downloadingIds = ref(new Set<string>());
 const fetchData = async () => {
   loading.value = true;
   try {
-    const result = await uMmsNovelApi.ummsNoevlPageGet({
+    const result = await uMmsNovelApi.ummsNovelPageGet({
       operator: "admin",
       pageNo: pageNo.value,
       pageSize: pageSize.value,
@@ -216,9 +216,9 @@ onMounted(() => {
         />
 
         <NButton
-          label="同步"
+          label="同步物料"
           btn="solid-primary"
-          leading="i-radix-icons-download"
+          leading="i-tabler-refresh"
           class="w-full sm:w-auto sm:shrink-0 active:translate-y-0.5"
           :loading="syncing"
           @click="handleSync"
