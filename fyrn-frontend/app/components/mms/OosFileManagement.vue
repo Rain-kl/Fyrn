@@ -5,6 +5,7 @@ import { useApi } from "~/api/useApi";
 import { formatToYMD } from "~/utils/date";
 import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
+import NovelBindDialog from "~/components/mms/NovelBindDialog.vue";
 
 const { uMmsNovelApi, mmsNovelApi } = useApi();
 const { toast } = useToast();
@@ -15,6 +16,9 @@ const syncing = ref(false);
 const total = ref(0);
 const pageNo = ref(1);
 const pageSize = ref(10);
+
+const bindDialogOpen = ref(false);
+const selectedFile = ref<MmsNovelFile | null>(null);
 
 const filters = reactive({
   novelId: "" as string,
@@ -76,6 +80,15 @@ const columns: ColumnDef<MmsNovelFile>[] = [
     id: "actions",
     cell: (info) => {
       return h("div", { class: "flex gap-2" }, [
+        h(resolveComponent("NButton"), {
+          label: "绑定",
+          btn: "ghost-primary",
+          size: "sm",
+          onClick: () => {
+            selectedFile.value = info.row.original;
+            bindDialogOpen.value = true;
+          },
+        }),
         h(resolveComponent("NButton"), {
           label: "下载",
           btn: "ghost-primary",
@@ -251,6 +264,12 @@ onMounted(() => {
       </template>
       <!-- end cell -->
     </NTable>
+
+    <NovelBindDialog
+      v-model:open="bindDialogOpen"
+      :file="selectedFile"
+      @success="fetchData"
+    />
 
     <!-- footer -->
     <div class="flex items-center justify-between px-2">
