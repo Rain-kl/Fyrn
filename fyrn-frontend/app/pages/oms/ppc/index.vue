@@ -136,6 +136,11 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col space-y-4">
+
+    <div class="flex items-center gap-x-2">
+      <h2 class="text-lg font-semibold">系统参数管理</h2>
+    </div>
+
     <!-- header -->
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div class="grid w-full gap-2 md:grid-cols-4">

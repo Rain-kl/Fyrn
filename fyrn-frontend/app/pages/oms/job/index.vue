@@ -1,17 +1,17 @@
 <script setup lang="ts">
 const items = ref([
   {
-    value: "oss",
-    name: "OSS管理",
+    value: "jobList",
+    name: "任务列表",
     _tabsTrigger: {
-      leading: "i-lucide-cloud",
+      leading: "i-lucide-list-checks",
     },
   },
   {
-    value: "local",
-    name: "本地文件管理",
+    value: "threadStatus",
+    name: "Thread Status",
     _tabsTrigger: {
-      leading: "i-lucide-hard-drive",
+      leading: "i-lucide-activity",
     },
   },
 ]);
@@ -20,7 +20,7 @@ const items = ref([
 <template>
   <NTabs
     :items="items"
-    default-value="oss"
+    default-value="jobList"
     :_tabs-list="{
       class: 'grid grid-cols-2 w-full max-w-md',
     }"
@@ -29,12 +29,12 @@ const items = ref([
     }"
   >
     <template #content="{ item }">
-      <div v-if="item.value === 'oss'">
-        <MmsOosFileManagement />
+      <div v-if="item.value === 'jobList'">
+        <OmsJobListManagement />
       </div>
 
-      <div v-if="item.value === 'local'">
-        <MmsLocalFileManagement />
+      <div v-if="item.value === 'threadStatus'">
+        <OmsThreadStatus />
       </div>
     </template>
   </NTabs>
