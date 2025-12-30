@@ -17,6 +17,7 @@
 
 package com.arctel.mms.service;
 
+import com.arctel.domain.dto.input.BindNovelFileInput;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 
 import com.arctel.domain.dao.entity.MmsNovelFile;
@@ -50,4 +51,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     void downloadNovelFile(String filePath);
 
     ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId);
+
+    Boolean bindNovelFile(BindNovelFileInput input);
 }

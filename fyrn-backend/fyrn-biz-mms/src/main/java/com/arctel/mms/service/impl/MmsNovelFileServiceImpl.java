@@ -25,6 +25,7 @@ import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
+import com.arctel.domain.dto.input.BindNovelFileInput;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.domain.dto.input.UMmsPageInput;
 import com.arctel.mms.service.MmsNovelFileService;
@@ -289,6 +290,33 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(fileBytes);
+    }
+
+    @Override
+    public Boolean bindNovelFile(BindNovelFileInput input) {
+        Long novelId = input.getNovelId();
+        MmsNovelFile file = getOne(new LambdaQueryWrapper<MmsNovelFile>().eq(MmsNovelFile::getId, input.getFileId()));
+        if (file == null) {
+            throw new BizException(ErrorConstant.COMMON_ERROR, "未找到对应的物料文件记录，无法绑定小说ID: " + novelId);
+        }
+
+        if (novelId != null && novelId > 0) {
+            // 绑定到已有小说
+            boolean exists = mmsNovelMapper.exists(new LambdaQueryWrapper<MmsNovel>().eq(MmsNovel::getId, novelId));
+            if (!exists) {
+                throw new BizException(ErrorConstant.COMMON_ERROR, "绑定的小说ID不存在: " + novelId);
+            }
+            file.setNovelId(novelId);
+            updateById(file);
+        } else {
+            // 创建新小说并绑定
+            MmsNovel novel = new MmsNovel();
+            novel.setNovelTitle(input.getNovelTitle());
+            novel.setNovelAuthor(input.getNovelAuthor());
+            // 假设此方法会设置 novel.id 并更新 file.novelId
+            mmsNovelService.createNovel(novel, file);
+        }
+        return true;
     }
 }
 

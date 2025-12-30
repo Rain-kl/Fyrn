@@ -19,16 +19,30 @@ package com.arctel.oms.pub.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 @AllArgsConstructor
 public class JobProgressDto {
 
-    Integer current;
+    Long current;
 
-    Integer total;
+    Long total;
 
-    private double getPercent() {
+    public JobProgressDto(Integer current, Integer total) {
+        this.current = Long.valueOf(current);
+        this.total = Long.valueOf(total);
+    }
+
+    public void setCurrent(Integer current) {
+        this.current = Long.valueOf(current);
+    }
+
+    public void setTotal(Integer total) {
+        this.total = Long.valueOf(total);
+    }
+
+    public double getPercent() {
         if (total == null || total == 0) {
             return 0.0;
         }
