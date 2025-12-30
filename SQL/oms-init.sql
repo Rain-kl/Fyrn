@@ -47,3 +47,30 @@ CREATE TABLE oms_job
     KEY idx_task_type_created (task_type, create_time)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='任务表';
+
+
+-- ----------------------------
+-- Table structure for oms_user
+-- ----------------------------
+DROP TABLE IF EXISTS `oms_user`;
+CREATE TABLE `oms_user`
+(
+    `user_id`        VARCHAR(64)   NOT NULL COMMENT '用户ID',
+    `username`       VARCHAR(64)   NOT NULL COMMENT '登录用户名',
+    `password`       VARCHAR(255)  NOT NULL COMMENT '登录密码(加密)',
+    `nickname`       VARCHAR(64)   NULL COMMENT '用户昵称',
+    `email`          VARCHAR(128)  NULL COMMENT '邮箱',
+    `phone`          VARCHAR(32)   NULL COMMENT '手机号',
+    `status`         TINYINT       NOT NULL COMMENT '用户状态：0=禁用，1=正常，2=锁定',
+    `last_login_ip`  VARCHAR(64)   NULL COMMENT '最后登录IP',
+    `last_login_time` DATETIME(3)  NULL COMMENT '最后登录时间',
+    `created_user`   VARCHAR(64)   NULL COMMENT '创建人',
+    `create_time`    DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+
+    PRIMARY KEY (`user_id`),
+    UNIQUE KEY uk_username (`username`),
+    UNIQUE KEY uk_email (`email`),
+    KEY idx_status_updated (`status`, `update_time`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='系统用户表';

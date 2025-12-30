@@ -25,7 +25,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseQueryPageInput extends BaseInput {
+public class BaseQueryPageInput {
 
     /**
      * 当前页码
