@@ -25,4 +25,5 @@ public class RedisPrefixConstant {
 
     public static final String DEFAULT_THREAD_POOL_PREFIX = "oms:thread:default:";
 
+    public static final String THREAD_POOL_METRICS = DEFAULT_THREAD_POOL_PREFIX + "metrics:";
 }

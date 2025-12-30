@@ -17,6 +17,8 @@
 
 package com.arctel.oms.pub.exception;
 
+import com.arctel.oms.pub.constants.ErrorConstant;
+
 public class BizException extends BaseException {
 
     public BizException(String errorCode) {
@@ -27,8 +29,8 @@ public class BizException extends BaseException {
         super(errorCode, messages);
     }
 
-    public BizException(String errorCode, Throwable cause) {
-        super(errorCode, cause);
+    public BizException(String message, Throwable cause) {
+        super(ErrorConstant.COMMON_ERROR, cause, message);
     }
 
     public BizException(String errorCode, Throwable cause, String... messages) {

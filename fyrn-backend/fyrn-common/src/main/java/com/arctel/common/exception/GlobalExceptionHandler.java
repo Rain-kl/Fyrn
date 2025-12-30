@@ -17,6 +17,7 @@
 
 package com.arctel.common.exception;
 
+import com.arctel.oms.pub.exception.BizException;
 import com.arctel.oms.pub.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -76,6 +77,15 @@ public class GlobalExceptionHandler {
     public Result<String> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("参数验证失败: {}", e.getMessage());
         return Result.error(e.getMessage());
+    }
+
+    /**
+     * 业务异常
+     */
+    @ExceptionHandler( BizException.class)
+    public Result<String> handleException(BizException e) {
+        log.error("业务异常", e);
+        return Result.error("错误: " + e.getMessage());
     }
 
     /**

@@ -37,4 +37,6 @@ public interface MmsNovelService   {
     OmsJob syncJobAsync();
 
     List<MmsNovelFile> getMmsNovelFile(String mmsNovelId);
+
+    void createNovel(MmsNovel newmmsNovel, MmsNovelFile mmsNovelFile);
 }

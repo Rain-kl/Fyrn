@@ -15,40 +15,17 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.pub.domain.dto;
+package com.arctel.oms.pub.domain.output;
 
-import lombok.AllArgsConstructor;
+import com.arctel.oms.pub.domain.dto.JobOverviewDto;
+import com.arctel.oms.pub.domain.dto.ThreadPoolMetricsDTO;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
-@AllArgsConstructor
-public class JobProgressDto {
+public class JobMonitorOutput {
 
-    Long current;
+    ThreadPoolMetricsDTO threadPoolMetricsDTO;
 
-    Long total;
+    JobOverviewDto jobOverviewDto;
 
-    public JobProgressDto(Integer current, Integer total) {
-        this.current = Long.valueOf(current);
-        this.total = Long.valueOf(total);
-    }
-
-    public void setCurrent(Integer current) {
-        this.current = Long.valueOf(current);
-    }
-
-    public void setTotal(Integer total) {
-        this.total = Long.valueOf(total);
-    }
-
-    public double getPercent() {
-        if (total == null || total == 0) {
-            return 0.0;
-        }
-        if (current == null) {
-            return 0.0;
-        }
-        return (double) current / total;
-    }
 }

@@ -47,11 +47,16 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> error(String msg) {
+
+    public static <T> Result<T> error(int errorCode, String msg) {
         Result<T> result = new Result<>();
         result.msg = msg;
-        result.code = CodeConstant.ERROR;
+        result.code = errorCode;
         return result;
+    }
+
+    public static <T> Result<T> error(String msg) {
+        return Result.error(CodeConstant.ERROR, msg);
     }
 
     public static <T> Result<T> fail(String msg) {

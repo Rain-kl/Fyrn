@@ -24,19 +24,16 @@ import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.mms.service.MmsNovelService;
-import com.arctel.oms.biz.file.OosService;
 import com.arctel.oms.biz.job.JobRunnable;
 import com.arctel.oms.biz.job.ThreadPoolJobService;
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.domain.OmsJob;
 import com.arctel.oms.pub.domain.input.CreateJobInput;
-import com.arctel.oms.support.PublicParamSupport;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,12 +45,6 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         implements MmsNovelService {
 
     @Resource
-    OosService oosSupport;
-
-    @Resource
-    PublicParamSupport publicParamSupport;
-
-    @Resource
     ThreadPoolJobService threadPoolJobService;
 
     @Resource
@@ -63,8 +54,9 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
     MmsNovelMapper mmsNovelMapper;
 
     @Resource
-    MmsNovelServiceImpl self;
-    @Autowired
+    MmsNovelService self;
+
+    @Resource
     private MmsNovelFileMapper mmsNovelFileMapper;
 
 
@@ -108,9 +100,12 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                 int pageNum = 1;
                 while (true) {
                     BaseQueryPage<MmsNovelFile> unlinkedMmsNovelFile = mmsNovelFileService.getUnlinkedMmsNovelFile(pageNum, pageSize);
+
                     if (unlinkedMmsNovelFile.getTotal() <= 0) {
                         break;
                     }
+                    this.setTotalProgress(unlinkedMmsNovelFile.getTotal());
+
                     unlinkedMmsNovelFile.getRows().forEach(novelFile -> {
                         String fileName = novelFile.getFileName();
                         List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName);
@@ -128,13 +123,13 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                             MmsNovel newmmsNovel = new MmsNovel();
                             newmmsNovel.setNovelTitle(title);
                             newmmsNovel.setNovelAuthor(author);
-                            novelFile.setNovelId(newmmsNovel.getId());
                             try {
                                 self.createNovel(newmmsNovel, novelFile);
-                                updateProgress("新增物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
+                                this.updateProgress("新增物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
                             } catch (Exception e) {
                                 log.error("创建物料失败，文件名: " + fileName, e);
-                                updateLog("创建物料失败，文件名: " + fileName + ", 错误信息: " + e.getMessage());
+                                this.updateLog("创建物料失败，文件名: " + fileName + ", 错误信息: " + e.getMessage());
+
                             }
                         } else {
                             novelFile.setNovelId(mmsNovel.getId());
@@ -142,7 +137,7 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                                     new LambdaQueryWrapper<MmsNovelFile>()
                                             .eq(MmsNovelFile::getId, novelFile.getId())
                             );
-                            updateProgress("更新物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
+                            this.updateProgress("更新物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
                         }
                     });
                 }
@@ -152,8 +147,10 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
 
 
     @Transactional(rollbackFor = Exception.class)
+    @Override
     public void createNovel(MmsNovel newmmsNovel, MmsNovelFile mmsNovelFile) {
         mmsNovelMapper.insert(newmmsNovel);
+        mmsNovelFile.setNovelId(newmmsNovel.getId());
         mmsNovelFileService.update(mmsNovelFile,
                 new LambdaQueryWrapper<MmsNovelFile>()
                         .eq(MmsNovelFile::getId, mmsNovelFile.getId())

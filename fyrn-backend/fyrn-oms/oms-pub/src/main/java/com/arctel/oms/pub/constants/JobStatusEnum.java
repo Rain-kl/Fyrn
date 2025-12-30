@@ -29,7 +29,7 @@ public enum JobStatusEnum {
 
     private final String code;
     private final String description;
-    private final int value;
+    private final Integer value;
 
 
     JobStatusEnum(String code, int value, String description) {

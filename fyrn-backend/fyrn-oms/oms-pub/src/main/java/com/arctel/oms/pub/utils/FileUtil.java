@@ -17,11 +17,14 @@
 
 package com.arctel.oms.pub.utils;
 
+import com.arctel.oms.pub.constants.ErrorConstant;
+import com.arctel.oms.pub.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -37,6 +40,8 @@ public class FileUtil {
                     .filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".txt"))
                     .collect(Collectors.toList());
+        } catch (NoSuchFileException e) {
+            throw new BizException(ErrorConstant.FILE_NOT_FOUND, e, "目录不存在: " + dirPath);
         }
     }
 

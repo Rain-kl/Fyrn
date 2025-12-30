@@ -19,18 +19,20 @@ package com.arctel.mms.service.impl;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
+import com.arctel.common.utils.NovelUtil;
+import com.arctel.domain.dao.entity.MmsNovel;
+import com.arctel.domain.dao.entity.MmsNovelFile;
+import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
+import com.arctel.domain.dao.mapper.MmsNovelMapper;
+import com.arctel.domain.dto.LocalFileSimpleDTO;
+import com.arctel.domain.dto.input.BindNovelFileInput;
+import com.arctel.domain.dto.input.SyncMaterialInput;
+import com.arctel.domain.dto.input.UMmsPageInput;
+import com.arctel.mms.service.MmsNovelFileService;
+import com.arctel.mms.service.MmsNovelService;
 import com.arctel.oms.biz.file.OosService;
 import com.arctel.oms.biz.job.JobRunnable;
 import com.arctel.oms.biz.job.ThreadPoolJobService;
-import com.arctel.common.utils.NovelUtil;
-import com.arctel.domain.dto.input.SyncMaterialInput;
-
-import com.arctel.domain.dao.entity.MmsNovelFile;
-import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
-import com.arctel.domain.dto.LocalFileSimpleDTO;
-import com.arctel.domain.dto.input.UMmsPageInput;
-import com.arctel.mms.service.MmsNovelFileService;
-
 import com.arctel.oms.pub.base.BaseQueryPage;
 import com.arctel.oms.pub.constants.ErrorConstant;
 import com.arctel.oms.pub.domain.OmsJob;
@@ -44,16 +46,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import jakarta.annotation.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,6 +87,10 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
     @Resource
     ThreadPoolJobService threadPoolJobService;
+    @Autowired
+    private MmsNovelService mmsNovelService;
+    @Autowired
+    private MmsNovelMapper mmsNovelMapper;
 
     /**
      * 查询物料分页列表
@@ -268,7 +273,12 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         }
 
         // 3. 设置响应头：强制下载 + 文件名（建议对文件名做 URL 编码）
-        String fileName = mmsNovelFile.getFileName(); // 如 "我的小说.txt"
+        String fileName = mmsNovelFile.getFileName();
+        Long novelId = mmsNovelFile.getNovelId();
+        if (novelId != null) {
+            MmsNovel mmsNovel = mmsNovelMapper.selectById(novelId);
+            fileName = NovelUtil.buildNovelFileName(mmsNovel.getNovelTitle(), mmsNovel.getNovelAuthor());
+        }
         String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20"); // 防止空格变加号
 
@@ -280,6 +290,33 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(fileBytes);
+    }
+
+    @Override
+    public Boolean bindNovelFile(BindNovelFileInput input) {
+        Long novelId = input.getNovelId();
+        MmsNovelFile file = getOne(new LambdaQueryWrapper<MmsNovelFile>().eq(MmsNovelFile::getId, input.getFileId()));
+        if (file == null) {
+            throw new BizException(ErrorConstant.COMMON_ERROR, "未找到对应的物料文件记录，无法绑定小说ID: " + novelId);
+        }
+
+        if (novelId != null && novelId > 0) {
+            // 绑定到已有小说
+            boolean exists = mmsNovelMapper.exists(new LambdaQueryWrapper<MmsNovel>().eq(MmsNovel::getId, novelId));
+            if (!exists) {
+                throw new BizException(ErrorConstant.COMMON_ERROR, "绑定的小说ID不存在: " + novelId);
+            }
+            file.setNovelId(novelId);
+            updateById(file);
+        } else {
+            // 创建新小说并绑定
+            MmsNovel novel = new MmsNovel();
+            novel.setNovelTitle(input.getNovelTitle());
+            novel.setNovelAuthor(input.getNovelAuthor());
+            // 假设此方法会设置 novel.id 并更新 file.novelId
+            mmsNovelService.createNovel(novel, file);
+        }
+        return true;
     }
 }
 

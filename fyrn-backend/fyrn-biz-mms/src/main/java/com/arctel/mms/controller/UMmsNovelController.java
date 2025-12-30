@@ -17,6 +17,7 @@
 
 package com.arctel.mms.controller;
 
+import com.arctel.domain.dto.input.BindNovelFileInput;
 import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.domain.dto.input.UMmsNovelPageInput;
 import com.arctel.domain.dao.entity.MmsNovelFile;
@@ -63,7 +64,7 @@ public class UMmsNovelController {
      * @param input
      * @return
      */
-    @GetMapping("/noevl/page")
+    @GetMapping("/novel/page")
     public Result<BaseQueryPage<MmsNovelFile>> novelPage(UMmsNovelPageInput input) {
 
         MmsNovelFile mmsNovelFile = new MmsNovelFile();
@@ -73,6 +74,19 @@ public class UMmsNovelController {
                 mmsNovelFile, input.getPageNo(), input.getPageSize());
         return Result.success(mmsNovelQueryPage);
     }
+
+    /**
+     * 物料文件绑定
+     * 不存在则新增，存在则更新
+     * @param input
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/novel/bind")
+    public Result<Boolean> bindNovelFile(BindNovelFileInput input) throws IOException {
+        return Result.success(uMmsNovelService.bindNovelFile(input));
+    }
+
 
 
     /**
@@ -101,8 +115,10 @@ public class UMmsNovelController {
      */
     @PostMapping("/dedup")
     public Result<OmsJob> dedup() {
+        //TODO: 实现文件去重功能
         return null;
     }
+
 
 
 }

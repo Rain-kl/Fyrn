@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  fyrn-backend:
+    build: .
+    ports:
+      - "45600:45600"
+    restart: always
+    volumes:
+      - ./config/application-prod.yml:/app/config/application-prod.yml
+    environment:
+      - TZ=Asia/Shanghai

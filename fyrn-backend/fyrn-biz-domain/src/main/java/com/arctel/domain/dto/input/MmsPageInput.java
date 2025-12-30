@@ -28,7 +28,7 @@ public class MmsPageInput extends BaseQueryPageInput {
     /**
      * 小说ID
      */
-    private String novelId;
+    private Long novelId;
 
     /**
      * 小说名称

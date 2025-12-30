@@ -55,6 +55,7 @@ public class MmsNovelController {
 
         MmsNovel mmsNovel = new MmsNovel();
         BeanUtils.copyProperties(input, mmsNovel);
+        mmsNovel.setId(input.getNovelId());
 
         BaseQueryPage<MmsNovel> mmsNovelQueryPage = mmsNovelService.pageMmsNovel(
                 mmsNovel, input.getPageNo(), input.getPageSize());
