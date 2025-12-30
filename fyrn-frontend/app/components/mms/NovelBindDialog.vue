@@ -29,16 +29,45 @@ const form = reactive({
 const searchResults = ref<MmsNovel[]>([]);
 const isSearching = ref(false);
 const isBinding = ref(false);
+const isLoadingInfo = ref(false);
 const showResults = ref(false);
+const isProgrammaticChange = ref(false);
 
 // Watch for file changes to reset form
-watch(() => props.open, (isOpen) => {
+watch(() => props.open, async (isOpen) => {
   if (isOpen) {
+    isProgrammaticChange.value = true;
     form.title = "";
     form.author = "";
     form.novelId = undefined;
     searchResults.value = [];
     showResults.value = false;
+
+    if (props.file?.novelId) {
+      isLoadingInfo.value = true;
+      try {
+        const result = await mmsNovelApi.mmsPageGet({
+          operator: "admin",
+          novelId: props.file.novelId,
+          pageNo: 1,
+          pageSize: 1,
+        });
+        const novel = result.data?.rows?.[0];
+        if (result.code === 200 && novel) {
+          form.title = novel.novelTitle || "";
+          form.author = novel.novelAuthor || "";
+          form.novelId = novel.id?.toString();
+        }
+      } catch (error) {
+        console.error("Failed to fetch existing novel info:", error);
+      } finally {
+        isLoadingInfo.value = false;
+      }
+    }
+    
+    nextTick(() => {
+      isProgrammaticChange.value = false;
+    });
   }
 });
 
@@ -72,13 +101,10 @@ const handleSearch = async (query: string) => {
 // Debounced search
 let searchTimeout: any = null;
 watch(() => form.title, (newTitle) => {
+  if (isProgrammaticChange.value) return;
+  
   if (searchTimeout) clearTimeout(searchTimeout);
   
-  // If the title was just set from a selection, don't search
-  if (form.novelId && searchResults.value.some(r => r.novelTitle === newTitle && r.id?.toString() === form.novelId)) {
-    return;
-  }
-
   // Reset novelId if user starts typing again
   form.novelId = undefined;
 
@@ -88,10 +114,15 @@ watch(() => form.title, (newTitle) => {
 });
 
 const selectNovel = (novel: MmsNovel) => {
+  isProgrammaticChange.value = true;
   form.title = novel.novelTitle || "";
   form.author = novel.novelAuthor || "";
   form.novelId = novel.id?.toString();
   showResults.value = false;
+  
+  nextTick(() => {
+    isProgrammaticChange.value = false;
+  });
 };
 
 const handleBind = async () => {
@@ -149,7 +180,11 @@ const handleBind = async () => {
     description="将文件关联到现有的物料或创建新物料"
     class="sm:max-w-md"
   >
-    <div class="space-y-4 py-4">
+    <div v-if="isLoadingInfo" class="flex items-center justify-center py-10">
+      <div class="i-tabler-loader-2 animate-spin text-2xl text-primary" />
+      <span class="ml-2 text-sm text-muted">加载关联信息...</span>
+    </div>
+    <div v-else class="space-y-4 py-4">
       <div class="space-y-2">
         <label class="text-sm font-medium">文件名称</label>
         <NInput :model-value="file?.fileName" disabled />

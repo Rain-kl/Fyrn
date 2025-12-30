@@ -138,8 +138,8 @@ const columns: ColumnDef<OmsJob>[] = [
       const jobId = info.row.original.jobId;
       return h(resolveComponent("NButton"), {
         label: "详情",
-        btn: "soft-info",
-        size: "xs",
+        btn: "ghost-primary",
+        size: "sm",
         leading: "i-heroicons-eye",
         onClick: () => {
           if (jobId) navigateTo(`/oms/job/${jobId}`);

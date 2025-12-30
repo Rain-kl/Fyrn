@@ -42,6 +42,7 @@ const fetchData = async () => {
 
 onMounted(() => {
   fetchData();
+  // 自动刷新
   timer = setInterval(fetchData, 1000);
 });
 
