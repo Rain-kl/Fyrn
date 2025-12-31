@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableScheduling
 @EnableTransactionManagement
-@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.oms.mapper"})
+@MapperScan({"com.arctel.domain.dao.mapper", "com.arctel.oms.biz.mapper"})
 @ComponentScan(basePackages = { "com.arctel.mms", "com.arctel.domain", "com.arctel.common", "com.arctel.oms" })
 class MmsServiceApplication {
 

@@ -17,3 +17,10 @@ fyrn:
     access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
     bucket-name: fyrn
     endpoint: http://localhost:9000
+
+  logging:
+    level: info
+
+  mybatis:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl

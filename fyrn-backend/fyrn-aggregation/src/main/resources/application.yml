@@ -22,9 +22,13 @@ spring:
       port: ${fyrn.redis.port}
       password: ${fyrn.redis.password}
 
+logging:
+  level:
+    root: ${fyrn.logging.level}
+
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: ${fyrn.mybatis.log-impl:org.apache.ibatis.logging.nologging.NoLoggingImpl}
   global-config:
     banner: false
 
