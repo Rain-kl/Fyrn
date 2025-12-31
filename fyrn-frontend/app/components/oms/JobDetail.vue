@@ -92,83 +92,130 @@ const statusLabel = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 p-4 h-full">
-    <div v-if="job" class="flex flex-col gap-6 h-full">
+  <div class="flex flex-col gap-4 h-full overflow-hidden">
+    <div v-if="job" class="flex flex-col gap-4 h-full">
       <!-- Header Info -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-        <div>
-          <span class="text-muted">Job ID:</span>
-          <span class="font-mono ml-2">{{ job.jobId }}</span>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="p-3 rounded-lg border border-base bg-base/50 flex flex-col gap-1">
+          <div class="text-xs text-muted font-medium flex items-center gap-1">
+            <div class="i-lucide-hash size-3" />
+            Job ID
+          </div>
+          <div class="font-mono text-sm truncate">{{ job.jobId }}</div>
         </div>
-        <div>
-          <span class="text-muted">任务类型:</span>
-          <span class="ml-2">{{ job.taskType }}</span>
-        </div>
-        <div>
-          <span class="text-muted">状态:</span>
-          <NBadge
-            class="ml-2"
-            :label="statusLabel"
-            :una="{
-              badgeDefaultVariant:
-                job.status === 2
-                  ? 'badge-soft-success'
-                  : job.status === 1
-                  ? 'badge-soft-warning'
-                  : job.status === 3
-                  ? 'badge-soft-error'
-                  : 'badge-soft-gray',
-            }"
-          />
-        </div>
-        <div>
-          <span class="text-muted">创建时间:</span>
-          <span class="ml-2">{{
-            job.createTime && new Date(job.createTime).toLocaleString()
-          }}</span>
+        
+        <div class="p-3 rounded-lg border border-base bg-base/50 flex flex-col gap-1">
+          <div class="text-xs text-muted font-medium flex items-center gap-1">
+            <div class="i-lucide-tag size-3" />
+            任务类型
+          </div>
+          <div class="text-sm">{{ job.taskType }}</div>
         </div>
 
-        <div class="col-span-full" v-if="job.message">
-          <span class="text-muted text-xs block mb-1">状态说明:</span>
-          <CommonTextCollapse :text="job.message" :max-length="200" />
+        <div class="p-3 rounded-lg border border-base bg-base/50 flex flex-col gap-1">
+          <div class="text-xs text-muted font-medium flex items-center gap-1">
+            <div class="i-lucide-activity size-3" />
+            当前状态
+          </div>
+          <div>
+            <NBadge
+              :label="statusLabel"
+              :una="{
+                badgeDefaultVariant:
+                  job.status === 2
+                    ? 'badge-soft-success'
+                    : job.status === 1
+                    ? 'badge-soft-warning'
+                    : job.status === 3
+                    ? 'badge-soft-error'
+                    : 'badge-soft-gray',
+              }"
+            />
+          </div>
         </div>
-      </div>
 
-      <!-- Progress -->
-      <div class="flex flex-col gap-2" v-if="job.status === 1">
-        <div class="font-medium">任务进度</div>
-        <div class="w-full">
-          <NProgress v-if="!hasTotal" indeterminate progress="primary" />
-          <NProgress
-            v-else
-            :model-value="progressPercentage"
-            progress="lime"
-            size="0.5cm"
-          />
-          <div v-if="hasTotal" class="text-xs text-muted text-right mt-1">
-            {{ job.jobProgressDto?.current }} / {{ job.jobProgressDto?.total }}
+        <div class="p-3 rounded-lg border border-base bg-base/50 flex flex-col gap-1">
+          <div class="text-xs text-muted font-medium flex items-center gap-1">
+            <div class="i-lucide-calendar size-3" />
+            创建时间
+          </div>
+          <div class="text-sm">
+            {{ job.createTime ? new Date(job.createTime).toLocaleString() : '-' }}
           </div>
         </div>
       </div>
 
+      <!-- Message -->
+      <div v-if="job.message" class="p-3 rounded-lg border border-base bg-base/30">
+        <div class="text-xs text-muted font-medium mb-1 flex items-center gap-1">
+          <div class="i-lucide-info size-3" />
+          状态说明
+        </div>
+        <CommonTextCollapse :text="job.message" :max-length="200" class="text-sm" />
+      </div>
+
+      <!-- Progress -->
+      <div v-if="job.status === 1 || (job.jobProgressDto && job.jobProgressDto.total > 0)" class="flex flex-col gap-2">
+        <div class="flex justify-between items-end">
+          <div class="text-sm font-medium flex items-center gap-1">
+            <div class="i-lucide-loader-2 size-4 animate-spin text-primary" v-if="job.status === 1" />
+            <div class="i-lucide-check-circle size-4 text-success" v-else-if="job.status === 2" />
+            任务进度
+          </div>
+          <div v-if="hasTotal" class="text-xs text-muted font-mono">
+            {{ job.jobProgressDto?.current }} / {{ job.jobProgressDto?.total }} ({{ progressPercentage.toFixed(1) }}%)
+          </div>
+        </div>
+        <NProgress
+          v-if="!hasTotal && job.status === 1"
+          indeterminate
+          progress="primary"
+          size="sm"
+        />
+        <NProgress
+          v-else
+          :model-value="progressPercentage"
+          progress="primary"
+          size="sm"
+        />
+      </div>
+
       <!-- Logs -->
-      <div class="flex flex-col gap-2 flex-1 min-h-[300px]">
-        <div class="font-medium">执行日志</div>
+      <div class="flex flex-col gap-2 flex-1 min-h-0">
+        <div class="flex justify-between items-center">
+          <div class="text-sm font-medium flex items-center gap-1">
+            <div class="i-lucide-terminal size-4" />
+            执行日志
+          </div>
+          <div class="text-[10px] px-1.5 py-0.5 rounded border border-base bg-base text-muted font-mono uppercase">
+            Console
+          </div>
+        </div>
         <div
           ref="logContainerRef"
-          class="w-full h-full border rounded-md bg-gray-900 text-gray-100 p-4 overflow-auto whitespace-pre-wrap font-mono text-xs leading-5"
+          class="w-full h-full rounded-lg bg-zinc-950 text-zinc-50 p-4 overflow-auto whitespace-pre-wrap font-mono text-xs leading-relaxed border border-zinc-800 shadow-inner selection:bg-primary/30"
         >
-          {{ job.jobLog || "暂时没有日志..." }}
+          <template v-if="job.jobLog">
+            {{ job.jobLog }}
+          </template>
+          <div v-else class="text-zinc-500 italic flex items-center gap-2">
+            <div class="i-lucide-clock size-3" />
+            等待日志输出...
+          </div>
         </div>
       </div>
     </div>
 
-    <div v-else-if="loading" class="flex items-center justify-center p-10">
-      <span class="animate-pulse">Loading job details...</span>
+    <!-- Loading State -->
+    <div v-else-if="loading" class="flex flex-col items-center justify-center h-64 gap-4">
+      <div class="i-lucide-loader-2 size-8 animate-spin text-primary" />
+      <div class="text-sm text-muted animate-pulse">正在获取任务详情...</div>
     </div>
 
-    <div v-else class="flex items-center justify-center p-10 text-muted">
-      未能获取到任务详情
+    <!-- Error/Empty State -->
+    <div v-else class="flex flex-col items-center justify-center h-64 gap-3 text-muted">
+      <div class="i-lucide-file-question size-10 opacity-20" />
+      <div class="text-sm">未能获取到任务详情</div>
     </div>
   </div>
 </template>

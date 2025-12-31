@@ -19,7 +19,7 @@ const items = [
     ],
   },
   {
-    label: '运营管理系统',
+    label: '运维管理系统',
     leading: 'i-lucide:box',
     items: [
       {

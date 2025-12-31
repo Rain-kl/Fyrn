@@ -8,12 +8,23 @@ useHead({
 </script>
 
 <template>
-  <div class="h-full w-full">
-    <div class="mb-4">
+  <div class="h-full w-full flex flex-col gap-4">
+    <div class="flex items-center justify-between">
       <h1 class="text-xl font-bold">任务详情</h1>
+      <NButton
+        label="返回列表"
+        btn="link"
+        leading="i-lucide-arrow-left"
+        to="/oms/job"
+      />
     </div>
-    <div class="bg-white rounded-lg shadow-sm h-[calc(100vh-180px)]">
+    <NCard
+      class="flex-1 overflow-hidden"
+      :una="{
+        cardContent: 'p-4 h-full',
+      }"
+    >
       <OmsJobDetail :jobId="jobId" />
-    </div>
+    </NCard>
   </div>
 </template>
