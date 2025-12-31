@@ -7,14 +7,14 @@ import com.arctel.oms.pub.domain.input.UserUpdateInput;
 import com.arctel.oms.pub.domain.output.UserInfoVo;
 import com.arctel.oms.pub.utils.Result;
 
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
+
 /**
  * @author hspcadmin
  * @description 针对表【oms_user(系统用户表)】的数据库操作Service
  * @createDate 2025-12-30 14:04:20
  */
-import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/oms/user")
 public class OmsUserController {
@@ -25,8 +25,8 @@ public class OmsUserController {
     /**
      * 创建用户
      */
-    @PostMapping
-    public Result<String> createUser(UserCreateInput input) {
+    @PostMapping("/create")
+    public Result<String> createUser(@RequestBody UserCreateInput input) {
         return Result.success(omsUserService.createUser(input));
     }
 
@@ -41,7 +41,7 @@ public class OmsUserController {
     /**
      * 分页查询用户列表
      */
-    @GetMapping
+    @GetMapping("/list")
     public Result<BaseQueryPage<UserInfoVo>> listUsers(QueryUserPageInput input) {
         return Result.success(omsUserService.listUsers(input));
 
@@ -51,7 +51,7 @@ public class OmsUserController {
      * 更新用户信息
      */
     @PostMapping("/update")
-    public Result<String> updateUser(UserUpdateInput input) {
+    public Result<String> updateUser(@RequestBody UserUpdateInput input) {
         return Result.success(omsUserService.updateUser(input));
 
     }
