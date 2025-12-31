@@ -46,7 +46,6 @@ export interface OmsJobDetailGetRequest {
 }
 
 export interface OmsJobListGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
     jobId?: string;
@@ -173,18 +172,7 @@ export class JobControllerApi extends runtime.BaseAPI {
      * 获取任务列表
      */
     async omsJobListGetRaw(requestParameters: OmsJobListGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageOmsJob>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling omsJobListGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -222,7 +210,7 @@ export class JobControllerApi extends runtime.BaseAPI {
      * 
      * 获取任务列表
      */
-    async omsJobListGet(requestParameters: OmsJobListGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageOmsJob> {
+    async omsJobListGet(requestParameters: OmsJobListGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageOmsJob> {
         const response = await this.omsJobListGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

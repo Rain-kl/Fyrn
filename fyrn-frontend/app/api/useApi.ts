@@ -4,6 +4,7 @@ import {
     UMmsNovelControllerApi,
     OmsParameterControllerApi,
     JobControllerApi,
+    OmsUserControllerApi,
     type Middleware
 } from '~/api/index'
 
@@ -84,5 +85,6 @@ export const useApi = () => {
         uMmsNovelApi: new UMmsNovelControllerApi(apiConfig),
         OmsParameterApi: new OmsParameterControllerApi(apiConfig),
         JobControllerApi: new JobControllerApi(apiConfig),
+        OmsUserControllerApi: new OmsUserControllerApi(apiConfig),
     }
 }
