@@ -20,10 +20,12 @@ package com.arctel.oms.pub.constants;
 public class ErrorConstant {
     public static final String COMMON_ERROR = "4000";
     public static final String FILE_NOT_FOUND = "4001";
+    public static final String USER_NOT_FOUND = "4011";
     public static final String INVALID_FILE_FORMAT = "4002";
     public static final String UPLOAD_FAILED = "4003";
     public static final String DATA_NOT_EXIST = "4004";
     public static final String PERMISSION_DENIED = "4005";
+    public static final String CHECK_FAILED = "4006";
 
     public static final String DOWNLOAD_FAILED = "5001";
 

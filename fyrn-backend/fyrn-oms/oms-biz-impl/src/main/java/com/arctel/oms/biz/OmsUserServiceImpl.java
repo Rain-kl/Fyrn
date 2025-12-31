@@ -31,6 +31,8 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
     public String createUser(UserCreateInput input) {
         OmsUser omsUser = new OmsUser();
         BeanUtils.copyProperties(input, omsUser);
+        // 安全因素, 修改密码操作使用专用接口
+        omsUser.setPassword(null);
         this.save(omsUser);
         return omsUser.getUserId();
     }
@@ -75,6 +77,7 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
         String userId = input.getUserId();
         OmsUser omsUser = getById(userId);
         BeanUtils.copyProperties(input, omsUser);
+        omsUser.setPassword(null);
         this.updateById(omsUser);
         return omsUser.getUserId();
     }

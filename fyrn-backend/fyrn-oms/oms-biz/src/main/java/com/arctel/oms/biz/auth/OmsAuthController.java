@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class OmsAuthController {
 
     @Resource
+    OmsAuthService omsAuthService;
+
+    @Resource
     OmsUserService omsUserService;
 
     /**
@@ -22,6 +25,7 @@ public class OmsAuthController {
      */
     @PostMapping("/register")
     public Result<String> register(UserCreateInput input) {
-        return Result.success(omsUserService.createUser(input));
+        String userId = omsUserService.createUser(input);
+        return Result.success(omsAuthService.updatePassowrd(userId,input.getPassword()));
     }
 }

@@ -8,4 +8,7 @@ package com.arctel.oms.biz.auth;
 public interface OmsAuthService{
 
 
+    String updatePassowrd(String userId, String password);
+
+    Boolean login(String userId, String password);
 }
