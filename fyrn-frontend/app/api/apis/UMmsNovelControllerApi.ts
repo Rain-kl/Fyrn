@@ -39,7 +39,6 @@ export interface UmmsDownloadMaterialGetRequest {
 }
 
 export interface UmmsLocalPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
 }
@@ -51,8 +50,11 @@ export interface UmmsNovelBindPostRequest {
     novelAuthor?: string;
 }
 
+export interface UmmsNovelDeletePostRequest {
+    fileId?: string;
+}
+
 export interface UmmsNovelPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
     novelId?: string;
@@ -134,18 +136,7 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 获取未处理的小说列表
      */
     async ummsLocalPageGetRaw(requestParameters: UmmsLocalPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageLocalFileSimpleDto>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsLocalPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -171,7 +162,7 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 获取未处理的小说列表
      */
-    async ummsLocalPageGet(requestParameters: UmmsLocalPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageLocalFileSimpleDto> {
+    async ummsLocalPageGet(requestParameters: UmmsLocalPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageLocalFileSimpleDto> {
         const response = await this.ummsLocalPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -222,21 +213,42 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
 
     /**
      * 
+     * 删除物料文件
+     */
+    async ummsNovelDeletePostRaw(requestParameters: UmmsNovelDeletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBoolean>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['fileId'] != null) {
+            queryParameters['fileId'] = requestParameters['fileId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/umms/novel/delete`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 删除物料文件
+     */
+    async ummsNovelDeletePost(requestParameters: UmmsNovelDeletePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
+        const response = await this.ummsNovelDeletePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
      * 查询物料分页列表
      */
     async ummsNovelPageGetRaw(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageMmsNovelFile>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsNovelPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -270,7 +282,7 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 查询物料分页列表
      */
-    async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
+    async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
         const response = await this.ummsNovelPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

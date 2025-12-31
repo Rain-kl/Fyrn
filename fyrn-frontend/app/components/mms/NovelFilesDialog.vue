@@ -58,17 +58,17 @@ const filesColumns: ColumnDef<MmsNovelFile>[] = [
   {
     header: "大小",
     accessorKey: "fileSize",
-    cell: (info) => formatBytes(info.row.original.fileSize),
+    cell: (info) => h("span", { class: "whitespace-nowrap" }, formatBytes(info.row.original.fileSize)),
   },
   {
     header: "字数",
     accessorKey: "wordCount",
-    cell: (info) => formatWordCount(info.row.original.wordCount),
+    cell: (info) => h("span", { class: "whitespace-nowrap" }, formatWordCount(info.row.original.wordCount)),
   },
   {
     header: "更新时间",
     accessorKey: "updateTime",
-    cell: (info) => formatToYMD(info.row.original.updateTime),
+    cell: (info) => h("span", { class: "whitespace-nowrap" }, formatToYMD(info.row.original.updateTime)),
   },
   {
     header: "操作",
@@ -136,6 +136,7 @@ watch(
   <NDialog
     v-model:open="isOpen"
     :title="`物料文件列表：${novel?.novelTitle || ''}`"
+
   >
     <div class="space-y-3">
       <div class="text-sm text-muted">小说ID：{{ novel?.id }}</div>

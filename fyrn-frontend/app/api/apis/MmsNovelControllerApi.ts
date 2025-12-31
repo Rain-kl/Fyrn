@@ -33,7 +33,6 @@ export interface MmsFileGetRequest {
 }
 
 export interface MmsPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
     novelId?: string;
@@ -83,18 +82,7 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
      * 小说分页列表
      */
     async mmsPageGetRaw(requestParameters: MmsPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageMmsNovel>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling mmsPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -132,7 +120,7 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 小说分页列表
      */
-    async mmsPageGet(requestParameters: MmsPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovel> {
+    async mmsPageGet(requestParameters: MmsPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovel> {
         const response = await this.mmsPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

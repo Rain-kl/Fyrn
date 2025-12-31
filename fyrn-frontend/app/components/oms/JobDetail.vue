@@ -198,9 +198,9 @@ const statusLabel = computed(() => {
           <template v-if="job.jobLog">
             {{ job.jobLog }}
           </template>
-          <div v-else class="text-zinc-500 italic flex items-center gap-2">
-            <div class="i-lucide-clock size-3" />
-            等待日志输出...
+          <div v-else class="text-zinc-300 italic flex items-center gap-2">
+            <div class="i-lucide-clock size-4" />
+            暂无日志...
           </div>
         </div>
       </div>
