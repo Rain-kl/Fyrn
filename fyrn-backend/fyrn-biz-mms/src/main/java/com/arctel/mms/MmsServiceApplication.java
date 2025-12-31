@@ -17,9 +17,11 @@
 
 package com.arctel.mms;
 
+import com.arctel.common.utils.StartupHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -32,7 +34,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 class MmsServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MmsServiceApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(MmsServiceApplication.class, args);
+        StartupHelper.printStartInfo(context);
     }
 
 }

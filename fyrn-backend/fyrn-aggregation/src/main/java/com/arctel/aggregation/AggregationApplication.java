@@ -17,10 +17,12 @@
 
 package com.arctel.aggregation;
 
+import com.arctel.common.utils.StartupHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -36,7 +38,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 class AggregationApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AggregationApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(AggregationApplication.class, args);
+        StartupHelper.printStartInfo(context);
     }
 
 }
