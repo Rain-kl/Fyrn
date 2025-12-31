@@ -53,4 +53,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId);
 
     Boolean bindNovelFile(BindNovelFileInput input);
+
+    Boolean deleteFile(String fileId);
 }

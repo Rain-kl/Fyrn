@@ -84,7 +84,7 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
             return null;
         }
         String paramValue = omsParameter.getParamValue();
-        if (StringUtils.isBlank(paramValue)) {
+        if (StringUtils.isBlank(paramValue) || omsParameter.getEnabledFlag() != 1) {
             return null;
         }
         return paramValue;

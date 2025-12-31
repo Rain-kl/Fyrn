@@ -30,10 +30,7 @@ import com.arctel.oms.pub.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.Resource;
 
@@ -85,6 +82,16 @@ public class UMmsNovelController {
     @PostMapping("/novel/bind")
     public Result<Boolean> bindNovelFile(BindNovelFileInput input) throws IOException {
         return Result.success(uMmsNovelService.bindNovelFile(input));
+    }
+
+    /**
+     * 删除物料文件
+     * @param fileId
+     * @return
+     */
+    @PostMapping("/novel/delete")
+    public Result<Boolean> deleteFile(String fileId) {
+        return Result.success(uMmsNovelService.deleteFile(fileId));
     }
 
 

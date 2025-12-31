@@ -318,5 +318,14 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         }
         return true;
     }
+
+    @Override
+    public Boolean deleteFile(String fileId) {
+        if (!exists(new LambdaQueryWrapper<MmsNovelFile>().eq(MmsNovelFile::getId, fileId))) {
+            throw new BizException(ErrorConstant.COMMON_ERROR, "未找到对应的物料文件记录，无法删除，fileId: " + fileId);
+        }
+        // 删除数据库记录
+        return removeById(fileId);
+    }
 }
 
