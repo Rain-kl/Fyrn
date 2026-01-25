@@ -52,3 +52,38 @@ CREATE TABLE `mms_novel_file`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='本地小说表';
 
+
+
+-- ----------------------------
+-- Table structure for mms_novel_file
+-- ----------------------------
+DROP TABLE IF EXISTS `mms_meta`;
+CREATE TABLE `mms_meta`
+(
+    `id`           BIGINT(20)   NOT NULL COMMENT '主键',
+    `pbn`          VARCHAR(20)  DEFAULT NULL COMMENT 'Platform Book Number',
+    `title`        VARCHAR(100) NOT NULL COMMENT '小说名称',
+    `author`       VARCHAR(50)  NOT NULL COMMENT '小说作者',
+    `tag`          VARCHAR(300) DEFAULT NULL COMMENT '小说标签',
+    `summary`      TEXT         DEFAULT NULL COMMENT '小说简介',
+    `popularity`   BIGINT(20)   DEFAULT '0' COMMENT '小说人气值',
+    `word_count`   BIGINT(20)   DEFAULT '0' COMMENT '小说字数, 单位：字',
+    `status`       TINYINT(4)   DEFAULT '2' COMMENT '1: 连载中, 2：完结',
+    `source`       VARCHAR(10)  DEFAULT NULL COMMENT '小说来源',
+    `source_url`   VARCHAR(200) DEFAULT NULL COMMENT '小说来源链接',
+    `post_time`    DATETIME     DEFAULT NULL COMMENT '小说发布时间',
+    `edit_time`    DATETIME     DEFAULT NULL COMMENT '小说最后编辑时间',
+
+    `create_time`  DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `update_time`  DATETIME     DEFAULT NULL COMMENT '修改时间',
+    `created_user` VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    `updated_user` VARCHAR(50)  DEFAULT NULL COMMENT '修改人',
+
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_pbn` (`pbn`),
+
+    KEY `idx_author` (`author`),
+    KEY `idx_title` (`title`),
+    KEY `idx_title_author` (`title`, `author`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='小说元数据表';
