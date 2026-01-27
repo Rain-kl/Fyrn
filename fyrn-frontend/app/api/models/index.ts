@@ -36,3 +36,7 @@ export * from './ThreadPoolMetricsDto';
 export * from './UserCreateInput';
 export * from './UserInfoVo';
 export * from './UserUpdateInput';
+export * from './BaseQueryPageMmsMeta';
+export * from './MmsMeta';
+export * from './ResultBaseQueryPageMmsMeta';
+export * from './ResultMmsMeta';

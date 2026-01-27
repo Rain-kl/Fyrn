@@ -5,3 +5,4 @@ export * from './UMmsNovelControllerApi';
 export * from './JobControllerApi';
 export * from './OmsParameterControllerApi';
 export * from './OmsUserControllerApi';
+export * from './MmsMetaControllerApi';

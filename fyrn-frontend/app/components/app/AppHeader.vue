@@ -11,6 +11,12 @@ const items = [
         description: '物料信息的维护与管理',
         to: '/mms/novels',
       },
+
+      {
+        label: '元数据管理系统',
+        description: '元数据信息的维护与管理',
+        to: '/mms/meta',
+      },
       {
         label: '文件管理系统',
         description: 'OOS文件存储同步与管理',
