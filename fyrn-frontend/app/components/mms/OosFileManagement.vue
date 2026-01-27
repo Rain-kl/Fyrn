@@ -301,6 +301,8 @@ onMounted(() => {
       :loading
       :columns
       :data
+      :row-count="total"
+      manual-pagination
       enable-row-selection
       row-id="id"
     >

@@ -200,6 +200,8 @@ onMounted(() => {
       :loading
       :columns
       :data
+      :row-count="total"
+      manual-pagination
       enable-row-selection
       row-id="id"
     >
@@ -223,9 +225,7 @@ onMounted(() => {
     <div class="flex items-center justify-between px-2">
       <div class="hidden text-sm text-muted sm:block">
         已选择
-        {{
-          table?.getFilteredSelectedRowModel().rows.length.toLocaleString()
-        }}
+        {{ table?.getFilteredSelectedRowModel().rows.length.toLocaleString() }}
         / {{ total.toLocaleString() }}
         条记录
       </div>
