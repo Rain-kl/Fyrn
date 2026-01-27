@@ -20,9 +20,11 @@ package com.arctel.domain.dto.input;
 import com.arctel.oms.pub.base.BaseInput;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class SyncMaterialInput extends BaseInput {
 
     public Integer size = 0;

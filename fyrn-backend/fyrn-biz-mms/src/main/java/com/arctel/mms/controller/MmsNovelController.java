@@ -17,7 +17,6 @@
 
 package com.arctel.mms.controller;
 
-
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.input.MmsPageInput;
@@ -30,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.annotation.Resource;
@@ -76,7 +76,7 @@ public class MmsNovelController {
      * 查询物料文件列表
      */
     @GetMapping("/file")
-    public Result<List<MmsNovelFile>> getMmsNovelFile(String mmsNovelId) {
+    public Result<List<MmsNovelFile>> getMmsNovelFile(@RequestParam("mmsNovelId") String mmsNovelId) {
         return Result.success(mmsNovelService.getMmsNovelFile(mmsNovelId));
     }
 

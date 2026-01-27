@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
         String errorMessage = e.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
-        log.error("参数验证失败: {}", errorMessage);
+        log.error("参数验证失败", e);
         return Result.error(errorMessage);
     }
 
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
         String errorMessage = e.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining("; "));
-        log.error("参数验证失败: {}", errorMessage);
+        log.error("参数验证失败", e);
         return Result.error(errorMessage);
     }
 
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
         String errorMessage = e.getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
-        log.error("参数绑定失败: {}", errorMessage);
+        log.error("参数绑定失败", e);
         return Result.error(errorMessage);
     }
 
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public Result<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        log.error("参数验证失败: {}", e.getMessage());
+        log.error("参数验证失败", e);
         return Result.error(e.getMessage());
     }
 

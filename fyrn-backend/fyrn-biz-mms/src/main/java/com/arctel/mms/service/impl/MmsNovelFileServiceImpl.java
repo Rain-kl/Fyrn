@@ -182,12 +182,11 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
                             try {
                                 // 通过 self 调用，确保走 Spring 代理，事务生效
                                 self.syncLocalFile(f, input.getOperator());
+                                updateProgress(rows.size(), "Processed: " + f.getFileName());
                             } catch (Exception e) {
                                 // 记录失败日志或更新 job 状态，但不中断其他文件处理
                                 updateProgress(rows.size(), "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage());
-                                return;
                             }
-                            updateProgress(rows.size(), "Processed: " + f.getFileName());
                         });
                     }
                 });

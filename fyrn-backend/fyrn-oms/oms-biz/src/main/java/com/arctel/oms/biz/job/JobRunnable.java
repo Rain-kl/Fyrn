@@ -22,8 +22,6 @@ import com.arctel.oms.pub.domain.OmsJob;
 
 public abstract class JobRunnable extends BaseJobLogger {
 
-    protected OmsJob omsJob;
-
     public JobRunnable(ThreadPoolJobService threadPoolJobService) {
         super(threadPoolJobService);
     }
@@ -31,7 +29,7 @@ public abstract class JobRunnable extends BaseJobLogger {
     protected abstract void taskRun();
 
     public void run(OmsJob omsJob) {
-        this.omsJob = omsJob;
+        super.omsJob = omsJob;
         taskRun();
     }
 }
