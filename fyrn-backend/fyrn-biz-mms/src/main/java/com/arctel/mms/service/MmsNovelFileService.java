@@ -23,8 +23,8 @@ import com.arctel.domain.dto.input.SyncMaterialInput;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
 import com.arctel.domain.dto.input.UMmsPageInput;
-import com.arctel.oms.pub.base.BaseQueryPage;
-import com.arctel.oms.pub.utils.Result;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.common.utils.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.http.ResponseEntity;
 

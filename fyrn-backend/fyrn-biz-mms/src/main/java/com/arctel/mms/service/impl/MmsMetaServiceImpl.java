@@ -1,7 +1,7 @@
 package com.arctel.mms.service.impl;
 
 import com.arctel.mms.service.MmsMetaService;
-import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

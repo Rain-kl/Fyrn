@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-pub</artifactId>
+            <artifactId>oms-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

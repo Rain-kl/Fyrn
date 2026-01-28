@@ -19,8 +19,8 @@ package com.arctel.mms.service;
 
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
-import com.arctel.oms.pub.base.BaseQueryPage;
-import com.arctel.oms.pub.domain.OmsJob;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.common.domain.OmsJob;
 
 import java.util.List;
 

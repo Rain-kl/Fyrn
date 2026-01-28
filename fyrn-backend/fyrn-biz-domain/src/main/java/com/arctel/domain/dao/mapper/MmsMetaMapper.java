@@ -1,4 +1,5 @@
 package com.arctel.domain.dao.mapper;
+import java.util.List;
 
 import com.arctel.domain.dao.entity.MmsMeta;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -10,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.arctel.domain.dao.entity.MmsMeta
 */
 public interface MmsMetaMapper extends BaseMapper<MmsMeta> {
+
+    List<MmsMeta> findAll();
 
 }
 

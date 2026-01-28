@@ -1,7 +1,7 @@
 package com.arctel.mms.service;
 
 import com.arctel.domain.dao.entity.MmsMeta;
-import com.arctel.oms.pub.base.BaseQueryPage;
+import com.arctel.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

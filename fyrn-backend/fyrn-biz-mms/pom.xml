@@ -36,12 +36,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-support</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.arctel</groupId>
             <artifactId>fyrn-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -73,7 +67,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
