@@ -95,19 +95,6 @@ public class UMmsNovelController {
     }
 
 
-
-    /**
-     * 同步素材到 oos
-     *
-     * @param input
-     * @return
-     * @throws IOException
-     */
-    @GetMapping("/syncMaterial")
-    public Result<String> syncMaterial(SyncMaterialInput input) throws IOException {
-        return uMmsNovelService.syncMaterial(input);
-    }
-
     /**
      * 下载物料
      */

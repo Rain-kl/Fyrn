@@ -27,6 +27,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SyncMaterialInput extends BaseInput {
 
+    /**
+     * 最大同步数量
+     */
     public Integer size = 0;
 
 }

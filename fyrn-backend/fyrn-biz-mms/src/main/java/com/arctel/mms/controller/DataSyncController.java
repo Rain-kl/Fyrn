@@ -30,14 +30,16 @@ public class DataSyncController {
 
     /**
      * 同步小说任务
-     *
-     * @return
      */
     @PostMapping("/ossToMms")
     public Result<OmsJob> ossToMms() {
         return Result.success(dataSyncService.ossToMms());
     }
 
+    /**
+     * 同步本地文件到OSS
+     * @param input 最大同步数量, -1表示不限制
+     */
     @PostMapping("/fileToOss")
     public Result<String> fileToOss(SyncMaterialInput input) throws IOException {
         return Result.success(dataSyncService.fileToOss(input));
