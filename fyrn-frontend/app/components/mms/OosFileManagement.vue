@@ -7,7 +7,7 @@ import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
 import NovelBindDialog from "~/components/mms/NovelBindDialog.vue";
 
-const { uMmsNovelApi, mmsNovelApi } = useApi();
+const { uMmsNovelApi, mmsNovelApi, DataSyncControllerApi} = useApi();
 const { toast } = useToast();
 
 const data = ref<MmsNovelFile[]>([]);
@@ -215,7 +215,7 @@ const handleDelete = async (file: MmsNovelFile) => {
 const handleSync = async () => {
   syncing.value = true;
   try {
-    const result = await mmsNovelApi.mmsSyncPost();
+    const result = await DataSyncControllerApi.syncOssToMmsPost();
     if (result.code === 200) {
       toast({
         title: "开始同步任务",

@@ -6,3 +6,4 @@ export * from './JobControllerApi';
 export * from './OmsParameterControllerApi';
 export * from './OmsUserControllerApi';
 export * from './MmsMetaControllerApi';
+export * from './DataSyncControllerApi';

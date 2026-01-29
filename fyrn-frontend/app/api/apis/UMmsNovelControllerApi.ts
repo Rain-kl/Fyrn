@@ -19,7 +19,6 @@ import type {
   ResultBaseQueryPageMmsNovelFile,
   ResultBoolean,
   ResultOmsJob,
-  ResultString,
 } from '../models/index';
 import {
     ResultBaseQueryPageLocalFileSimpleDtoFromJSON,
@@ -30,8 +29,6 @@ import {
     ResultBooleanToJSON,
     ResultOmsJobFromJSON,
     ResultOmsJobToJSON,
-    ResultStringFromJSON,
-    ResultStringToJSON,
 } from '../models/index';
 
 export interface UmmsDownloadMaterialGetRequest {
@@ -59,11 +56,6 @@ export interface UmmsNovelPageGetRequest {
     pageSize?: number;
     novelId?: string;
     fileName?: string;
-}
-
-export interface UmmsSyncMaterialGetRequest {
-    operator: string;
-    size?: number;
 }
 
 /**
@@ -284,49 +276,6 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      */
     async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
         const response = await this.ummsNovelPageGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
-     * 同步素材到 oos
-     */
-    async ummsSyncMaterialGetRaw(requestParameters: UmmsSyncMaterialGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsSyncMaterialGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
-
-        if (requestParameters['size'] != null) {
-            queryParameters['size'] = requestParameters['size'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/umms/syncMaterial`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultStringFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * 同步素材到 oos
-     */
-    async ummsSyncMaterialGet(requestParameters: UmmsSyncMaterialGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
-        const response = await this.ummsSyncMaterialGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

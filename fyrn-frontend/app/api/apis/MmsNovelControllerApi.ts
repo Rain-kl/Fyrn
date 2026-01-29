@@ -17,19 +17,16 @@ import * as runtime from '../runtime';
 import type {
   ResultBaseQueryPageMmsNovel,
   ResultListMmsNovelFile,
-  ResultOmsJob,
 } from '../models/index';
 import {
     ResultBaseQueryPageMmsNovelFromJSON,
     ResultBaseQueryPageMmsNovelToJSON,
     ResultListMmsNovelFileFromJSON,
     ResultListMmsNovelFileToJSON,
-    ResultOmsJobFromJSON,
-    ResultOmsJobToJSON,
 } from '../models/index';
 
 export interface MmsFileGetRequest {
-    mmsNovelId?: string;
+    mmsNovelId: string;
 }
 
 export interface MmsPageGetRequest {
@@ -50,6 +47,13 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
      * 查询物料文件列表
      */
     async mmsFileGetRaw(requestParameters: MmsFileGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultListMmsNovelFile>> {
+        if (requestParameters['mmsNovelId'] == null) {
+            throw new runtime.RequiredError(
+                'mmsNovelId',
+                'Required parameter "mmsNovelId" was null or undefined when calling mmsFileGet().'
+            );
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters['mmsNovelId'] != null) {
@@ -72,7 +76,7 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 查询物料文件列表
      */
-    async mmsFileGet(requestParameters: MmsFileGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultListMmsNovelFile> {
+    async mmsFileGet(requestParameters: MmsFileGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultListMmsNovelFile> {
         const response = await this.mmsFileGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -122,34 +126,6 @@ export class MmsNovelControllerApi extends runtime.BaseAPI {
      */
     async mmsPageGet(requestParameters: MmsPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovel> {
         const response = await this.mmsPageGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
-     * 同步小说任务
-     */
-    async mmsSyncPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsJob>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/mms/sync`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsJobFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * 同步小说任务
-     */
-    async mmsSyncPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsJob> {
-        const response = await this.mmsSyncPostRaw(initOverrides);
         return await response.value();
     }
 

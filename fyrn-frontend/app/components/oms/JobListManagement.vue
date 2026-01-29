@@ -157,7 +157,6 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const result = await JobControllerApi.omsJobListGet({
-      operator: "admin",
       pageNo: pageNo.value,
       pageSize: pageSize.value,
       jobId: filters.jobId || undefined,
