@@ -17,14 +17,15 @@
 
 package com.arctel.biz.impl;
 
-import com.arctel.oms.biz.job.JobRunnable;
-import com.arctel.oms.biz.job.ThreadPoolJobService;
+
 import com.arctel.oms.common.constants.JobStatusEnum;
-import com.arctel.oms.common.domain.OmsJob;
-import com.arctel.oms.common.domain.dto.JobProgressDto;
-import com.arctel.oms.common.domain.input.CreateJobInput;
-import com.arctel.oms.common.domain.input.UpdateJobInput;
-import com.arctel.oms.common.domain.input.UpdateJobProgressInput;
+import com.arctel.oms.dto.JobProgressDTO;
+import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.input.CreateJobInput;
+import com.arctel.oms.input.UpdateJobInput;
+import com.arctel.oms.input.UpdateJobProgressInput;
+import com.arctel.oms.service.job.JobRunnable;
+import com.arctel.oms.service.job.ThreadPoolJobService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -94,7 +95,7 @@ class ThreadPoolJobServiceImplTest {
 
     @Test
     void updateTaskProgress() {
-        JobProgressDto jobProgressDto = new JobProgressDto(5, 100);
+        JobProgressDTO jobProgressDto = new JobProgressDTO(5, 100);
         threadPoolJobSupport.updateJobProgress(new UpdateJobProgressInput(jobId, "", jobProgressDto));
     }
 

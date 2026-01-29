@@ -9,10 +9,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>fyrn-common</module>
-        <module>fyrn-biz-domain</module>
         <module>fyrn-aggregation</module>
-        <module>fyrn-biz-mms</module>
         <module>fyrn-oms</module>
+        <module>fyrn-mms</module>
     </modules>
 
     <properties>
