@@ -50,6 +50,8 @@ public class MmsMetaController {
         MmsMeta mmsMeta = new MmsMeta();
         BeanUtils.copyProperties(input, mmsMeta);
         mmsMeta.setId(input.getNovelId());
+        mmsMeta.setTitle(input.getNovelTitle());
+        mmsMeta.setAuthor(input.getNovelAuthor());
 
         BaseQueryPage<MmsMeta> mmsNovelQueryPage = mmsMetaService.pageMmsMeta(
                 mmsMeta, input.getPageNo(), input.getPageSize());
