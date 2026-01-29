@@ -128,9 +128,11 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     @Override
     public synchronized boolean updateJobProgress(UpdateJobProgressInput input) {
         String bizLog = input.getLog();
+        // 更新日志
         if (StringUtils.isNotBlank(bizLog)) {
             updateLog(input.getJobId(), bizLog);
         }
+        // 更新进度到 Redis，设置10分钟过期
         String key = JOB_PROGRESS_KEY_PREFIX + input.getJobId();
         redisTemplate.opsForValue().set(key, input.getJobProgressDto(), Duration.ofMinutes(10));
         return true;

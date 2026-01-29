@@ -20,7 +20,6 @@ package com.arctel.mms.service;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.domain.OmsJob;
 
 import java.util.List;
 
@@ -33,8 +32,6 @@ import java.util.List;
 public interface MmsNovelService   {
 
     BaseQueryPage<MmsNovel> pageMmsNovel(MmsNovel mmsNovel, Integer pageNo, Integer pageSize);
-
-    OmsJob syncJobAsync();
 
     List<MmsNovelFile> getMmsNovelFile(String mmsNovelId);
 

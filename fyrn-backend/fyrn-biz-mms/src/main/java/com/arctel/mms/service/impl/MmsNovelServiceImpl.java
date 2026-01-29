@@ -17,18 +17,13 @@
 
 package com.arctel.mms.service.impl;
 
-import com.arctel.common.utils.NovelUtil;
 import com.arctel.domain.dao.entity.MmsNovel;
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dao.mapper.MmsNovelFileMapper;
 import com.arctel.domain.dao.mapper.MmsNovelMapper;
 import com.arctel.mms.service.MmsNovelFileService;
 import com.arctel.mms.service.MmsNovelService;
-import com.arctel.oms.biz.job.JobRunnable;
-import com.arctel.oms.biz.job.ThreadPoolJobService;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.domain.OmsJob;
-import com.arctel.oms.common.domain.input.CreateJobInput;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -44,17 +39,12 @@ import java.util.List;
 public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
         implements MmsNovelService {
 
-    @Resource
-    ThreadPoolJobService threadPoolJobService;
 
     @Resource
     MmsNovelFileService mmsNovelFileService;
 
     @Resource
     MmsNovelMapper mmsNovelMapper;
-
-    @Resource
-    MmsNovelService self;
 
     @Resource
     private MmsNovelFileMapper mmsNovelFileMapper;
@@ -90,61 +80,6 @@ public class MmsNovelServiceImpl extends ServiceImpl<MmsNovelMapper, MmsNovel>
                         .eq(MmsNovelFile::getNovelId, mmsNovelId
                         ));
     }
-
-    @Override
-    public OmsJob syncJobAsync() {
-        return threadPoolJobService.createJob(new CreateJobInput("sync-mms", "同步umms到mms"), new JobRunnable(threadPoolJobService) {
-            @Override
-            protected void taskRun() {
-                int pageSize = 100;
-                int pageNum = 1;
-                while (true) {
-                    BaseQueryPage<MmsNovelFile> unlinkedMmsNovelFile = mmsNovelFileService.getUnlinkedMmsNovelFile(pageNum, pageSize);
-
-                    if (unlinkedMmsNovelFile.getTotal() <= 0) {
-                        break;
-                    }
-                    this.setTotalProgress(unlinkedMmsNovelFile.getTotal());
-
-                    unlinkedMmsNovelFile.getRows().forEach(novelFile -> {
-                        String fileName = novelFile.getFileName();
-                        List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName);
-
-                        // 查询小说是否存在
-                        String title = novelBasicMetadata.get(0);
-                        String author = novelBasicMetadata.get(1);
-                        MmsNovel mmsNovel = mmsNovelMapper.selectOne(
-                                new LambdaQueryWrapper<MmsNovel>()
-                                        .eq(MmsNovel::getNovelTitle, title)
-                                        .eq(MmsNovel::getNovelAuthor, author)
-                        );
-                        // 如果小说不存在，则新增小说记录
-                        if (mmsNovel == null) {
-                            MmsNovel newmmsNovel = new MmsNovel();
-                            newmmsNovel.setNovelTitle(title);
-                            newmmsNovel.setNovelAuthor(author);
-                            try {
-                                self.createNovel(newmmsNovel, novelFile);
-                                this.updateProgress("新增物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
-                            } catch (Exception e) {
-                                log.error("创建物料失败，文件名: " + fileName, e);
-                                this.updateLog("创建物料失败，文件名: " + fileName + ", 错误信息: " + e.getMessage());
-
-                            }
-                        } else {
-                            novelFile.setNovelId(mmsNovel.getId());
-                            mmsNovelFileService.update(novelFile,
-                                    new LambdaQueryWrapper<MmsNovelFile>()
-                                            .eq(MmsNovelFile::getId, novelFile.getId())
-                            );
-                            this.updateProgress("更新物料信息: " + fileName + ", 小说ID: " + novelFile.getNovelId());
-                        }
-                    });
-                }
-            }
-        });
-    }
-
 
     @Transactional(rollbackFor = Exception.class)
     @Override

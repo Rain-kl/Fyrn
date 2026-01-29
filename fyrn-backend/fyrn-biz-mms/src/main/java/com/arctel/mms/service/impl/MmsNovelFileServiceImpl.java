@@ -122,6 +122,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     public BaseQueryPage<MmsNovelFile> getUnlinkedMmsNovelFile(Integer pageNo, Integer pageSize) {
         IPage<MmsNovelFile> page = new Page<>(pageNo, pageSize);
 
+        // 查询 novelId 为空的文件, novelId在数据库中为null表示未绑定到mms
         IPage<MmsNovelFile> result = page(
                 page,
                 new LambdaQueryWrapper<MmsNovelFile>()
@@ -160,37 +161,6 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         localFileSimpleDTOQueryPage.setRows(localFileSimpleDTOS);
 
         return Result.success(localFileSimpleDTOQueryPage);
-    }
-
-    @Override
-    public Result<String> syncMaterial(SyncMaterialInput input) throws IOException {
-        Integer size = input.getSize();
-        if (size == null || size <= 0) {
-            size = Integer.MAX_VALUE;
-        }
-        UMmsPageInput uMmsPageInput = new UMmsPageInput();
-        uMmsPageInput.setPageSize(size);
-        uMmsPageInput.setPageNo(1);
-        Result<BaseQueryPage<LocalFileSimpleDTO>> unprocessedLocalFile = getUnprocessedLocalFile(uMmsPageInput);
-        List<LocalFileSimpleDTO> rows = unprocessedLocalFile.getData().getRows();
-
-        OmsJob job = threadPoolJobService.createJob(new CreateJobInput("sync_material", "同步物料到OOS"),
-                new JobRunnable(threadPoolJobService) {
-                    @Override
-                    public void taskRun() {
-                        rows.forEach(f -> {
-                            try {
-                                // 通过 self 调用，确保走 Spring 代理，事务生效
-                                self.syncLocalFile(f, input.getOperator());
-                                updateProgress(rows.size(), "Processed: " + f.getFileName());
-                            } catch (Exception e) {
-                                // 记录失败日志或更新 job 状态，但不中断其他文件处理
-                                updateProgress(rows.size(), "Failed to process file: " + f.getFileName() + ", error: " + e.getMessage());
-                            }
-                        });
-                    }
-                });
-        return Result.success(job.getJobId());
     }
 
 

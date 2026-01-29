@@ -18,7 +18,6 @@
 package com.arctel.mms.service;
 
 import com.arctel.domain.dto.input.BindNovelFileInput;
-import com.arctel.domain.dto.input.SyncMaterialInput;
 
 import com.arctel.domain.dao.entity.MmsNovelFile;
 import com.arctel.domain.dto.LocalFileSimpleDTO;
@@ -40,18 +39,38 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
     BaseQueryPage<MmsNovelFile> pageMmsNovelFile(MmsNovelFile mmsNovelFile, Integer pageNo, Integer pageSize);
 
+    /**
+     * 获取未关联小说的原始文件, 即mms_novel_file表中novel_id为空的记录
+     */
     BaseQueryPage<MmsNovelFile> getUnlinkedMmsNovelFile(Integer pageNo, Integer pageSize);
 
+    /**
+     * 获取未同步到OSS的本地文件
+     */
     Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
-    Result<String> syncMaterial(SyncMaterialInput input) throws IOException;
-
+    /**
+     * 同步本地文件到OSS
+     */
     void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException;
 
+    /**
+     * 下载小说文件
+     * @param filePath OSS文件地址
+     */
     void downloadNovelFile(String filePath);
 
+    /**
+     * 下载物料
+     * @param mmsNovelFileId 物料ID
+     * @return
+     */
     ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId);
 
+    /**
+     * 绑定小说文件到 MMS
+     * @param input 绑定输入对象
+     */
     Boolean bindNovelFile(BindNovelFileInput input);
 
     Boolean deleteFile(String fileId);

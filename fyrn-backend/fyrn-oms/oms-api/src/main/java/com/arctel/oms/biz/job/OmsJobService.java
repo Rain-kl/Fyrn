@@ -33,21 +33,62 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface OmsJobService extends IService<OmsJob> {
 
+    /**
+     * 分页查询任务
+     */
     BaseQueryPage<OmsJob> pageJob(OmsJob omsJob, Integer pageNo, Integer pageSize);
 
+    /**
+     * 获取任务详情
+     */
     OmsJob getJobDetail(GetJobDetailInput input);
 
+    /**
+     * 创建任务
+     * @param input
+     * @return
+     */
     OmsJob createJob(CreateJobInput input);
 
+    /**
+     * 更新任务进度
+     * @param input
+     * @return
+     */
     boolean updateJobProgress(UpdateJobProgressInput input);
 
+    /**
+     * 更新任务状态
+     * @param input
+     * @return
+     */
     boolean updateJob(UpdateJobInput input);
 
+    /**
+     * 更新任务日志到 Redis
+     * @param jobId
+     * @param logMessage
+     */
     void updateLog(String jobId, String logMessage);
 
+    /**
+     * 获取任务日志
+     * @param jobId
+     * @return
+     */
     String getLog(String jobId);
 
+    /**
+     * 获取任务日志
+     * @param jobId
+     * @param limit
+     * @return
+     */
     String getLog(String jobId, int limit);
 
+    /**
+     * 监控任务执行情况
+     * @return
+     */
     JobMonitorOutput monitorJob();
 }

@@ -63,16 +63,6 @@ public class MmsNovelController {
     }
 
     /**
-     * 同步小说任务
-     *
-     * @return
-     */
-    @PostMapping("/sync")
-    public Result<OmsJob> sync() {
-        return Result.success(mmsNovelService.syncJobAsync());
-    }
-
-    /**
      * 查询物料文件列表
      */
     @GetMapping("/file")
