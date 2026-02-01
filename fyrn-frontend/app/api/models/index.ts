@@ -44,3 +44,6 @@ export * from './BaseQueryPageMmsMeta';
 export * from './MmsMeta';
 export * from './ResultBaseQueryPageMmsMeta';
 export * from './ResultMmsMeta';
+export * from './JobDetailOutput';
+export * from './JobProgressDto';
+export * from './ResultJobDetailOutput';

@@ -1,24 +1,14 @@
 <script setup lang="ts">
 import { useApi } from "~/api/useApi";
-import type { OmsJob } from "~/api/models";
+import type {JobDetailOutput, OmsJob} from "~/api/models";
 
 const props = defineProps<{
   jobId: string;
 }>();
 
-const { JobControllerApi } = useApi();
+const { OmsJobControllerApi } = useApi();
 
-interface JobProgressDto {
-  current: number;
-  total: number;
-}
-
-interface ExtendedOmsJob extends OmsJob {
-  jobProgressDto?: JobProgressDto;
-  jobLog?: string;
-}
-
-const job = ref<ExtendedOmsJob | null>(null);
+const job = ref<JobDetailOutput | null>(null);
 const loading = ref(false);
 let timer: ReturnType<typeof setInterval> | null = null;
 const logContainerRef = ref<HTMLElement | null>(null);
@@ -26,12 +16,12 @@ const logContainerRef = ref<HTMLElement | null>(null);
 const fetchData = async () => {
   if (!job.value) loading.value = true;
   try {
-    const res = await JobControllerApi.omsJobDetailGet({
+    const res = await OmsJobControllerApi.omsJobDetailGet({
       operator: "admin",
       jobId: props.jobId,
     });
     if (res.code === 200 && res.data) {
-      job.value = res.data as ExtendedOmsJob;
+      job.value = res.data;
     }
   } catch (e) {
     console.error("Failed to fetch job details:", e);

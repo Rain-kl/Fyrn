@@ -3,7 +3,7 @@ import {
     MmsNovelControllerApi,
     UMmsNovelControllerApi,
     OmsParameterControllerApi,
-    JobControllerApi,
+    OmsJobControllerApi,
     OmsUserControllerApi,
     DataSyncControllerApi,
     type Middleware, MmsMetaControllerApi
@@ -85,7 +85,7 @@ export const useApi = () => {
         mmsNovelApi: new MmsNovelControllerApi(apiConfig),
         uMmsNovelApi: new UMmsNovelControllerApi(apiConfig),
         OmsParameterApi: new OmsParameterControllerApi(apiConfig),
-        JobControllerApi: new JobControllerApi(apiConfig),
+        OmsJobControllerApi: new OmsJobControllerApi(apiConfig),
         OmsUserControllerApi: new OmsUserControllerApi(apiConfig),
         MmsMetaControllerApi: new MmsMetaControllerApi(apiConfig),
         DataSyncControllerApi: new DataSyncControllerApi(apiConfig),

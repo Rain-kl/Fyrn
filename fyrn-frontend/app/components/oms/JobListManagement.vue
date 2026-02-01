@@ -9,7 +9,7 @@ import type { OmsJob } from "~/api/models";
 import { useApi } from "~/api/useApi";
 import { formatToYMDHMS } from "~/utils/date";
 
-const { JobControllerApi } = useApi();
+const { OmsJobControllerApi } = useApi();
 
 const data = ref<OmsJob[]>([]);
 const loading = ref(false);
@@ -156,7 +156,7 @@ const table = useTemplateRef<Table<OmsJob>>("table");
 const fetchData = async () => {
   loading.value = true;
   try {
-    const result = await JobControllerApi.omsJobListGet({
+    const result = await OmsJobControllerApi.omsJobListGet({
       pageNo: pageNo.value,
       pageSize: pageSize.value,
       jobId: filters.jobId || undefined,

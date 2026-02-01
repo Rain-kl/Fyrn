@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ResultBaseQueryPageOmsJob,
   ResultBoolean,
+  ResultJobDetailOutput,
   ResultJobMonitorOutput,
   ResultOmsJob,
   ResultString,
@@ -26,6 +27,8 @@ import {
     ResultBaseQueryPageOmsJobToJSON,
     ResultBooleanFromJSON,
     ResultBooleanToJSON,
+    ResultJobDetailOutputFromJSON,
+    ResultJobDetailOutputToJSON,
     ResultJobMonitorOutputFromJSON,
     ResultJobMonitorOutputToJSON,
     ResultOmsJobFromJSON,
@@ -68,14 +71,14 @@ export interface OmsJobUpdateProgressPostRequest {
     operator: string;
     jobId?: string;
     log?: string;
-    jobProgressDtoCurrent?: number;
-    jobProgressDtoTotal?: number;
+    jobProgressDTOCurrent?: number;
+    jobProgressDTOTotal?: number;
 }
 
 /**
  * 
  */
-export class JobControllerApi extends runtime.BaseAPI {
+export class OmsJobControllerApi extends runtime.BaseAPI {
 
     /**
      * 
@@ -128,7 +131,7 @@ export class JobControllerApi extends runtime.BaseAPI {
      * 
      * 获取任务详情
      */
-    async omsJobDetailGetRaw(requestParameters: OmsJobDetailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsJob>> {
+    async omsJobDetailGetRaw(requestParameters: OmsJobDetailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultJobDetailOutput>> {
         if (requestParameters['operator'] == null) {
             throw new runtime.RequiredError(
                 'operator',
@@ -155,14 +158,14 @@ export class JobControllerApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsJobFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultJobDetailOutputFromJSON(jsonValue));
     }
 
     /**
      * 
      * 获取任务详情
      */
-    async omsJobDetailGet(requestParameters: OmsJobDetailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsJob> {
+    async omsJobDetailGet(requestParameters: OmsJobDetailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultJobDetailOutput> {
         const response = await this.omsJobDetailGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -352,12 +355,12 @@ export class JobControllerApi extends runtime.BaseAPI {
             queryParameters['log'] = requestParameters['log'];
         }
 
-        if (requestParameters['jobProgressDtoCurrent'] != null) {
-            queryParameters['jobProgressDto.current'] = requestParameters['jobProgressDtoCurrent'];
+        if (requestParameters['jobProgressDTOCurrent'] != null) {
+            queryParameters['jobProgressDTO.current'] = requestParameters['jobProgressDTOCurrent'];
         }
 
-        if (requestParameters['jobProgressDtoTotal'] != null) {
-            queryParameters['jobProgressDto.total'] = requestParameters['jobProgressDtoTotal'];
+        if (requestParameters['jobProgressDTOTotal'] != null) {
+            queryParameters['jobProgressDTO.total'] = requestParameters['jobProgressDTOTotal'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
