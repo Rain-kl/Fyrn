@@ -115,7 +115,11 @@ public class DataSyncServiceImpl implements DataSyncService {
                     unlinkedMmsNovelFile.getRows().forEach(novelFile -> {
                         String fileName = novelFile.getFileName();
                         List<String> novelBasicMetadata = NovelUtil.extractTitleAndAuthor(fileName);
-
+                        if (novelBasicMetadata == null) {
+                            this.updateProgress("提取小说基本信息失败，文件名: " + fileName);
+                            mmsNovelFileService.markUnableAutoBind(novelFile.getId());
+                            return;
+                        }
                         // 查询小说是否存在
                         String title = novelBasicMetadata.get(0);
                         String author = novelBasicMetadata.get(1);

@@ -286,6 +286,13 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     }
 
     @Override
+    public Boolean markUnableAutoBind(Long mmsNovelFileId) {
+        return lambdaUpdate().set(MmsNovelFile::getNovelId, -1L)
+                .eq(MmsNovelFile::getId, mmsNovelFileId)
+                .update();
+    }
+
+    @Override
     public Boolean deleteFile(String fileId) {
         if (!exists(new LambdaQueryWrapper<MmsNovelFile>().eq(MmsNovelFile::getId, fileId))) {
             throw new BizException(ErrorConstant.COMMON_ERROR, "未找到对应的物料文件记录，无法删除，fileId: " + fileId);

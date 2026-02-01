@@ -60,12 +60,14 @@ public abstract class BaseJobLogger {
     }
 
     public void updateProgress(String logMessage) {
+        // 如果 totalProgress 不为 null 且大于 0，则使用它来更新进度
         if (this.totalProgress != null && this.totalProgress > 0) {
             updateProgress(this.totalProgress, logMessage);
+        } else {
+            threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
+                    omsJob.getJobId(), logMessage, new JobProgressDTO(currentProgress.incrementAndGet(), 0L)
+            ));
         }
-        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                omsJob.getJobId(), logMessage, new JobProgressDTO(currentProgress.incrementAndGet(), 0L)
-        ));
     }
 
     public void updateProgress(Integer current, Integer total, String logMessage) {

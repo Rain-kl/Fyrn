@@ -73,5 +73,12 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
      */
     Boolean bindNovelFile(BindNovelFileInput input);
 
+    /**
+     * 取消自动绑定小说文件
+     * @param mmsNovelFileId 物料 ID
+     * @return
+     */
+    Boolean markUnableAutoBind(Long mmsNovelFileId);
+
     Boolean deleteFile(String fileId);
 }

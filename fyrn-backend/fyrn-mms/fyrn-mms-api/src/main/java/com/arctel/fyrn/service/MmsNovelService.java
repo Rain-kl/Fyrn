@@ -35,5 +35,10 @@ public interface MmsNovelService   {
 
     List<MmsNovelFile> getMmsNovelFile(String mmsNovelId);
 
+    /**
+     * 在 MMS 表中新增小说信息, 同步更新 OSS 表 NovelID
+     * @param newmmsNovel
+     * @param mmsNovelFile
+     */
     void createNovel(MmsNovel newmmsNovel, MmsNovelFile mmsNovelFile);
 }
