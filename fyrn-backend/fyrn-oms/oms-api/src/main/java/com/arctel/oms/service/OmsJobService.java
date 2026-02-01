@@ -24,6 +24,7 @@ import com.arctel.oms.input.CreateJobInput;
 import com.arctel.oms.input.GetJobDetailInput;
 import com.arctel.oms.input.UpdateJobInput;
 import com.arctel.oms.input.UpdateJobProgressInput;
+import com.arctel.oms.output.JobDetailOutput;
 import com.arctel.oms.output.JobMonitorOutput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -42,7 +43,7 @@ public interface OmsJobService extends IService<OmsJob> {
     /**
      * 获取任务详情
      */
-    OmsJob getJobDetail(GetJobDetailInput input);
+    JobDetailOutput getJobDetail(GetJobDetailInput input);
 
     /**
      * 创建任务

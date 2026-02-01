@@ -53,7 +53,7 @@ public class ThreadPoolJobServiceImpl extends OmsJobServiceImpl implements Threa
      * 创建新任务
      *
      * @param input 创建任务输入参数
-     * @param task 任务逻辑
+     * @param task  任务逻辑
      * @return 创建的任务对象
      */
     public OmsJob createJob(CreateJobInput input, JobRunnable task) {
@@ -72,6 +72,13 @@ public class ThreadPoolJobServiceImpl extends OmsJobServiceImpl implements Threa
                                 JobStatusEnum.SUCCESS.getValue(),
                                 "Task completed successfully")
                 );
+            } catch (Exception e) {
+                omsJobService.updateJob(
+                        new UpdateJobInput(omsJob.getJobId(),
+                                JobStatusEnum.FAILED.getValue(),
+                                "Task failed: " + e.getMessage())
+                );
+                omsJobService.updateLog(omsJob.getJobId(),e.toString());
             } finally {
                 // 任务完成后移除记录
                 taskFutures.remove(omsJob.getJobId());

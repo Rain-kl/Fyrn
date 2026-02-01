@@ -22,6 +22,7 @@ import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.entity.OmsJob;
 import com.arctel.oms.input.*;
+import com.arctel.oms.output.JobDetailOutput;
 import com.arctel.oms.output.JobMonitorOutput;
 import com.arctel.oms.service.OmsJobService;
 import jakarta.annotation.Resource;
@@ -72,7 +73,7 @@ public class OmsJobController {
      * @return
      */
     @GetMapping("/detail")
-    public Result<OmsJob> getJobDetail(GetJobDetailInput input) {
+    public Result<JobDetailOutput> getJobDetail(GetJobDetailInput input) {
         return Result.success(omsJobService.getJobDetail(input));
     }
 

@@ -29,7 +29,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetJobDetailOutput extends OmsJob {
+public class JobDetailOutput extends OmsJob {
 
     JobProgressDTO jobProgressDTO;
 

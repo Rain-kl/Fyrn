@@ -27,7 +27,7 @@ import com.arctel.oms.input.GetJobDetailInput;
 import com.arctel.oms.input.UpdateJobInput;
 import com.arctel.oms.input.UpdateJobProgressInput;
 import com.arctel.oms.mapper.OmsJobMapper;
-import com.arctel.oms.output.GetJobDetailOutput;
+import com.arctel.oms.output.JobDetailOutput;
 import com.arctel.oms.output.JobMonitorOutput;
 import com.arctel.oms.scheduled.ThreadPoolMetricsPublisher;
 import com.arctel.oms.common.base.BaseQueryPage;
@@ -101,12 +101,12 @@ public class OmsJobServiceImpl extends ServiceImpl<OmsJobMapper, OmsJob>
     }
 
     @Override
-    public GetJobDetailOutput getJobDetail(GetJobDetailInput input) {
+    public JobDetailOutput getJobDetail(GetJobDetailInput input) {
         OmsJob omsJob = getJobById(input.getJobId());
         JobProgressDTO jobProgressDTO = (JobProgressDTO) redisTemplate.opsForValue()
                 .get(JOB_PROGRESS_KEY_PREFIX + input.getJobId());
         String jobLog = getLog(input.getJobId());
-        GetJobDetailOutput output = new GetJobDetailOutput();
+        JobDetailOutput output = new JobDetailOutput();
         BeanUtils.copyProperties(omsJob, output);
         output.setJobProgressDTO(jobProgressDTO);
         output.setJobLog(jobLog);

@@ -103,9 +103,10 @@ public class DataSyncServiceImpl implements DataSyncService {
             protected void taskRun() {
                 int pageSize = 100;
                 int pageNum = 1;
+                updateLog("开始同步UMMS物料到MMS...");
                 while (true) {
                     BaseQueryPage<MmsNovelFile> unlinkedMmsNovelFile = mmsNovelFileService.getUnlinkedMmsNovelFile(pageNum, pageSize);
-
+                    updateLog("处理第 " + pageNum + " 页, 共 " + unlinkedMmsNovelFile.getTotal() + " 条未关联小说的物料记录.");
                     if (unlinkedMmsNovelFile.getTotal() <= 0) {
                         break;
                     }
