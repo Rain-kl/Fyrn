@@ -7,7 +7,7 @@ import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
 import NovelBindDialog from "~/components/mms/NovelBindDialog.vue";
 
-const { uMmsNovelApi, mmsNovelApi, DataSyncControllerApi} = useApi();
+const { uMmsNovelApi, DataSyncControllerApi} = useApi();
 const { toast } = useToast();
 
 const data = ref<MmsNovelFile[]>([]);
@@ -35,6 +35,9 @@ const columns: ColumnDef<MmsNovelFile>[] = [
     accessorKey: "novelId",
     cell: (info) => {
       const novelId = info.row.original.novelId;
+      if (novelId === "-1") {
+        return h("span", { class: "text-warning" }, "待关联");
+      }
       if (novelId) {
         return h(resolveComponent("NButton"), {
           label: "已关联",
@@ -124,7 +127,7 @@ const columns: ColumnDef<MmsNovelFile>[] = [
                 size: "sm",
                 class: "p-0 h-auto font-normal",
               }),
-          }
+          },
         ),
       ]);
     },
@@ -253,7 +256,7 @@ watch(
     pageNo.value = 1;
     fetchData();
   },
-  { deep: true }
+  { deep: true },
 );
 
 onMounted(() => {
