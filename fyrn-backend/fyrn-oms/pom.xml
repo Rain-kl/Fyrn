@@ -15,10 +15,16 @@
 
     <name>运维管理系统</name>
     <description>运维管理系统, 包含redis管理, 系统参数管理, 用户认证, 任务管理</description>
+
+    <properties>
+        <oms.version>${project.version}</oms.version>
+    </properties>
+
     <modules>
         <module>oms-common</module>
         <module>oms-api</module>
         <module>oms-service</module>
+        <module>oms-domain</module>
     </modules>
 
     <dependencies>
