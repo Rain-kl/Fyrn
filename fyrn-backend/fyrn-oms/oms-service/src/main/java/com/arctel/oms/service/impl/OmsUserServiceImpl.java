@@ -17,11 +17,11 @@
 
 package com.arctel.oms.service.impl;
 
-import com.arctel.oms.entity.OmsUser;
+import com.arctel.oms.domain.entity.OmsUser;
 import com.arctel.oms.input.QueryUserPageInput;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserUpdateInput;
-import com.arctel.oms.mapper.OmsUserMapper;
+import com.arctel.oms.domain.mapper.OmsUserMapper;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.exception.BizException;

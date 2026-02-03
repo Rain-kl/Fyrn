@@ -15,29 +15,33 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.oms.infrastructure.job;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
+
 import com.arctel.oms.domain.entity.OmsJob;
+import com.arctel.oms.input.CreateJobInput;
+import com.arctel.oms.service.OmsJobService;
 
-import java.io.IOException;
-
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
-
+public interface ThreadPoolJobService extends OmsJobService {
 
     /**
-     * 同步本地文件到OSS
+     * 创建新任务
+     *
+     * @param input 创建任务输入参数
+     * @param task 任务逻辑
+     * @return 创建的任务对象
      */
-    String fileToOss(SyncMaterialInput input) throws IOException;
+    OmsJob createJob(CreateJobInput input, JobRunnable task);
 
     /**
-     * 同步OSS文件到MMS
+     * 取消指定任务
+     *
+     * @param jobId                 任务ID
+     * @param mayInterruptIfRunning 是否中断正在运行的任务
+     * @return true 表示成功取消（或任务已完成/已取消）
      */
-    OmsJob ossToMms();
+    boolean cancelTask(String jobId, boolean mayInterruptIfRunning);
+
+    boolean completeTask(String jobId);
 
 }

@@ -17,8 +17,8 @@
 
 package com.arctel.oms.service.impl;
 
-import com.arctel.oms.common.config.OssProperties;
 import com.arctel.oms.common.exception.BizException;
+import com.arctel.oms.infrastructure.config.OssProperties;
 import com.arctel.oms.service.OmsStorageService;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;

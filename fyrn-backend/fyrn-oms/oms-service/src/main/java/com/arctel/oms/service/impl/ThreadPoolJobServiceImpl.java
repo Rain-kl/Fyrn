@@ -17,13 +17,13 @@
 
 package com.arctel.oms.service.impl;
 
-import com.arctel.oms.common.constants.JobStatusEnum;
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsJob;
+import com.arctel.oms.enums.JobStatusEnum;
+import com.arctel.oms.infrastructure.job.JobRunnable;
+import com.arctel.oms.infrastructure.job.ThreadPoolJobService;
 import com.arctel.oms.input.CreateJobInput;
 import com.arctel.oms.input.UpdateJobInput;
 import com.arctel.oms.service.OmsJobService;
-import com.arctel.oms.service.job.JobRunnable;
-import com.arctel.oms.service.job.ThreadPoolJobService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;

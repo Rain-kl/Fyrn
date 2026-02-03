@@ -19,7 +19,7 @@ package com.arctel.oms.output;
 
 
 import com.arctel.oms.dto.JobProgressDTO;
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsJob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

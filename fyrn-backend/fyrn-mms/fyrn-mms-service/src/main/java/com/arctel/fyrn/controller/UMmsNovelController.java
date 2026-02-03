@@ -26,7 +26,7 @@ import com.arctel.fyrn.requestion.UMmsPageInput;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsJob;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;

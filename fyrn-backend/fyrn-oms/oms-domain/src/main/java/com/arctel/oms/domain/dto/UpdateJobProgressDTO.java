@@ -15,29 +15,17 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
-
-import com.arctel.fyrn.requestion.SyncMaterialInput;
-import com.arctel.oms.domain.entity.OmsJob;
-
-import java.io.IOException;
-
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
+package com.arctel.oms.domain.dto;
 
 
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
 
+@Data
+@AllArgsConstructor
+public class UpdateJobProgressDTO {
+    String jobId;
+    String log;
+    JobProgressDTO jobProgressDTO;
 }

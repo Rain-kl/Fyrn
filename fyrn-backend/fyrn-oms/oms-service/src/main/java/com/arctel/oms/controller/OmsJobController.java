@@ -20,7 +20,7 @@ package com.arctel.oms.controller;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsJob;
 import com.arctel.oms.input.*;
 import com.arctel.oms.output.JobDetailOutput;
 import com.arctel.oms.output.JobMonitorOutput;

@@ -20,9 +20,9 @@ package com.arctel.oms.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.arctel.oms.entity.OmsParameter;
+import com.arctel.oms.domain.entity.OmsParameter;
 import com.arctel.oms.input.AddParameterInput;
-import com.arctel.oms.mapper.OmsParameterMapper;
+import com.arctel.oms.domain.mapper.OmsParameterMapper;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.service.OmsParameterService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

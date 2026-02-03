@@ -20,7 +20,7 @@ package com.arctel.oms.controller;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.entity.OmsParameter;
+import com.arctel.oms.domain.entity.OmsParameter;
 import com.arctel.oms.input.AddParameterInput;
 import com.arctel.oms.input.QueryParameterInput;
 import com.arctel.oms.service.OmsParameterService;

@@ -25,6 +25,7 @@
         <module>oms-api</module>
         <module>oms-service</module>
         <module>oms-domain</module>
+        <module>oms-infrastructure</module>
     </modules>
 
     <dependencies>

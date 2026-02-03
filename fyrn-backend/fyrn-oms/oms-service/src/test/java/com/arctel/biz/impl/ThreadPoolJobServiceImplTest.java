@@ -18,14 +18,14 @@
 package com.arctel.biz.impl;
 
 
-import com.arctel.oms.common.constants.JobStatusEnum;
+import com.arctel.oms.domain.entity.OmsJob;
 import com.arctel.oms.dto.JobProgressDTO;
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.enums.JobStatusEnum;
+import com.arctel.oms.infrastructure.job.JobRunnable;
+import com.arctel.oms.infrastructure.job.ThreadPoolJobService;
 import com.arctel.oms.input.CreateJobInput;
 import com.arctel.oms.input.UpdateJobInput;
 import com.arctel.oms.input.UpdateJobProgressInput;
-import com.arctel.oms.service.job.JobRunnable;
-import com.arctel.oms.service.job.ThreadPoolJobService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

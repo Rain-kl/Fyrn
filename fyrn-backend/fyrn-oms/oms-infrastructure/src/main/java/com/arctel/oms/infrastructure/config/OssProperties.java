@@ -15,29 +15,18 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.oms.infrastructure.config;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
-import com.arctel.oms.domain.entity.OmsJob;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
-
-
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
-
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
-
+@Data
+@Component
+@ConfigurationProperties(prefix = "minio")
+public class OssProperties {
+    private String endpoint;
+    private String accessKeyId;
+    private String accessKeySecret;
+    private String bucketName;
 }

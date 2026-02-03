@@ -18,7 +18,7 @@
 package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.entity.OmsUser;
+import com.arctel.oms.domain.entity.OmsUser;
 import com.arctel.oms.input.QueryUserPageInput;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserUpdateInput;

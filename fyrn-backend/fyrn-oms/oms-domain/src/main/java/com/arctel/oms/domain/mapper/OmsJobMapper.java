@@ -15,29 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.oms.domain.mapper;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
 import com.arctel.oms.domain.entity.OmsJob;
-
-import java.io.IOException;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
-
-
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
-
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
+* @author hspcadmin
+* @description 针对表【oms_job(任务表)】的数据库操作Mapper
+* @createDate 2025-12-16 11:27:56
+* @Entity generator.domain.OmsJob
+*/
+public interface OmsJobMapper extends BaseMapper<OmsJob> {
 
 }
+
+
+
+

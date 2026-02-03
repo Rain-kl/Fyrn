@@ -19,7 +19,7 @@ package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 
-import com.arctel.oms.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsJob;
 import com.arctel.oms.input.CreateJobInput;
 import com.arctel.oms.input.GetJobDetailInput;
 import com.arctel.oms.input.UpdateJobInput;

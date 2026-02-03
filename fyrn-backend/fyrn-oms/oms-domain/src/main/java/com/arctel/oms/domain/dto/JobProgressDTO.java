@@ -15,29 +15,39 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.oms.domain.dto;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
-import com.arctel.oms.domain.entity.OmsJob;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-import java.io.IOException;
+@Data
+@AllArgsConstructor
+public class JobProgressDTO {
 
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
+    Long current;
 
+    Long total;
 
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
+    public JobProgressDTO(Integer current, Integer total) {
+        this.current = Long.valueOf(current);
+        this.total = Long.valueOf(total);
+    }
 
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
+    public void setCurrent(Integer current) {
+        this.current = Long.valueOf(current);
+    }
 
+    public void setTotal(Integer total) {
+        this.total = Long.valueOf(total);
+    }
+
+    public double getPercent() {
+        if (total == null || total == 0) {
+            return 0.0;
+        }
+        if (current == null) {
+            return 0.0;
+        }
+        return (double) current / total;
+    }
 }

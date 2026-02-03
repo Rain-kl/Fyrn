@@ -15,29 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.oms.infrastructure.job;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
+
 import com.arctel.oms.domain.entity.OmsJob;
 
-import java.io.IOException;
+public abstract class JobRunnable extends BaseJobLogger {
 
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
+    public JobRunnable(ThreadPoolJobService threadPoolJobService) {
+        super(threadPoolJobService);
+    }
 
+    protected abstract void taskRun();
 
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
-
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
-
+    public void run(OmsJob omsJob) {
+        super.omsJob = omsJob;
+        taskRun();
+    }
 }

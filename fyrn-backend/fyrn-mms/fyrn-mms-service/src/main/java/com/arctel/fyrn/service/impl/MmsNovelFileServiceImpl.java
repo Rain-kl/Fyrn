@@ -19,7 +19,6 @@ package com.arctel.fyrn.service.impl;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
-
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovel;
@@ -36,9 +35,9 @@ import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.common.utils.FileUtil;
 import com.arctel.oms.common.utils.PagingUtil;
 import com.arctel.oms.common.utils.Result;
+import com.arctel.oms.infrastructure.job.ThreadPoolJobService;
 import com.arctel.oms.service.OmsParameterService;
 import com.arctel.oms.service.OmsStorageService;
-import com.arctel.oms.service.job.ThreadPoolJobService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
