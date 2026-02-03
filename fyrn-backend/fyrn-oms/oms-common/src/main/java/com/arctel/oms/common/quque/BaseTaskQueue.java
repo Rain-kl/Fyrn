@@ -13,10 +13,13 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessageDTO> implements Ini
 
     private Class<T> taskMsgClass;
 
-    public static final String TASK_QUEUE_PREFIX = "TASK_GROUP:";
+    public static final String TASK_PREFIX = "oms:task:";
 
-    private String queueKey;
-    private String tasksQueueKey;
+    public static final String TASK_QUEUE = TASK_PREFIX + "queue:";
+
+    public static final String TASK_METRICS = TASK_PREFIX + "metrics:";
+
+    private RegistrationInfoDTO<T> registrationInfoDTO;
 
     /**
      * 获取注册信息, 将任务队列注册到系统中
@@ -33,13 +36,9 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessageDTO> implements Ini
     }
 
     public void register() {
-        RegistrationInfoDTO<T> registrationInfoDTO = getRegistrationInfo();
-        this.queueKey = TASK_QUEUE_PREFIX + registrationInfoDTO.getQueueName();
-        this.tasksQueueKey = queueKey + ":tasks";
+        this.registrationInfoDTO = getRegistrationInfo();
         this.taskMsgClass = registrationInfoDTO.getClazz();
-
-        // 在 Redis 中注册任务队列信息
-        redisTemplate.opsForHash().put(queueKey, "description", registrationInfoDTO.getDescription());
+        redisTemplate.opsForHash().put(TASK_METRICS + registrationInfoDTO.getQueueName(), "description", registrationInfoDTO.getDescription());
     }
 
     /**
@@ -48,7 +47,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessageDTO> implements Ini
      * @param taskMsg 任务信息
      */
     public Boolean put(T taskMsg) {
-        redisTemplate.opsForList().rightPush(tasksQueueKey, taskMsg);
+        redisTemplate.opsForList().rightPush(TASK_QUEUE + registrationInfoDTO.getQueueName(), taskMsg);
         return null;
     }
 
@@ -56,7 +55,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessageDTO> implements Ini
      * 获取任务信息
      */
     public T pop() {
-        Object o = redisTemplate.opsForList().rightPop(tasksQueueKey);
+        Object o = redisTemplate.opsForList().rightPop(TASK_QUEUE + registrationInfoDTO.getQueueName());
         return taskMsgClass.cast(o);
     }
 
