@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * 分页工具类
+ *
+ * @author ryan
+ * @date 2024-06-25
+ */
 public class PagingUtil {
 
     public static <T> BaseQueryPage<T> page(
@@ -80,8 +86,7 @@ public class PagingUtil {
             Integer pageNo,
             Integer pageSize,
             Comparator<T> comparator,
-            Predicate<T> filter
-    ) {
+            Predicate<T> filter) {
         return page(
                 fullList,
                 pageNo,

@@ -23,8 +23,18 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author ryan
+ * @description 编码工具类
+ * @createDate
+ */
 public class CharsetUtil {
 
+    /**
+     * 检测文件编码格式
+     * @param file 待检测文件
+     * @return 文件编码格式
+     */
     public static String detectCharset(File file) throws Exception {
         byte[] buf = new byte[4096];
         UniversalDetector detector = new UniversalDetector(null);
@@ -44,6 +54,12 @@ public class CharsetUtil {
     }
 
 
+    /**
+     * 将文件转换为UTF-8编码格式
+     * @param src 待转换文件
+     * @param srcCharset 源文件编码格式
+     * @return 转换后文件
+     */
     public static File convertToUtf8(File src, String srcCharset) throws IOException {
         File target = new File(src.getParent(), src.getName() + ".utf8.txt");
 

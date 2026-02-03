@@ -34,15 +34,28 @@ import java.util.stream.Stream;
 @Slf4j
 public class FileUtil {
 
-    public static List<Path> getAllTxtFiles(String dirPath) throws IOException {
+    public final static String TXT_SUFFIX = ".txt";
+
+    public static List<Path> getAllFiles(String dirPath, String suffix) throws IOException {
         try (Stream<Path> paths = Files.walk(Paths.get(dirPath))) {
             return paths
                     .filter(Files::isRegularFile)
-                    .filter(p -> p.toString().endsWith(".txt"))
+                    .filter(p -> p.toString().endsWith(suffix))
                     .collect(Collectors.toList());
         } catch (NoSuchFileException e) {
             throw new BizException(ErrorConstant.FILE_NOT_FOUND, e, "目录不存在: " + dirPath);
         }
+    }
+
+    /**
+     * 获取目录下所有txt文件
+     *
+     * @param dirPath 目录路径
+     * @return
+     * @throws IOException
+     */
+    public static List<Path> getAllTxtFiles(String dirPath) throws IOException {
+        return getAllFiles(dirPath, TXT_SUFFIX);
     }
 
     public static long getFileSize(Path path) {
