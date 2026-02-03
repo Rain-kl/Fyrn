@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.arctel.platform</groupId>
         <artifactId>oms</artifactId>
@@ -10,20 +11,21 @@
     </parent>
 
     <artifactId>oms-api</artifactId>
+    <name>OMS - API Layer</name>
+    <description>OMS API 层, 包含 Controller、DTO、接口定义等对外暴露的接口</description>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
     <dependencies>
+        <!-- OMS 内部依赖 -->
         <dependency>
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
-            <version>${oms.version}</version>
-            <scope>compile</scope>
+        </dependency>
+
+        <!-- MyBatis Plus (Service 接口继承 IService, 3.5.9 版本在 spring 包里) -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

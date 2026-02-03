@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.arctel</groupId>
         <artifactId>fyrn</artifactId>
@@ -10,54 +11,50 @@
     </parent>
 
     <artifactId>fyrn-aggregation</artifactId>
+    <name>Fyrn - Aggregation Module</name>
+    <description>Fyrn 聚合启动模块, 整合所有服务模块作为统一入口</description>
 
     <dependencies>
+        <!-- Fyrn 模块 -->
+        <dependency>
+            <groupId>com.arctel</groupId>
+            <artifactId>fyrn-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.arctel</groupId>
+            <artifactId>fyrn-mms-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.arctel</groupId>
+            <artifactId>fyrn-mms-service</artifactId>
+        </dependency>
+
+        <!-- OMS 模块 -->
+        <dependency>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-service</artifactId>
+        </dependency>
+
+        <!-- Spring 相关 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-mms-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-mms-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
+        <!-- 数据库 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -85,4 +82,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

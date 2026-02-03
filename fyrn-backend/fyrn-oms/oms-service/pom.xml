@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.arctel.platform</groupId>
         <artifactId>oms</artifactId>
@@ -10,30 +11,40 @@
     </parent>
 
     <artifactId>oms-service</artifactId>
+    <name>OMS - Service Layer</name>
+    <description>OMS 服务层, 包含业务逻辑实现、应用服务等</description>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
     <dependencies>
+        <!-- OMS 内部依赖 -->
         <dependency>
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
-            <version>${oms.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-api</artifactId>
-            <version>${oms.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-infrastructure</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+
+        <!-- 监控 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

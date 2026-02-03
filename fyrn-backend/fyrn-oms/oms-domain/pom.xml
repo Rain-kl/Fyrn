@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.arctel.platform</groupId>
         <artifactId>oms</artifactId>
@@ -10,11 +11,24 @@
     </parent>
 
     <artifactId>oms-domain</artifactId>
+    <name>OMS - Domain Layer</name>
+    <description>OMS 领域层, 包含实体、值对象、领域服务等核心业务逻辑</description>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <!-- 
+        注意: 理想情况下领域层应该是最纯净的层
+        但由于当前实体使用了 MyBatis Plus 注解，需要引入相关依赖
+        将来可考虑将 Mapper 移至 infrastructure 层以实现更纯粹的 DDD
+    -->
+    <dependencies>
+        <!-- MyBatis Plus (实体注解 + Mapper 接口) -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
