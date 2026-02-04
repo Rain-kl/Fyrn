@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.task;
+package com.arctel.oms.infrastructure.task;
 
-import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
-@Data
-public class BaseTaskMessage {
+@Slf4j
+public abstract class BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
-    private String taskId;
+    protected abstract String getHandlerId();
+
+    public abstract void handleTask(T taskMsg);
 
 }

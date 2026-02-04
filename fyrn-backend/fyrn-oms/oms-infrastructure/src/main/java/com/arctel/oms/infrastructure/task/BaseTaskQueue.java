@@ -17,45 +17,135 @@
 
 package com.arctel.oms.infrastructure.task;
 
-import com.arctel.oms.domain.task.BaseTaskMessage;
-import com.arctel.oms.domain.task.RegistrationInfo;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.time.Duration;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE;
+
+/**
+ * 任务队列基类
+ * 设计: 一个模块一个任务队列，在队列注册监听器
+ *
+ * @param <T>
+ */
+@Slf4j
 public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements InitializingBean {
+
+    private static final Long KEEP_ALIVE_TOLERANCE_FACTOR = 5L;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    private Class<T> taskMsgClass;
-
-    public static final String TASK_PREFIX = "oms:task:";
-
-    public static final String TASK_QUEUE = TASK_PREFIX + "queue:";
-
-    public static final String TASK_METRICS = TASK_PREFIX + "metrics:";
-
     private RegistrationInfo<T> registrationInfo;
+
+    private TaskQueueConfig queueConfig;
+
+    private BaseThreadPoolListener<T> listener;
+
+    private ScheduledExecutorService scheduledExecutor;
+
 
     /**
      * 获取注册信息, 将任务队列注册到系统中
      */
     public abstract RegistrationInfo<T> getRegistrationInfo();
 
+    /**
+     * 获取任务队列配置, 默认配置
+     */
+    public TaskQueueConfig getTaskQueueConfig() {
+        return new TaskQueueConfig();
+    }
+
+    /**
+     * 获取任务池监听器
+     */
+    public abstract BaseThreadPoolListener<T> getPoolListener();
+
+
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         initTaskQueue();
     }
 
     public void initTaskQueue() {
+        // 获取任务队列配置
+        this.queueConfig = getTaskQueueConfig();
+        // 任务队列注册
         register();
+        // 初始化定时任务线程池
+        this.scheduledExecutor = new ScheduledThreadPoolExecutor(1,
+                new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-%d").build());
+        // 启动心跳保持
+        keepAlive();
+
+        // 启动自动消费任务
+        autoConsumption();
     }
 
     public void register() {
         this.registrationInfo = getRegistrationInfo();
-        this.taskMsgClass = registrationInfo.getClazz();
-        redisTemplate.opsForHash().put(TASK_METRICS + registrationInfo.getQueueName(), "description", registrationInfo.getDescription());
+        this.listener = getPoolListener();
+    }
+
+    /**
+     * 任务队列心跳保持, 定时更新任务队列的存活信息到 Redis
+     */
+    public void keepAlive() {
+        String queue_key = TASK_METRICS + registrationInfo.getQueueName();
+        scheduledExecutor.schedule(() -> {
+            try {
+                redisTemplate.opsForValue().set(queue_key, registrationInfo);
+                redisTemplate.expire(queue_key, Duration.ofMinutes(queueConfig.getKeepAliveInterval() * KEEP_ALIVE_TOLERANCE_FACTOR));
+            } catch (Throwable e) {
+                log.error("Failed to update task queue keep-alive info for queue: {}", registrationInfo.getQueueName(), e);
+            } finally {
+                keepAlive();
+            }
+        }, queueConfig.getKeepAliveInterval(), TimeUnit.SECONDS);
+    }
+
+    /**
+     * 自动消费任务
+     */
+    private void autoConsumption() {
+        scheduledExecutor.schedule(() -> {
+            try {
+                T taskMsg = pop();
+                if (taskMsg != null) {
+                    submit2Listener(taskMsg);
+                }
+            } catch (Throwable e) {
+                log.error("Failed to consume task from queue: {}", registrationInfo.getQueueName(), e);
+            } finally {
+                autoConsumption();
+            }
+
+        }, queueConfig.getWorkingInterval(), TimeUnit.SECONDS);
+    }
+
+    private void submit2Listener(T taskMsg) {
+        listener.submit2Pool(taskMsg);
+    }
+
+    /**
+     * 获取队列长度
+     *
+     */
+    public int getQueueSize() {
+        Long size = redisTemplate.opsForList().size(TASK_QUEUE + registrationInfo.getQueueName());
+        return size != null ? size.intValue() : 0;
     }
 
     /**
@@ -63,9 +153,13 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      *
      * @param taskMsg 任务信息
      */
-    public Boolean put(T taskMsg) {
+    public Boolean push(T taskMsg) {
+        if (getQueueSize() >= queueConfig.getMaxQueueSize()) {
+            log.warn("Task queue {} is full, cannot add new task {}", registrationInfo.getQueueName(), taskMsg.getTaskId());
+            return false;
+        }
         redisTemplate.opsForList().rightPush(TASK_QUEUE + registrationInfo.getQueueName(), taskMsg);
-        return null;
+        return true;
     }
 
     /**
@@ -73,14 +167,40 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      */
     public T pop() {
         Object o = redisTemplate.opsForList().rightPop(TASK_QUEUE + registrationInfo.getQueueName());
-        return taskMsgClass.cast(o);
+        return registrationInfo.getTaskMessageClazz().cast(o);
     }
 
-    /**
-     * 自动消费任务
-     */
-    void autoConsumption() {
 
+    @Data
+    @AllArgsConstructor
+    public static class RegistrationInfo<T> {
+        private String queueName;
+        private String description;
+        private Class<T> taskMessageClazz;
     }
+
+    @Data
+    @AllArgsConstructor
+    public static class TaskQueueConfig {
+        /**
+         * 任务队列容量
+         */
+        private Long maxQueueSize;
+        /**
+         * 心跳保持间隔时间，单位秒
+         */
+        private Long keepAliveInterval;
+        /**
+         * 默认工作间隔时间，单位秒
+         */
+        private Long workingInterval;
+
+        public TaskQueueConfig() {
+            this.maxQueueSize = 100L;
+            this.keepAliveInterval = 5L;
+            this.workingInterval = 1L;
+        }
+    }
+
 
 }

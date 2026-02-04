@@ -15,15 +15,34 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.domain.task;
+package com.arctel.oms.infrastructure.task;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
-@AllArgsConstructor
-public class RegistrationInfo<T> {
-    private String queueName;
-    private String description;
-    private Class<T> clazz;
+public class DefaultTaskMessage extends BaseTaskMessage {
+
+    /**
+     * 业务标签
+     */
+    private String bizTag;
+
+    /**
+     * 业务值
+     */
+    private String bizValue;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
+
+
 }
