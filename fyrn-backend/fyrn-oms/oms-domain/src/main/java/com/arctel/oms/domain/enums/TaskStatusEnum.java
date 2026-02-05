@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.enums;
+package com.arctel.oms.domain.enums;
 
 import lombok.Getter;
 
 @Getter
-public enum JobStatusEnum {
+public enum TaskStatusEnum {
     PENDING("QUEUED",0, "列队中"),
     RUNNING("RUNNING", 1,"运行中"),
     SUCCESS("SUCCESS",2, "成功"),
@@ -32,7 +32,7 @@ public enum JobStatusEnum {
     private final Integer value;
 
 
-    JobStatusEnum(String code, int value, String description) {
+    TaskStatusEnum(String code, int value, String description) {
         this.code = code;
         this.value = value;
         this.description = description;
@@ -51,11 +51,11 @@ public enum JobStatusEnum {
      * @param code 状态码
      * @return 对应的枚举，若未找到则返回 null
      */
-    public static JobStatusEnum fromCode(String code) {
+    public static TaskStatusEnum fromCode(String code) {
         if (code == null || code.isEmpty()) {
             return null;
         }
-        for (JobStatusEnum status : JobStatusEnum.values()) {
+        for (TaskStatusEnum status : TaskStatusEnum.values()) {
             if (status.code.equals(code)) {
                 return status;
             }

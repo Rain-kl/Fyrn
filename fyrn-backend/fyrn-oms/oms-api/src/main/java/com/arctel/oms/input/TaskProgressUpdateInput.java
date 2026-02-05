@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.dto;
+package com.arctel.oms.input;
 
+import com.arctel.oms.domain.dto.TaskProgressDTO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 @Data
-public class JobOverviewDTO {
-
-    Integer totalJobCount;
-    Integer runningJobCount;
-    Integer successJobCount;
-    Integer failedJobCount;
-
+@AllArgsConstructor
+public class TaskProgressUpdateInput {
+    String taskId;
+    String log;
+    TaskProgressDTO taskProgressDTO;
 }

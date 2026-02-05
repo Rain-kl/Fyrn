@@ -17,15 +17,37 @@
 
 package com.arctel.oms.domain.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-
 @Data
 @AllArgsConstructor
-public class UpdateJobProgressDTO {
-    String jobId;
-    String log;
-    JobProgressDTO jobProgressDTO;
+public class TaskProgressDTO {
+
+    Long current;
+
+    Long total;
+
+    public TaskProgressDTO(Integer current, Integer total) {
+        this.current = Long.valueOf(current);
+        this.total = Long.valueOf(total);
+    }
+
+    public void setCurrent(Integer current) {
+        this.current = Long.valueOf(current);
+    }
+
+    public void setTotal(Integer total) {
+        this.total = Long.valueOf(total);
+    }
+
+    public double getPercent() {
+        if (total == null || total == 0) {
+            return 0.0;
+        }
+        if (current == null) {
+            return 0.0;
+        }
+        return (double) current / total;
+    }
 }

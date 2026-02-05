@@ -17,27 +17,23 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseQueryPageInput;
-import lombok.Getter;
+import com.arctel.oms.common.base.BaseInput;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
-@Getter
 @Setter
-public class ListJobsInput extends BaseQueryPageInput {
+@AllArgsConstructor
+@NoArgsConstructor
+public class TaskDetailGetInput extends BaseInput {
 
-    /**
-     * 业务任务ID(对外返回)
-     */
-    private String jobId = null;
+    String taskId;
 
-    /**
-     * 任务类型，如 file_batch
-     */
-    private String taskType = null;
-
-    /**
-     * 0=queued,1=running,2=success,3=failed,4=canceled
-     */
-    private Integer status = null;
-
+    public String getTaskId() {
+        if(StringUtils.isBlank(taskId)){
+            throw new IllegalArgumentException("taskId 不能为空");
+        }
+        return taskId;
+    }
 }

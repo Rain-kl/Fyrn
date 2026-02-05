@@ -17,16 +17,27 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
-import com.arctel.oms.dto.JobProgressDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class TaskPageQueryInput extends BaseQueryPageInput {
 
-@Data
-@AllArgsConstructor
-public class UpdateJobProgressInput extends BaseInput {
-    String jobId;
-    String log;
-    JobProgressDTO jobProgressDTO;
+    /**
+     * 业务任务ID(对外返回)
+     */
+    private String taskId = null;
+
+    /**
+     * 任务类型，如 file_batch
+     */
+    private String taskTag = null;
+
+    /**
+     * 0=queued,1=running,2=success,3=failed,4=canceled
+     */
+    private Integer status = null;
+
 }

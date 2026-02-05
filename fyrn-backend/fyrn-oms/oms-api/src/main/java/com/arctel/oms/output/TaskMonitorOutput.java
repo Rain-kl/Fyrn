@@ -17,15 +17,15 @@
 
 package com.arctel.oms.output;
 
-import com.arctel.oms.dto.JobOverviewDTO;
+import com.arctel.oms.domain.dto.TaskOverviewDTO;
 import com.arctel.oms.dto.ThreadPoolMetricsDTO;
 import lombok.Data;
 
 @Data
-public class JobMonitorOutput {
+public class TaskMonitorOutput {
 
     ThreadPoolMetricsDTO threadPoolMetricsDTO;
 
-    JobOverviewDTO jobOverviewDto;
+    TaskOverviewDTO taskOverviewDTO;
 
 }

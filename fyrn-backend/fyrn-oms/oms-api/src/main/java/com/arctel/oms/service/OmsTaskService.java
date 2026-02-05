@@ -18,79 +18,78 @@
 package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-
-import com.arctel.oms.domain.entity.OmsJob;
-import com.arctel.oms.input.CreateJobInput;
-import com.arctel.oms.input.GetJobDetailInput;
-import com.arctel.oms.input.UpdateJobInput;
-import com.arctel.oms.input.UpdateJobProgressInput;
-import com.arctel.oms.output.JobDetailOutput;
-import com.arctel.oms.output.JobMonitorOutput;
+import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.input.*;
+import com.arctel.oms.output.TaskDetailOutput;
+import com.arctel.oms.output.TaskMonitorOutput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @author hspcadmin
- * @description 针对表【oms_job(任务表)】的数据库操作Service
+ * @description 针对表【oms_task(任务表)】的数据库操作Service
  * @createDate 2025-12-16 11:27:56
  */
-public interface OmsJobService extends IService<OmsJob> {
+public interface OmsTaskService extends IService<OmsTask> {
+
+
+    OmsTask getTaskById(String taskId);
 
     /**
      * 分页查询任务
      */
-    BaseQueryPage<OmsJob> pageJob(OmsJob omsJob, Integer pageNo, Integer pageSize);
+    BaseQueryPage<OmsTask> pageTask(OmsTask omsTask, Integer pageNo, Integer pageSize);
 
     /**
      * 获取任务详情
      */
-    JobDetailOutput getJobDetail(GetJobDetailInput input);
+    TaskDetailOutput getTaskDetail(TaskDetailGetInput input);
 
     /**
      * 创建任务
-     * @param input
+     * @param omsTask
      * @return
      */
-    OmsJob createJob(CreateJobInput input);
+    OmsTask createTask(OmsTask omsTask);
 
     /**
      * 更新任务进度
      * @param input
      * @return
      */
-    boolean updateJobProgress(UpdateJobProgressInput input);
+    boolean updateTaskProgress(TaskProgressUpdateInput input);
 
     /**
      * 更新任务状态
      * @param input
      * @return
      */
-    boolean updateJob(UpdateJobInput input);
+    boolean updateTask(TaskUpdateInput input);
 
     /**
      * 更新任务日志到 Redis
-     * @param jobId
+     * @param taskId
      * @param logMessage
      */
-    void updateLog(String jobId, String logMessage);
+    void writeLog(String taskId, String logMessage);
 
     /**
      * 获取任务日志
-     * @param jobId
+     * @param taskId
      * @return
      */
-    String getLog(String jobId);
+    String getLog(String taskId);
 
     /**
      * 获取任务日志
-     * @param jobId
+     * @param taskId
      * @param limit
      * @return
      */
-    String getLog(String jobId, int limit);
+    String getLog(String taskId, int limit);
 
     /**
      * 监控任务执行情况
      * @return
      */
-    JobMonitorOutput monitorJob();
+    TaskMonitorOutput monitorTask();
 }

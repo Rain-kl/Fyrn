@@ -55,12 +55,6 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException;
 
     /**
-     * 下载小说文件
-     * @param filePath OSS文件地址
-     */
-    void downloadNovelFile(String filePath);
-
-    /**
      * 下载物料
      * @param mmsNovelFileId 物料ID
      * @return

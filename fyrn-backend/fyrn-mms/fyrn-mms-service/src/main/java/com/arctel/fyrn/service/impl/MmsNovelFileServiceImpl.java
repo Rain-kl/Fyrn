@@ -35,7 +35,6 @@ import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.common.utils.FileUtil;
 import com.arctel.oms.common.utils.PagingUtil;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.infrastructure.job.ThreadPoolJobService;
 import com.arctel.oms.service.OmsParameterService;
 import com.arctel.oms.service.OmsStorageService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -43,8 +42,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -67,8 +66,8 @@ import java.util.Objects;
  * @since 2024-06-10
  */
 @Service
-public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile>
-        implements MmsNovelFileService {
+@Slf4j
+public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, MmsNovelFile> implements MmsNovelFileService {
 
     public static final String OOS_FILE_PATH = "/novels";
 
@@ -82,10 +81,9 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     OmsStorageService oosSupport;
 
     @Resource
-    ThreadPoolJobService threadPoolJobService;
-    @Autowired
     private MmsNovelService mmsNovelService;
-    @Autowired
+
+    @Resource
     private MmsNovelMapper mmsNovelMapper;
 
     /**
@@ -100,15 +98,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     public BaseQueryPage<MmsNovelFile> pageMmsNovelFile(MmsNovelFile mmsNovelFile, Integer pageNo, Integer pageSize) {
         IPage<MmsNovelFile> page = new Page<>(pageNo, pageSize);
 
-        IPage<MmsNovelFile> result = page(
-                page,
-                new LambdaQueryWrapper<MmsNovelFile>()
-                        .eq(mmsNovelFile.getNovelId() != null,
-                                MmsNovelFile::getNovelId, mmsNovelFile.getNovelId())
-                        .like(mmsNovelFile.getFileName() != null,
-                                MmsNovelFile::getFileName, mmsNovelFile.getFileName())
-                        .orderByDesc(MmsNovelFile::getId)
-        );
+        IPage<MmsNovelFile> result = page(page, new LambdaQueryWrapper<MmsNovelFile>().eq(mmsNovelFile.getNovelId() != null, MmsNovelFile::getNovelId, mmsNovelFile.getNovelId()).like(mmsNovelFile.getFileName() != null, MmsNovelFile::getFileName, mmsNovelFile.getFileName()).orderByDesc(MmsNovelFile::getId));
 
         List<MmsNovelFile> ordersList = result.getRecords();
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
@@ -119,12 +109,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         IPage<MmsNovelFile> page = new Page<>(pageNo, pageSize);
 
         // 查询 novelId 为空的文件, novelId在数据库中为null表示未绑定到mms
-        IPage<MmsNovelFile> result = page(
-                page,
-                new LambdaQueryWrapper<MmsNovelFile>()
-                        .isNull(MmsNovelFile::getNovelId)
-                        .orderByDesc(MmsNovelFile::getId)
-        );
+        IPage<MmsNovelFile> result = page(page, new LambdaQueryWrapper<MmsNovelFile>().isNull(MmsNovelFile::getNovelId).orderByDesc(MmsNovelFile::getId));
 
         List<MmsNovelFile> ordersList = result.getRecords();
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
@@ -136,10 +121,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
         List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
 
-        BaseQueryPage<Path> page = PagingUtil.page(
-                allTxtFiles, input.getPageNo(), input.getPageSize(),
-                Comparator.comparing(Path::getFileName), Objects::nonNull
-        );
+        BaseQueryPage<Path> page = PagingUtil.page(allTxtFiles, input.getPageNo(), input.getPageSize(), Comparator.comparing(Path::getFileName), Objects::nonNull);
         BaseQueryPage<LocalFileSimpleDTO> localFileSimpleDTOQueryPage = new BaseQueryPage<>();
         localFileSimpleDTOQueryPage.setCurrentPage(page.getCurrentPage());
         localFileSimpleDTOQueryPage.setPageSize(page.getPageSize());
@@ -194,10 +176,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
             FileUtil.deleteFile(file);
         } else {
             try {
-                Files.move(
-                        file.toPath(),
-                        Path.of(rubbishPath, file.getName())
-                );
+                Files.move(file.toPath(), Path.of(rubbishPath, file.getName()));
             } catch (Exception e) {
                 // 移动失败则重命名 +.bk
                 File renamedFile = new File(file.getAbsolutePath() + ".bk");
@@ -206,15 +185,6 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
                 }
             }
         }
-    }
-
-    @Override
-    public void downloadNovelFile(String filePath) {
-        byte[] fileBytes = oosSupport.downloadBytes(filePath);
-        System.out.printf("Downloaded file size: %d bytes%n", fileBytes.length);
-        String preview = new String(fileBytes, 0, Math.min(fileBytes.length, 100));
-        System.out.println("File preview (first 100 characters):");
-        System.out.println(preview);
     }
 
     @Override
@@ -244,17 +214,14 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
             MmsNovel mmsNovel = mmsNovelMapper.selectById(novelId);
             fileName = NovelUtil.buildNovelFileName(mmsNovel.getNovelTitle(), mmsNovel.getNovelAuthor());
         }
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20"); // 防止空格变加号
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // 防止空格变加号
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 通用二进制流
         headers.setContentDispositionFormData("attachment", encodedFileName);
         headers.setContentLength(fileBytes.length);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(fileBytes);
+        return ResponseEntity.ok().headers(headers).body(fileBytes);
     }
 
     @Override
@@ -286,9 +253,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
     @Override
     public Boolean markUnableAutoBind(Long mmsNovelFileId) {
-        return lambdaUpdate().set(MmsNovelFile::getNovelId, -1L)
-                .eq(MmsNovelFile::getId, mmsNovelFileId)
-                .update();
+        return lambdaUpdate().set(MmsNovelFile::getNovelId, -1L).eq(MmsNovelFile::getId, mmsNovelFileId).update();
     }
 
     @Override

@@ -28,16 +28,16 @@ import java.io.IOException;
  * @createDate
  */
 public interface DataSyncService {
-
-
-    /**
-     * 同步本地文件到OSS
-     */
-    String fileToOss(SyncMaterialInput input) throws IOException;
-
-    /**
-     * 同步OSS文件到MMS
-     */
-    OmsJob ossToMms();
+//
+//
+//    /**
+//     * 同步本地文件到OSS
+//     */
+//    String fileToOss(SyncMaterialInput input) throws IOException;
+//
+//    /**
+//     * 同步OSS文件到MMS
+//     */
+//    OmsJob ossToMms();
 
 }

@@ -20,35 +20,23 @@ package com.arctel.oms.controller;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.input.*;
-import com.arctel.oms.output.JobDetailOutput;
-import com.arctel.oms.output.JobMonitorOutput;
-import com.arctel.oms.service.OmsJobService;
+import com.arctel.oms.output.TaskDetailOutput;
+import com.arctel.oms.output.TaskMonitorOutput;
+import com.arctel.oms.service.OmsTaskService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/oms/job")
+@RequestMapping("/oms/task")
 @RestController
-public class OmsJobController {
+public class OmsTaskController {
 
     @Resource
-    OmsJobService omsJobService;
-
-
-    /**
-     * 创建新任务
-     *
-     * @param input
-     * @return
-     */
-    @PostMapping("/create")
-    public Result<OmsJob> createJob(CreateJobInput input) {
-        return Result.success(omsJobService.createJob(input));
-    }
+    OmsTaskService omsTaskService;
 
 
     /**
@@ -58,12 +46,12 @@ public class OmsJobController {
      * @return
      */
     @GetMapping("/list")
-    public Result<BaseQueryPage<OmsJob>> listJobs(ListJobsInput input) {
-        OmsJob omsJob = new OmsJob();
-        omsJob.setJobId(input.getJobId());
-        omsJob.setTaskType(input.getTaskType());
-        omsJob.setStatus(input.getStatus());
-        return Result.success(omsJobService.pageJob(omsJob, input.getPageNo(), input.getPageSize()));
+    public Result<BaseQueryPage<OmsTask>> listTasks(TaskPageQueryInput input) {
+        OmsTask omsTask = new OmsTask();
+        omsTask.setTaskId(input.getTaskId());
+        omsTask.setTaskTag(input.getTaskTag());
+        omsTask.setStatus(input.getStatus());
+        return Result.success(omsTaskService.pageTask(omsTask, input.getPageNo(), input.getPageSize()));
     }
 
     /**
@@ -73,8 +61,8 @@ public class OmsJobController {
      * @return
      */
     @GetMapping("/detail")
-    public Result<JobDetailOutput> getJobDetail(GetJobDetailInput input) {
-        return Result.success(omsJobService.getJobDetail(input));
+    public Result<TaskDetailOutput> getTaskDetail(TaskDetailGetInput input) {
+        return Result.success(omsTaskService.getTaskDetail(input));
     }
 
     /**
@@ -84,8 +72,8 @@ public class OmsJobController {
      * @return
      */
     @PostMapping("/updateProgress")
-    public Result<Boolean> updateJobProgress(UpdateJobProgressInput input) {
-        return Result.success(omsJobService.updateJobProgress(input));
+    public Result<Boolean> updateTaskProgress(TaskProgressUpdateInput input) {
+        return Result.success(omsTaskService.updateTaskProgress(input));
     }
 
     /**
@@ -94,9 +82,9 @@ public class OmsJobController {
      * @param input
      * @return
      */
-    @PostMapping("/updateJob")
-    public Result<Boolean> updateJobInput(UpdateJobInput input) {
-        return Result.success(omsJobService.updateJob(input));
+    @PostMapping("/updateTask")
+    public Result<Boolean> updateTaskInput(TaskUpdateInput input) {
+        return Result.success(omsTaskService.updateTask(input));
     }
 
     /**
@@ -106,8 +94,8 @@ public class OmsJobController {
      * @return
      */
     @PostMapping("/log")
-    public Result<String> getJobLog(String logId) {
-        return Result.success(omsJobService.getLog(logId));
+    public Result<String> getTaskLog(String logId) {
+        return Result.success(omsTaskService.getLog(logId));
     }
 
 
@@ -115,7 +103,7 @@ public class OmsJobController {
      * 任务监控
      */
     @GetMapping("/monitor")
-    public Result<JobMonitorOutput> monitorJob() {
-        return Result.success(omsJobService.monitorJob());
+    public Result<TaskMonitorOutput> monitorTask() {
+        return Result.success(omsTaskService.monitorTask());
     }
 }

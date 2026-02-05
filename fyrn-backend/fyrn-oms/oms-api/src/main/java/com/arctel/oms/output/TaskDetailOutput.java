@@ -15,13 +15,23 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.enums;
+package com.arctel.oms.output;
 
-public enum ExceptionLogTypeEnum {
-    SYSTEM,
-    BUSINESS,
-    UNKNOWN;
 
-    ExceptionLogTypeEnum() {
-    }
+import com.arctel.oms.domain.dto.TaskProgressDTO;
+import com.arctel.oms.domain.entity.OmsJob;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class TaskDetailOutput extends OmsJob {
+
+    TaskProgressDTO taskProgressDTO;
+
+    String taskLog;
 }

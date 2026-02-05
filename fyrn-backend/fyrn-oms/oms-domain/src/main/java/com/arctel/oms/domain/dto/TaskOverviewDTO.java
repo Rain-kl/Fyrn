@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.input;
+package com.arctel.oms.domain.dto;
 
-import com.arctel.oms.common.base.BaseInput;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class CreateJobInput extends BaseInput {
+public class TaskOverviewDTO {
 
-    String task_type;
+    Integer totalTaskCount;
+    Integer runningTaskCount;
+    Integer successTaskCount;
+    Integer failedTaskCount;
 
-    String message;
 }

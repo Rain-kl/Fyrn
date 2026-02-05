@@ -15,39 +15,17 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.dto;
+package com.arctel.oms.input;
 
+import com.arctel.oms.common.base.BaseInput;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class JobProgressDTO {
+public class TaskCreateInput {
 
-    Long current;
+    String taskTag;
 
-    Long total;
-
-    public JobProgressDTO(Integer current, Integer total) {
-        this.current = Long.valueOf(current);
-        this.total = Long.valueOf(total);
-    }
-
-    public void setCurrent(Integer current) {
-        this.current = Long.valueOf(current);
-    }
-
-    public void setTotal(Integer total) {
-        this.total = Long.valueOf(total);
-    }
-
-    public double getPercent() {
-        if (total == null || total == 0) {
-            return 0.0;
-        }
-        if (current == null) {
-            return 0.0;
-        }
-        return (double) current / total;
-    }
+    String message;
 }

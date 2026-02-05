@@ -14,7 +14,7 @@ COPY --from=build /app/fyrn-aggregation/target/fyrn-aggregation.jar app.jar
 # Create config directory
 RUN mkdir -p /app/config
 
-EXPOSE 8080
+EXPOSE 45600
 
 # Run with prod profile and config location
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Dspring.config.additional-location=file:/app/config/", "app.jar"]

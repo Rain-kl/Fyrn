@@ -17,7 +17,7 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
+import com.arctel.oms.domain.enums.TaskStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +25,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateJobInput extends BaseInput {
-    String jobId;
+public class TaskUpdateInput {
+    String taskId;
     Integer status;
     String message;
+
+    public TaskUpdateInput(String taskId, Integer status) {
+        this.taskId = taskId;
+        this.status = status;
+        if (TaskStatusEnum.RUNNING.getValue().equals(status)) {
+            this.message = "任务开始执行";
+        }
+        if (TaskStatusEnum.FAILED.getValue().equals(status)) {
+            this.message = "任务执行失败";
+        }
+        if (TaskStatusEnum.SUCCESS.getValue().equals(status)) {
+            this.message = "任务执行完成";
+        }
+    }
 }
