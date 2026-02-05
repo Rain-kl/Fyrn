@@ -2,10 +2,10 @@
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn -T 1C clean package -DskipTests
 
 # Run stage
-FROM openjdk:17-ea-5-jdk-alpine
+FROM amazoncorretto:17-alpine3.21
 WORKDIR /app
 
 # Copy the jar file
