@@ -15,15 +15,21 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.task;
+package com.arctel.oms.domain.mapper;
 
-import lombok.Data;
+import com.arctel.oms.domain.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsTask;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Data
-public class BaseTaskMessage {
-
-    private String taskId;
-
-    private String handlerId;
+/**
+* @author hspcadmin
+* @description 针对表【oms_task(任务表)】的数据库操作Mapper
+* @createDate 2025-12-16 11:27:56
+*/
+public interface OmsTaskMapper extends BaseMapper<OmsTask> {
 
 }
+
+
+
+

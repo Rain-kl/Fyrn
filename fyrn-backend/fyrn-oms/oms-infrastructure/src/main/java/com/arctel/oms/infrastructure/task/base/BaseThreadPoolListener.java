@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.task;
+package com.arctel.oms.infrastructure.task.base;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +111,11 @@ public abstract class BaseThreadPoolListener<T extends BaseTaskMessage> implemen
     public void doExecute(T taskMsg) {
 
         Runnable wrapper = () -> {
-            this.handlerMap.get(taskMsg.getHandlerId()).handleTask(taskMsg);
+            try {
+                this.handlerMap.get(taskMsg.getTaskTag()).doProcess(taskMsg);
+            } catch (Exception e) {
+                log.error("Handler {} process task {} failed: {}", taskMsg.getTaskTag(), taskMsg.getTaskId(), e.getMessage(), e);
+            }
         };
 
         Future<?> future = pool.submit(wrapper);

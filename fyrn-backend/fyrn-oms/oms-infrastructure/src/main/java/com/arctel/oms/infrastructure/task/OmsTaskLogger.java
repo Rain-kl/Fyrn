@@ -15,47 +15,47 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.job;
+package com.arctel.oms.infrastructure.task;
 
-
-import com.arctel.oms.dto.JobProgressDTO;
-import com.arctel.oms.domain.entity.OmsJob;
-import com.arctel.oms.input.UpdateJobProgressInput;
+import com.arctel.oms.domain.dto.TaskProgressDTO;
+import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
+import com.arctel.oms.input.TaskProgressUpdateInput;
+import com.arctel.oms.service.OmsTaskService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class BaseJobLogger {
+@Slf4j
+public abstract class OmsTaskLogger<T extends BaseTaskMessage> {
 
-    protected OmsJob omsJob;
 
-    ThreadPoolJobService threadPoolJobService;
+    public abstract OmsTask getOmsTask();
+
+    public abstract OmsTaskService getOmsTaskService();
 
     private final AtomicLong currentProgress = new AtomicLong(0);
 
     @Setter
     private Long totalProgress;
 
-    public BaseJobLogger(ThreadPoolJobService threadPoolJobService) {
-        this.threadPoolJobService = threadPoolJobService;
-    }
-
-    public void updateLog(String logMessage) {
-        threadPoolJobService.updateLog(omsJob.getJobId(), logMessage);
+    public void writeLog(String logMessage) {
+        getOmsTaskService().writeLog(getOmsTask().getTaskId(), logMessage);
     }
 
     public void updateProgress(Long current, Long total, String logMessage) {
         this.totalProgress = total;
         currentProgress.set(current);
-        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                omsJob.getJobId(), logMessage, new JobProgressDTO(currentProgress.incrementAndGet(), total)
+        getOmsTaskService().updateTaskProgress(new TaskProgressUpdateInput(
+                getOmsTask().getTaskId(), logMessage, new TaskProgressDTO(currentProgress.incrementAndGet(), total)
         ));
     }
 
     public void updateProgress(Long total, String logMessage) {
         this.totalProgress = total;
-        threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                omsJob.getJobId(), logMessage, new JobProgressDTO(currentProgress.incrementAndGet(), total)
+        getOmsTaskService().updateTaskProgress(new TaskProgressUpdateInput(
+                getOmsTask().getTaskId(), logMessage, new TaskProgressDTO(currentProgress.incrementAndGet(), total)
         ));
     }
 
@@ -64,8 +64,8 @@ public abstract class BaseJobLogger {
         if (this.totalProgress != null && this.totalProgress > 0) {
             updateProgress(this.totalProgress, logMessage);
         } else {
-            threadPoolJobService.updateJobProgress(new UpdateJobProgressInput(
-                    omsJob.getJobId(), logMessage, new JobProgressDTO(currentProgress.incrementAndGet(), 0L)
+            getOmsTaskService().updateTaskProgress(new TaskProgressUpdateInput(
+                    getOmsTask().getTaskId(), logMessage, new TaskProgressDTO(currentProgress.incrementAndGet(), 0L)
             ));
         }
     }

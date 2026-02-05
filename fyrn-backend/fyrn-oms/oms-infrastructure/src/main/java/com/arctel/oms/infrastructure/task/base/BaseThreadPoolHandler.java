@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.task;
+package com.arctel.oms.infrastructure.task.base;
 
-import lombok.extern.slf4j.Slf4j;
+public interface BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
-@Slf4j
-public abstract class BaseThreadPoolHandler<T extends BaseTaskMessage> {
+    default void doProcess(T taskMsg) {
+        handleTask(taskMsg);
+    }
 
-    protected abstract String getHandlerId();
+    String getHandlerId();
 
-    public abstract void handleTask(T taskMsg);
+    void handleTask(T taskMsg);
 
 }

@@ -15,33 +15,37 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.job;
+package com.arctel.oms.infrastructure.task.base;
 
+import lombok.Data;
 
-import com.arctel.oms.domain.entity.OmsJob;
-import com.arctel.oms.input.CreateJobInput;
-import com.arctel.oms.service.OmsJobService;
-
-public interface ThreadPoolJobService extends OmsJobService {
+@Data
+public class BaseTaskMessage {
 
     /**
-     * 创建新任务
-     *
-     * @param input 创建任务输入参数
-     * @param task 任务逻辑
-     * @return 创建的任务对象
+     * 任务ID
      */
-    OmsJob createJob(CreateJobInput input, JobRunnable task);
+    private String taskId;
 
     /**
-     * 取消指定任务
-     *
-     * @param jobId                 任务ID
-     * @param mayInterruptIfRunning 是否中断正在运行的任务
-     * @return true 表示成功取消（或任务已完成/已取消）
+     * 任务标签, 用于分配到不同的处理器
      */
-    boolean cancelTask(String jobId, boolean mayInterruptIfRunning);
+    private String taskTag;
 
-    boolean completeTask(String jobId);
+    /**
+     * 该任务是否允许重试，0表示不允许重试，1表示允许重试
+     */
+    private int allowRetry;
+
+    /**
+     * 业务标签
+     */
+    private String bizTag;
+
+    /**
+     * 业务值
+     */
+    private String bizValue;
+
 
 }

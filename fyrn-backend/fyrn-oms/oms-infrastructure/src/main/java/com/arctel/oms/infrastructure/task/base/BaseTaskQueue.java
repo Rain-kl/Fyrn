@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.task;
+package com.arctel.oms.infrastructure.task.base;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -103,17 +104,17 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      * 任务队列心跳保持, 定时更新任务队列的存活信息到 Redis
      */
     public void keepAlive() {
-        String queue_key = TASK_METRICS + registrationInfo.getQueueName();
-        scheduledExecutor.schedule(() -> {
+        scheduledExecutor.scheduleWithFixedDelay(() -> {
             try {
+                String queue_key = TASK_METRICS + registrationInfo.getQueueName();
                 redisTemplate.opsForValue().set(queue_key, registrationInfo);
-                redisTemplate.expire(queue_key, Duration.ofMinutes(queueConfig.getKeepAliveInterval() * KEEP_ALIVE_TOLERANCE_FACTOR));
+                redisTemplate.expire(queue_key,
+                        Duration.ofMinutes(queueConfig.getKeepAliveInterval() * KEEP_ALIVE_TOLERANCE_FACTOR));
             } catch (Throwable e) {
-                log.error("Failed to update task queue keep-alive info for queue: {}", registrationInfo.getQueueName(), e);
-            } finally {
-                keepAlive();
+                log.error("Failed to update task queue keep-alive info for queue: {}",
+                        registrationInfo.getQueueName(), e);
             }
-        }, queueConfig.getKeepAliveInterval(), TimeUnit.SECONDS);
+        }, 0, queueConfig.getKeepAliveInterval(), TimeUnit.SECONDS);
     }
 
     /**
@@ -158,8 +159,18 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
             log.warn("Task queue {} is full, cannot add new task {}", registrationInfo.getQueueName(), taskMsg.getTaskId());
             return false;
         }
+        checkTaskMessage(taskMsg);
         redisTemplate.opsForList().rightPush(TASK_QUEUE + registrationInfo.getQueueName(), taskMsg);
         return true;
+    }
+
+    private void checkTaskMessage(T taskMsg) {
+        if (StringUtils.isBlank(taskMsg.getTaskId())) {
+            throw new IllegalArgumentException("Task message taskId cannot be null or empty");
+        }
+        if (StringUtils.isBlank(taskMsg.getTaskTag())) {
+            throw new IllegalArgumentException("Task message handlerId cannot be null or empty");
+        }
     }
 
     /**
