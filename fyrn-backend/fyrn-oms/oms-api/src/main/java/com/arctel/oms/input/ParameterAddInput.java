@@ -17,13 +17,37 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
 import lombok.Data;
 
 @Data
-public class UpdateLogInput extends BaseInput {
+public class ParameterAddInput {
+    /**
+     * 主键
+     */
+    private Long paramCode;
 
-    String jobId;
-    String logMessage;
+    /**
+     * 参数名称
+     */
+    private String paramName;
 
+    /**
+     * 参数类型
+     */
+    private String kindCode;
+
+    /**
+     * 参数值
+     */
+    private String paramValue;
+
+    /**
+     * 参数描述
+     */
+    private String paramDesc;
+
+    /**
+     * 是否启用
+     */
+    private Integer enabledFlag;
 }

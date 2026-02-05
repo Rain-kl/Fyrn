@@ -48,7 +48,7 @@ public class ThreadPoolMetricsPublisher {
     /**
      * 采集当前线程池的运行时指标并写入 Redis（Hash 结构）
      */
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void collectAndPublishMetrics() {
         ThreadPoolExecutor executor = taskExecutor.getThreadPoolExecutor();
 

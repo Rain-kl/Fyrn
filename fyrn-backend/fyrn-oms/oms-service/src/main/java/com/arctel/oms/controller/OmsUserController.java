@@ -19,7 +19,7 @@ package com.arctel.oms.controller;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.input.QueryUserPageInput;
+import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserUpdateInput;
 import com.arctel.oms.output.UserInfoVo;
@@ -59,7 +59,7 @@ public class OmsUserController {
      * 分页查询用户列表
      */
     @GetMapping("/list")
-    public Result<BaseQueryPage<UserInfoVo>> listUsers(QueryUserPageInput input) {
+    public Result<BaseQueryPage<UserInfoVo>> listUsers(UserPageQueryInput input) {
         return Result.success(omsUserService.listUsers(input));
 
     }

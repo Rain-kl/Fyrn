@@ -26,7 +26,6 @@ import com.arctel.fyrn.requestion.UMmsPageInput;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsJob;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
@@ -104,17 +103,6 @@ public class UMmsNovelController {
     public ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId) {
         return uMmsNovelService.downloadMaterial(mmsNovelFileId);
     }
-
-
-    /**
-     * 文件去重
-     */
-    @PostMapping("/dedup")
-    public Result<OmsJob> dedup() {
-        //TODO: 实现文件去重功能
-        return null;
-    }
-
 
 
 }

@@ -18,26 +18,9 @@
 package com.arctel.fyrn.service.impl;
 
 
-import com.arctel.common.utils.NovelUtil;
-import com.arctel.fyrn.dto.LocalFileSimpleDTO;
-import com.arctel.fyrn.entity.MmsNovel;
-import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.fyrn.mapper.MmsNovelMapper;
-import com.arctel.fyrn.requestion.SyncMaterialInput;
-import com.arctel.fyrn.requestion.UMmsPageInput;
 import com.arctel.fyrn.service.DataSyncService;
-import com.arctel.fyrn.service.MmsNovelFileService;
-import com.arctel.fyrn.service.MmsNovelService;
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsJob;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * @author ryan

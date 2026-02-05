@@ -21,7 +21,7 @@ import com.arctel.oms.common.base.BaseQueryPageInput;
 import lombok.Data;
 
 @Data
-public class QueryUserPageInput extends BaseQueryPageInput {
+public class UserPageQueryInput extends BaseQueryPageInput {
 
     /**
      * 用户ID

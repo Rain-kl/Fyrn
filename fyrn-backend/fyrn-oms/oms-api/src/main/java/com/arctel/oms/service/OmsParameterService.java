@@ -21,7 +21,7 @@ package com.arctel.oms.service;
 import com.arctel.oms.common.base.BaseQueryPage;
 
 import com.arctel.oms.domain.entity.OmsParameter;
-import com.arctel.oms.input.AddParameterInput;
+import com.arctel.oms.input.ParameterAddInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.io.Serializable;
@@ -54,5 +54,5 @@ public interface OmsParameterService extends IService<OmsParameter> {
 
     boolean clearCache();
 
-    boolean editParameter(AddParameterInput input);
+    boolean editParameter(ParameterAddInput input);
 }

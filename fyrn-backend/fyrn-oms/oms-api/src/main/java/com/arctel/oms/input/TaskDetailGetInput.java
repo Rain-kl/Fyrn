@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDetailGetInput extends BaseInput {
+public class TaskDetailGetInput {
 
     String taskId;
 

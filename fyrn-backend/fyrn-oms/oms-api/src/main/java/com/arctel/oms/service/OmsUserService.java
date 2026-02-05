@@ -19,7 +19,7 @@ package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.domain.entity.OmsUser;
-import com.arctel.oms.input.QueryUserPageInput;
+import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserUpdateInput;
 import com.arctel.oms.output.UserInfoVo;
@@ -43,7 +43,7 @@ public interface OmsUserService extends IService<OmsUser> {
 
     UserInfoVo getUserById(String userId);
 
-    BaseQueryPage<UserInfoVo> listUsers(QueryUserPageInput input);
+    BaseQueryPage<UserInfoVo> listUsers(UserPageQueryInput input);
 
     String updateUser(UserUpdateInput input);
 }

@@ -17,7 +17,6 @@
 
 package com.arctel.oms.domain.mapper;
 
-import com.arctel.oms.domain.entity.OmsJob;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 

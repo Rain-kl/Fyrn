@@ -17,11 +17,6 @@
 
 package com.arctel.fyrn.service;
 
-import com.arctel.fyrn.requestion.SyncMaterialInput;
-import com.arctel.oms.domain.entity.OmsJob;
-
-import java.io.IOException;
-
 /**
  * @author ryan
  * @description

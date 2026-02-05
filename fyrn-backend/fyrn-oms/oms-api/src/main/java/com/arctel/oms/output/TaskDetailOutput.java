@@ -19,7 +19,7 @@ package com.arctel.oms.output;
 
 
 import com.arctel.oms.domain.dto.TaskProgressDTO;
-import com.arctel.oms.domain.entity.OmsJob;
+import com.arctel.oms.domain.entity.OmsTask;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDetailOutput extends OmsJob {
+public class TaskDetailOutput extends OmsTask {
 
     TaskProgressDTO taskProgressDTO;
 

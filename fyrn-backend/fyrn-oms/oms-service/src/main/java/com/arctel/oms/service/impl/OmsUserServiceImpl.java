@@ -18,7 +18,7 @@
 package com.arctel.oms.service.impl;
 
 import com.arctel.oms.domain.entity.OmsUser;
-import com.arctel.oms.input.QueryUserPageInput;
+import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserUpdateInput;
 import com.arctel.oms.domain.mapper.OmsUserMapper;
@@ -79,7 +79,7 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
     }
 
     @Override
-    public BaseQueryPage<UserInfoVo> listUsers(QueryUserPageInput input) {
+    public BaseQueryPage<UserInfoVo> listUsers(UserPageQueryInput input) {
         Integer pageNo = input.getPageNo();
         Integer pageSize = input.getPageSize();
         IPage<OmsUser> page = new Page<>(pageNo, pageSize);

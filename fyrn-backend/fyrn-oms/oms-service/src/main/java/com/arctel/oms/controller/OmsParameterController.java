@@ -21,8 +21,8 @@ package com.arctel.oms.controller;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.domain.entity.OmsParameter;
-import com.arctel.oms.input.AddParameterInput;
-import com.arctel.oms.input.QueryParameterInput;
+import com.arctel.oms.input.ParameterAddInput;
+import com.arctel.oms.input.ParameterQueryInput;
 import com.arctel.oms.service.OmsParameterService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
@@ -42,7 +42,7 @@ public class OmsParameterController {
      * @return 分页结果
      */
     @GetMapping("/page")
-    public Result<BaseQueryPage<OmsParameter>> page(QueryParameterInput input) {
+    public Result<BaseQueryPage<OmsParameter>> page(ParameterQueryInput input) {
 
         OmsParameter omsParameter = new OmsParameter();
         BeanUtils.copyProperties(input, omsParameter);
@@ -59,7 +59,7 @@ public class OmsParameterController {
      * @return 分页结果
      */
     @PostMapping("/edit")
-    public Result<Boolean> editParameter(@RequestBody AddParameterInput input) {
+    public Result<Boolean> editParameter(@RequestBody ParameterAddInput input) {
 
         return Result.success(omsParameterService.editParameter(input));
     }

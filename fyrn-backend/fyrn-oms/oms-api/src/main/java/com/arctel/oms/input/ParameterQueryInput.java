@@ -15,21 +15,26 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.requestion;
+package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
-import lombok.AllArgsConstructor;
+import com.arctel.oms.common.base.BaseQueryPageInput;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class SyncMaterialInput extends BaseInput {
+public class ParameterQueryInput extends BaseQueryPageInput {
 
     /**
-     * 最大同步数量
+     * 主键
      */
-    public Integer size = 0;
+    private Long paramCode = null;
 
+    /**
+     * 参数名称
+     */
+    private String paramName = null;
+
+    /**
+     * 是否启用
+     */
+    private Integer enabledFlag = null;
 }
