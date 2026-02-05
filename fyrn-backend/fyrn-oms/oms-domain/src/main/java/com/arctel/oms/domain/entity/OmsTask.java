@@ -27,7 +27,7 @@ import java.util.Date;
 /**
  * 任务表
  *
- * @TableName oms_job
+ * @TableName oms_task
  */
 @TableName(value = "oms_task")
 @Data
