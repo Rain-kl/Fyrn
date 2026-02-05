@@ -15,28 +15,24 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.requestion;
+package com.arctel.fyrn.mapper;
 
-import com.arctel.oms.common.base.BaseQueryPageInput;
-import lombok.Getter;
-import lombok.Setter;
+import com.arctel.fyrn.entity.MmsMeta;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Getter
-@Setter
-public class MmsMetaPageInput extends BaseQueryPageInput {
+import java.util.List;
 
-    /**
-     * 小说ID
-     */
-    private Long novelId;
+/**
+ * @author ryan
+ * @description 针对表【mms_meta(小说元数据表)】的数据库操作Mapper
+ * @createDate 2026-01-25 21:02:27
+ * @Entity com.arctel.domain.dao.entity.MmsMeta
+ */
+public interface MmsMetaMapper extends BaseMapper<MmsMeta> {
 
-    /**
-     * 小说名称
-     */
-    private String novelTitle;
 
-    /**
-     * 小说作者
-     */
-    private String novelAuthor;
 }
+
+
+
+

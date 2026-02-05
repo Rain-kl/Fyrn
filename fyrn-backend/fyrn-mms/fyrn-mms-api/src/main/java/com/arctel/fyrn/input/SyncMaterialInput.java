@@ -15,33 +15,14 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.requestion;
+package com.arctel.fyrn.input;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class BindNovelFileInput {
+@Getter
+@Setter
+public class SyncMaterialInput {
 
-    /**
-     * 文件ID
-     * 被绑定的id mmsFile Id
-     */
-    public Long fileId;
-
-    /**
-     * 小说ID
-     * 存在则为绑定操作，不存在则为新增绑定操作
-     */
-    public Long novelId;
-
-    /**
-     * 小说名称
-     */
-    private String novelTitle;
-
-    /**
-     * 小说作者
-     */
-    private String novelAuthor;
-
+    private Integer size;
 }

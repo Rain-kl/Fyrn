@@ -46,6 +46,7 @@ public interface OmsTaskService extends IService<OmsTask> {
 
     /**
      * 创建任务
+     *
      * @param omsTask
      * @return
      */
@@ -53,6 +54,7 @@ public interface OmsTaskService extends IService<OmsTask> {
 
     /**
      * 更新任务进度
+     *
      * @param input
      * @return
      */
@@ -60,20 +62,32 @@ public interface OmsTaskService extends IService<OmsTask> {
 
     /**
      * 更新任务状态
+     *
      * @param input
      * @return
      */
     boolean updateTask(TaskUpdateInput input);
 
     /**
-     * 更新任务日志到 Redis
+     * INFO级别
+     *
      * @param taskId
-     * @param logMessage
+     * @param
      */
-    void writeLog(String taskId, String logMessage);
+    void writeLog(String taskId, String bizLog);
+
+    /**
+     * 更新任务日志到 Redis
+     *
+     * @param taskId
+     * @param
+     */
+    void writeLog(String logLevel, String taskId, String bizLog);
+
 
     /**
      * 获取任务日志
+     *
      * @param taskId
      * @return
      */
@@ -81,6 +95,7 @@ public interface OmsTaskService extends IService<OmsTask> {
 
     /**
      * 获取任务日志
+     *
      * @param taskId
      * @param limit
      * @return
@@ -89,6 +104,7 @@ public interface OmsTaskService extends IService<OmsTask> {
 
     /**
      * 监控任务执行情况
+     *
      * @return
      */
     TaskMonitorOutput monitorTask();

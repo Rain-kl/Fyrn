@@ -15,25 +15,11 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.mapper;
+package com.arctel.fyrn.input;
 
-import com.arctel.fyrn.entity.MmsMeta;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Data;
 
-import java.util.List;
-
-/**
-* @author ryan
-* @description 针对表【mms_meta(小说元数据表)】的数据库操作Mapper
-* @createDate 2026-01-25 21:02:27
-* @Entity com.arctel.domain.dao.entity.MmsMeta
-*/
-public interface MmsMetaMapper extends BaseMapper<MmsMeta> {
-
-    List<MmsMeta> findAll();
-
+@Data
+public class UMmsPageInput extends BaseQueryPageInput {
 }
-
-
-
-

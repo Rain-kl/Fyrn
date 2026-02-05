@@ -22,8 +22,8 @@ import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.fyrn.requestion.BindNovelFileInput;
-import com.arctel.fyrn.requestion.UMmsPageInput;
+import com.arctel.fyrn.input.BindNovelFileInput;
+import com.arctel.fyrn.input.UMmsPageInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.http.ResponseEntity;
 

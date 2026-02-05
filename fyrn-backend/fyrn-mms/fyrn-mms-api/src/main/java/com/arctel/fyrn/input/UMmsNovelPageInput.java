@@ -15,11 +15,20 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.requestion;
+package com.arctel.fyrn.input;
 
 import com.arctel.oms.common.base.BaseQueryPageInput;
 import lombok.Data;
 
 @Data
-public class UMmsPageInput extends BaseQueryPageInput {
+public class UMmsNovelPageInput extends BaseQueryPageInput {
+    /**
+     * 小说ID, 关联 mms_novel.id
+     */
+    private Long novelId;
+
+    /**
+     * 文件名称
+     */
+    private String fileName;
 }

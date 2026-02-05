@@ -15,29 +15,28 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.service;
+package com.arctel.fyrn.input;
 
-import com.arctel.fyrn.input.SyncMaterialInput;
-import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.common.base.BaseQueryPageInput;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.io.IOException;
-
-/**
- * @author ryan
- * @description
- * @createDate
- */
-public interface DataSyncService {
-
+@Getter
+@Setter
+public class MmsMetaPageInput extends BaseQueryPageInput {
 
     /**
-     * 同步本地文件到OSS
+     * 小说ID
      */
-    String fileToOss(SyncMaterialInput input) throws IOException;
+    private Long novelId;
 
     /**
-     * 同步OSS文件到MMS
+     * 小说名称
      */
-    OmsTask ossToMms();
+    private String novelTitle;
 
+    /**
+     * 小说作者
+     */
+    private String novelAuthor;
 }

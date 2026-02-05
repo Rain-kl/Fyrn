@@ -40,7 +40,7 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
     @Resource
     OmsTaskService omsTaskService;
 
-    public OmsTask createTask(T input, String message) {
+    public OmsTask buildOmsTask(T input, String message) {
         OmsTask task = new OmsTask();
 
         task.setTaskTag(input.getTaskTag());
@@ -58,19 +58,21 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
         return omsTaskService.createTask(task);
     }
 
-    @Override
-    public Boolean push(T taskMsg) {
+
+    public OmsTask createTask(T taskMsg) {
         log.info("Pushing task message to queue: {}", JSON.toJSONString(taskMsg));
-        OmsTask task = createTask(taskMsg, "Task created and queued.");
+        OmsTask task = buildOmsTask(taskMsg, "Task created and queued.");
         log.info("Created task successfully: {}", JSON.toJSONString(task));
         taskMsg.setTaskId(task.getTaskId());
-        return super.push(taskMsg);
+        super.push(taskMsg);
+        return task;
     }
 
-    public Boolean push(T taskMsg, String message) {
-        OmsTask task = createTask(taskMsg, message);
+    public OmsTask createTask(T taskMsg, String message) {
+        OmsTask task = buildOmsTask(taskMsg, message);
         taskMsg.setTaskId(task.getTaskId());
-        return super.push(taskMsg);
+        super.push(taskMsg);
+        return task;
     }
 
 }

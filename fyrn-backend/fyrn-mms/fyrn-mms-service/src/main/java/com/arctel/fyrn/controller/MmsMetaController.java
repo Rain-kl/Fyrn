@@ -19,7 +19,7 @@ package com.arctel.fyrn.controller;
 
 
 import com.arctel.fyrn.entity.MmsMeta;
-import com.arctel.fyrn.requestion.MmsMetaPageInput;
+import com.arctel.fyrn.input.MmsMetaPageInput;
 import com.arctel.fyrn.service.MmsMetaService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;

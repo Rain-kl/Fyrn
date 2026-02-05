@@ -20,7 +20,7 @@ package com.arctel.fyrn.controller;
 
 import com.arctel.fyrn.entity.MmsNovel;
 import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.fyrn.requestion.MmsPageInput;
+import com.arctel.fyrn.input.MmsPageInput;
 import com.arctel.fyrn.service.MmsNovelService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;

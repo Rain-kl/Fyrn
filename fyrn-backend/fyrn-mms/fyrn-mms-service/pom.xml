@@ -20,6 +20,10 @@
             <groupId>com.arctel</groupId>
             <artifactId>fyrn-mms-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.arctel</groupId>
+            <artifactId>fyrn-mms-domain</artifactId>
+        </dependency>
 
         <!-- Fyrn 公共模块 -->
         <dependency>

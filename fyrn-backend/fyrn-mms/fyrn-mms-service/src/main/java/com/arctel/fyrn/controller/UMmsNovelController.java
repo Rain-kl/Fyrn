@@ -20,9 +20,9 @@ package com.arctel.fyrn.controller;
 
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.fyrn.requestion.BindNovelFileInput;
-import com.arctel.fyrn.requestion.UMmsNovelPageInput;
-import com.arctel.fyrn.requestion.UMmsPageInput;
+import com.arctel.fyrn.input.BindNovelFileInput;
+import com.arctel.fyrn.input.UMmsNovelPageInput;
+import com.arctel.fyrn.input.UMmsPageInput;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;

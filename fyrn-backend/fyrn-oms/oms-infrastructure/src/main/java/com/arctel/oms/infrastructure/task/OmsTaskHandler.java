@@ -26,6 +26,8 @@ import com.arctel.oms.service.OmsTaskService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+
 @Slf4j
 public abstract class OmsTaskHandler<T extends BaseTaskMessage> extends OmsTaskLogger<T> implements BaseThreadPoolHandler<T> {
 
@@ -63,6 +65,6 @@ public abstract class OmsTaskHandler<T extends BaseTaskMessage> extends OmsTaskL
 
     public abstract String getHandlerId();
 
-    public abstract void handleTask(T taskMsg);
+    public abstract void handleTask(T taskMsg) throws Exception;
 
 }

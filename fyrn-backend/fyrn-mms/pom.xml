@@ -22,6 +22,7 @@
     <modules>
         <module>fyrn-mms-api</module>
         <module>fyrn-mms-service</module>
+        <module>fyrn-mms-domain</module>
     </modules>
 
     <!-- ====================================================================== -->
@@ -41,6 +42,11 @@
             <dependency>
                 <groupId>com.arctel</groupId>
                 <artifactId>fyrn-mms-service</artifactId>
+                <version>${mms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.arctel</groupId>
+                <artifactId>fyrn-mms-domain</artifactId>
                 <version>${mms.version}</version>
             </dependency>
         </dependencies>

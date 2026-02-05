@@ -19,11 +19,17 @@ package com.arctel.fyrn.controller;
 
 
 
+import com.arctel.fyrn.input.SyncMaterialInput;
 import com.arctel.fyrn.service.DataSyncService;
+import com.arctel.oms.common.utils.Result;
+import com.arctel.oms.domain.entity.OmsTask;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RequestMapping("/sync")
 @RestController
@@ -32,23 +38,23 @@ public class DataSyncController {
 
     @Resource
     DataSyncService dataSyncService;
-//
-//    /**
-//     * 同步小说任务
-//     */
-//    @PostMapping("/ossToMms")
-//    public Result<OmsJob> ossToMms() {
-//        return Result.success(dataSyncService.ossToMms());
-//    }
-//
-//    /**
-//     * 同步本地文件到OSS
-//     *
-//     * @param input 最大同步数量, -1表示不限制
-//     */
-//    @PostMapping("/fileToOss")
-//    public Result<String> fileToOss(SyncMaterialInput input) throws IOException {
-//        return Result.success(dataSyncService.fileToOss(input));
-//    }
+
+    /**
+     * 同步小说任务
+     */
+    @PostMapping("/ossToMms")
+    public Result<OmsTask> ossToMms() {
+        return Result.success(dataSyncService.ossToMms());
+    }
+
+    /**
+     * 同步本地文件到OSS
+     *
+     * @param input 最大同步数量, -1表示不限制
+     */
+    @PostMapping("/fileToOss")
+    public Result<String> fileToOss(SyncMaterialInput input) throws IOException {
+        return Result.success(dataSyncService.fileToOss(input));
+    }
 
 }

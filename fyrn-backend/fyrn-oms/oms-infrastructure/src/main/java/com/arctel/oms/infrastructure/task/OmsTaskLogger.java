@@ -17,6 +17,7 @@
 
 package com.arctel.oms.infrastructure.task;
 
+import com.arctel.oms.common.constants.LogConstant;
 import com.arctel.oms.domain.dto.TaskProgressDTO;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
@@ -40,9 +41,15 @@ public abstract class OmsTaskLogger<T extends BaseTaskMessage> {
     @Setter
     private Long totalProgress;
 
-    public void writeLog(String logMessage) {
-        getOmsTaskService().writeLog(getOmsTask().getTaskId(), logMessage);
+    public void logInfo(String logMessage) {
+        getOmsTaskService().writeLog(LogConstant.INFO, getOmsTask().getTaskId(), logMessage);
     }
+
+    public void logError(String logMessage, Exception e) {
+        log.error(logMessage, e);
+        getOmsTaskService().writeLog(LogConstant.ERROR, getOmsTask().getTaskId(), logMessage);
+    }
+
 
     public void updateProgress(Long current, Long total, String logMessage) {
         this.totalProgress = total;

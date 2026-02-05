@@ -24,6 +24,10 @@
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.arctel</groupId>
+            <artifactId>fyrn-mms-domain</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -17,6 +17,8 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
+import java.io.IOException;
+
 public interface BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
     default void doProcess(T taskMsg) {
@@ -25,6 +27,6 @@ public interface BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
     String getHandlerId();
 
-    void handleTask(T taskMsg);
+    void handleTask(T taskMsg) throws Exception;
 
 }

@@ -20,6 +20,7 @@ package com.arctel.oms.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
+import com.arctel.oms.common.constants.LogConstant;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.domain.dto.TaskOverviewDTO;
 import com.arctel.oms.domain.dto.TaskProgressDTO;
@@ -27,7 +28,6 @@ import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.domain.mapper.OmsTaskMapper;
 import com.arctel.oms.dto.ThreadPoolMetricsDTO;
 import com.arctel.oms.domain.enums.TaskStatusEnum;
-import com.arctel.oms.input.TaskCreateInput;
 import com.arctel.oms.input.TaskDetailGetInput;
 import com.arctel.oms.input.TaskProgressUpdateInput;
 import com.arctel.oms.input.TaskUpdateInput;
@@ -127,7 +127,7 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
         String bizLog = input.getLog();
         // 更新日志
         if (StringUtils.isNotBlank(bizLog)) {
-            writeLog(input.getTaskId(), bizLog);
+            writeLog(LogConstant.INFO, input.getTaskId(), bizLog);
         }
         // 更新进度到 Redis，设置10分钟过期
         String key = JOB_PROGRESS_KEY_PREFIX + input.getTaskId();
@@ -166,17 +166,24 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
         return updateById(omsTask);
     }
 
+
     @Override
     public void writeLog(String taskId, String bizLog) {
+        this.writeLog(LogConstant.INFO, taskId, bizLog);
+    }
+
+    @Override
+    public void writeLog(String logLevel, String taskId, String bizLog) {
         String key = JOB_LOG_KEY_PREFIX + taskId;
         // 追加到头部（最新在前）
-        String formatLog = "[" + new Date() + "] " + bizLog;
+        String formatLog = "[" + logLevel + "] [" + new Date() + "] " + bizLog;
         redisTemplate.opsForList().leftPush(key, formatLog);
         // 只保留最近1万条
         redisTemplate.opsForList().trim(key, 0, 9999);
         // 保留7天
         redisTemplate.expire(key, Duration.ofDays(7));
     }
+
 
     @Override
     public String getLog(String taskId) {
