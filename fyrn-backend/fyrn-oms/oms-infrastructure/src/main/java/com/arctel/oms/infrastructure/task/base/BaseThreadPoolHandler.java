@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public interface BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
-    default void doProcess(T taskMsg) {
+    default void doProcess(T taskMsg) throws Exception {
         handleTask(taskMsg);
     }
 
