@@ -74,6 +74,16 @@ const getStatusVariant = (status?: number) => {
   return status !== undefined ? variantMap[status] : "badge-soft-gray";
 };
 
+const renderBadge = (label: string, variant: string) => {
+  return h(resolveComponent("NBadge"), {
+    una: {
+      badgeDefaultVariant: variant,
+    },
+    class: "capitalize",
+    label,
+  });
+};
+
 const columns: ColumnDef<OmsTask>[] = [
   {
     header: "Task ID",
@@ -85,13 +95,7 @@ const columns: ColumnDef<OmsTask>[] = [
     cell: (info) => {
       const tag = info.row.original.taskTag;
       if (!tag) return "-";
-      return h(resolveComponent("NBadge"), {
-        una: {
-          badgeDefaultVariant: "badge-soft-info",
-        },
-        class: "capitalize",
-        label: tag,
-      });
+      return renderBadge(tag, "badge-soft-info");
     },
   },
   {
@@ -100,13 +104,7 @@ const columns: ColumnDef<OmsTask>[] = [
     cell: (info) => {
       const tag = info.row.original.bizTag;
       if (!tag) return "-";
-      return h(resolveComponent("NBadge"), {
-        una: {
-          badgeDefaultVariant: "badge-soft-warning",
-        },
-        class: "capitalize",
-        label: tag,
-      });
+      return renderBadge(tag, "badge-soft-warning");
     },
   },
   {
@@ -121,13 +119,7 @@ const columns: ColumnDef<OmsTask>[] = [
       if (allowRetry === undefined || allowRetry === null) return "-";
       const label = allowRetry === 1 ? "允许" : "不允许";
       const variant = allowRetry === 1 ? "badge-soft-success" : "badge-soft-gray";
-      return h(resolveComponent("NBadge"), {
-        una: {
-          badgeDefaultVariant: variant,
-        },
-        class: "capitalize",
-        label,
-      });
+      return renderBadge(label, variant);
     },
   },
   {
@@ -135,13 +127,7 @@ const columns: ColumnDef<OmsTask>[] = [
     accessorKey: "status",
     cell: (info) => {
       const status = info.row.original.status;
-      return h(resolveComponent("NBadge"), {
-        una: {
-          badgeDefaultVariant: getStatusVariant(status),
-        },
-        class: "capitalize",
-        label: getStatusLabel(status),
-      });
+      return renderBadge(getStatusLabel(status), getStatusVariant(status));
     },
   },
   {

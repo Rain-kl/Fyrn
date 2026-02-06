@@ -31,7 +31,7 @@ const fetchData = async () => {
 
 onMounted(() => {
   fetchData();
-  timer = setInterval(fetchData, 1000);
+  timer = setInterval(fetchData, 2000);
 });
 
 onUnmounted(() => {
@@ -76,6 +76,19 @@ const statusLabel = computed(() => {
   return statusMap[task.value.status as number] || "未知";
 });
 
+const getStatusVariant = (status?: number) => {
+  const variantMap: Record<number, string> = {
+    0: "badge-soft-info",
+    1: "badge-soft-warning",
+    2: "badge-soft-success",
+    3: "badge-soft-error",
+    4: "badge-soft-gray",
+  };
+  return status !== undefined ? variantMap[status] : "badge-soft-gray";
+};
+
+const statusVariant = computed(() => getStatusVariant(task.value?.status));
+
 const allowRetryLabel = computed(() => {
   if (task.value?.allowRetry === undefined || task.value?.allowRetry === null) {
     return "-";
@@ -87,6 +100,13 @@ const allowRetryVariant = computed(() => {
   if (task.value?.allowRetry === 1) return "badge-soft-success";
   if (task.value?.allowRetry === 0) return "badge-soft-gray";
   return "badge-soft-gray";
+});
+
+const badgeProps = (label: string, variant: string) => ({
+  label,
+  una: {
+    badgeDefaultVariant: variant,
+  },
 });
 </script>
 
@@ -110,10 +130,7 @@ const allowRetryVariant = computed(() => {
           <div>
             <NBadge
               v-if="task.taskTag"
-              :label="task.taskTag"
-              :una="{
-                badgeDefaultVariant: 'badge-soft-info',
-              }"
+              v-bind="badgeProps(task.taskTag, 'badge-soft-info')"
             />
             <span v-else class="text-sm">-</span>
           </div>
@@ -127,10 +144,7 @@ const allowRetryVariant = computed(() => {
           <div>
             <NBadge
               v-if="task.bizTag"
-              :label="task.bizTag"
-              :una="{
-                badgeDefaultVariant: 'badge-soft-warning',
-              }"
+              v-bind="badgeProps(task.bizTag, 'badge-soft-warning')"
             />
             <span v-else class="text-sm">-</span>
           </div>
@@ -153,14 +167,7 @@ const allowRetryVariant = computed(() => {
             <NBadge
               :label="statusLabel"
               :una="{
-                badgeDefaultVariant:
-                  task.status === 2
-                    ? 'badge-soft-success'
-                    : task.status === 1
-                    ? 'badge-soft-warning'
-                    : task.status === 3
-                    ? 'badge-soft-error'
-                    : 'badge-soft-gray',
+                badgeDefaultVariant: statusVariant,
               }"
             />
           </div>
@@ -174,10 +181,7 @@ const allowRetryVariant = computed(() => {
           <div>
             <NBadge
               v-if="allowRetryLabel !== '-'"
-              :label="allowRetryLabel"
-              :una="{
-                badgeDefaultVariant: allowRetryVariant,
-              }"
+              v-bind="badgeProps(allowRetryLabel, allowRetryVariant)"
             />
             <span v-else class="text-sm">-</span>
           </div>
@@ -230,7 +234,7 @@ const allowRetryVariant = computed(() => {
         <CommonTextCollapse :text="task.message" :max-length="200" class="text-sm" />
       </div>
 
-      <div v-if="task.status === 1 || (task.taskProgressDTO && task.taskProgressDTO.total > 0)" class="flex flex-col gap-2">
+  <div v-if="task.status === 1 || (task.taskProgressDTO?.total ?? 0) > 0" class="flex flex-col gap-2">
         <div class="flex justify-between items-end">
           <div class="text-sm font-medium flex items-center gap-1">
             <div class="i-lucide-loader-2 size-4 animate-spin text-primary" v-if="task.status === 1" />
