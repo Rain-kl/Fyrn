@@ -18,17 +18,15 @@
 package com.arctel.fyrn.service;
 
 
-import java.io.IOException;
-
-import org.springframework.http.ResponseEntity;
-
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.fyrn.input.BindNovelFileInput;
 import com.arctel.fyrn.input.UMmsPageInput;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
 
 /**
  * UMmsNovelBizService, 原始文件处理服务
@@ -48,7 +46,7 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
     /**
      * 获取未同步到OSS的本地文件
      */
-    Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
+    BaseQueryPage<LocalFileSimpleDTO> getUnprocessedLocalFile(UMmsPageInput input) throws IOException;
 
     /**
      * 同步本地文件到OSS
@@ -57,6 +55,7 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
     /**
      * 下载物料
+     *
      * @param mmsNovelFileId 物料ID
      * @return
      */
@@ -64,12 +63,14 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
 
     /**
      * 绑定小说文件到 MMS
+     *
      * @param input 绑定输入对象
      */
     Boolean bindNovelFile(BindNovelFileInput input);
 
     /**
      * 取消自动绑定小说文件
+     *
      * @param mmsNovelFileId 物料 ID
      * @return
      */

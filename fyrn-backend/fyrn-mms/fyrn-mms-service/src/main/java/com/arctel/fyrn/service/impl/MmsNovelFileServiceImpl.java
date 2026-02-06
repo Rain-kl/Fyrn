@@ -17,24 +17,9 @@
 
 package com.arctel.fyrn.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
+import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.lang.UUID;
+import com.arctel.common.constants.ParameterConstant;
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovel;
@@ -50,18 +35,31 @@ import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.common.utils.FileUtil;
 import com.arctel.oms.common.utils.PagingUtil;
-import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.service.OmsParameterService;
 import com.arctel.oms.service.OmsStorageService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.lang.UUID;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Arctel
@@ -119,8 +117,8 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
 
     @Override
-    public Result<BaseQueryPage<LocalFileSimpleDTO>> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
-        String paramValueByCode = (String) publicParamSupport.getParamValueByCode(1001);
+    public BaseQueryPage<LocalFileSimpleDTO> getUnprocessedLocalFile(UMmsPageInput input) throws IOException {
+        String paramValueByCode = (String) publicParamSupport.getParamValueByCode(ParameterConstant.UMMS_FILE_PATH);
         List<Path> allTxtFiles = FileUtil.getAllTxtFiles(paramValueByCode);
 
         BaseQueryPage<Path> page = PagingUtil.page(allTxtFiles, input.getPageNo(), input.getPageSize(), Comparator.comparing(Path::getFileName), Objects::nonNull);
@@ -140,7 +138,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
 
         localFileSimpleDTOQueryPage.setRows(localFileSimpleDTOS);
 
-        return Result.success(localFileSimpleDTOQueryPage);
+        return localFileSimpleDTOQueryPage;
     }
 
 
@@ -149,6 +147,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     public void syncLocalFile(LocalFileSimpleDTO localFileSimpleDTO, String operator) throws IOException {
         String fileName = localFileSimpleDTO.getFileName();
         String filePath = localFileSimpleDTO.getFilePath();
+        // 1. 创建数据库记录
         File file = new File(filePath);
         String suffix = FileNameUtil.getSuffix(fileName);
         UUID uuid = UUID.randomUUID();
@@ -162,6 +161,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         mmsNovelFile.setUpdatedUser(operator);
         baseMapper.insert(mmsNovelFile);
 
+        // 2. 同步文件到对象存储
         byte[] fileBytes = FileUtil.fileToByteArray(file);
         oosSupport.upload(fileBytes, oosPath);
         deleteProcessedFile(file);
@@ -173,7 +173,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
      * @param file 文件
      */
     public void deleteProcessedFile(File file) throws IOException {
-        String rubbishPath = (String) publicParamSupport.getParamValueByCode(1002);
+        String rubbishPath = (String) publicParamSupport.getParamValueByCode(ParameterConstant.MMS_RUBBISH_PATH);
         if (StringUtils.isBlank(rubbishPath)) {
             FileUtil.deleteFile(file);
         } else {

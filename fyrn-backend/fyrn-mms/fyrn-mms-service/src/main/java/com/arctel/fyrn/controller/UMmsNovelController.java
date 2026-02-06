@@ -18,16 +18,6 @@
 package com.arctel.fyrn.controller;
 
 
-import java.io.IOException;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.fyrn.input.BindNovelFileInput;
@@ -36,8 +26,16 @@ import com.arctel.fyrn.input.UMmsPageInput;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RequestMapping("/umms")
 @RestController
@@ -55,7 +53,7 @@ public class UMmsNovelController {
      */
     @GetMapping("/local/page")
     public Result<BaseQueryPage<LocalFileSimpleDTO>> localPage(UMmsPageInput input) throws IOException {
-        return uMmsNovelService.getUnprocessedLocalFile(input);
+        return Result.success(uMmsNovelService.getUnprocessedLocalFile(input));
     }
 
     /**
@@ -78,6 +76,7 @@ public class UMmsNovelController {
     /**
      * 物料文件绑定
      * 不存在则新增，存在则更新
+     *
      * @param input
      * @return
      * @throws IOException
@@ -89,6 +88,7 @@ public class UMmsNovelController {
 
     /**
      * 删除物料文件
+     *
      * @param fileId
      * @return
      */

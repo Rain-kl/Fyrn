@@ -17,22 +17,19 @@
 
 package com.arctel.fyrn.task.handler;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.arctel.common.MockFunction;
 import com.arctel.fyrn.constants.MmsHandlerTagConstant;
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.input.UMmsPageInput;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
 import com.arctel.oms.infrastructure.task.OmsTaskHandler;
-
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.List;
 
 @Component
 public class FileToOssHandler extends OmsTaskHandler<DefaultTaskMessage> {
@@ -54,8 +51,9 @@ public class FileToOssHandler extends OmsTaskHandler<DefaultTaskMessage> {
         UMmsPageInput uMmsPageInput = new UMmsPageInput();
         uMmsPageInput.setPageSize(size);
         uMmsPageInput.setPageNo(1);
-        Result<BaseQueryPage<LocalFileSimpleDTO>> unprocessedLocalFile = mmsNovelFileService.getUnprocessedLocalFile(uMmsPageInput);
-        List<LocalFileSimpleDTO> rows = unprocessedLocalFile.getData().getRows();
+        // 获取未处理的本地文件列表
+        BaseQueryPage<LocalFileSimpleDTO> unprocessedLocalFile = mmsNovelFileService.getUnprocessedLocalFile(uMmsPageInput);
+        List<LocalFileSimpleDTO> rows = unprocessedLocalFile.getRows();
 
         rows.forEach(f -> {
             try {
