@@ -20,6 +20,7 @@ package com.arctel.oms.domain.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -71,6 +72,7 @@ public class OmsTask {
     /**
      * 任务对象(JSON格式), 重试时使用
      */
+    @JsonIgnore
     private String taskObject;
 
     /**
