@@ -9,7 +9,7 @@ const items = ref([
     },
   },
   {
-    value: "jobList",
+    value: "taskList",
     name: "任务列表",
     _tabsTrigger: {
       leading: "i-lucide-list-checks",
@@ -22,7 +22,7 @@ const items = ref([
 <template>
   <NTabs
       :items="items"
-      default-value="jobList"
+      default-value="taskList"
       :_tabs-list="{
       class: 'grid grid-cols-2 w-full max-w-md',
     }"
@@ -36,8 +36,8 @@ const items = ref([
         <OmsThreadStatus/>
       </div>
 
-      <div v-if="item.value === 'jobList'">
-        <OmsJobListManagement/>
+      <div v-if="item.value === 'taskList'">
+        <OmsTaskListManagement/>
       </div>
 
     </template>

@@ -5,27 +5,29 @@ import type {
   Table,
   VisibilityState,
 } from "@tanstack/vue-table";
-import type { OmsJob } from "~/api/models";
+import type { OmsTask } from "~/api/models";
 import { useApi } from "~/api/useApi";
 import { formatToYMDHMS } from "~/utils/date";
 
-const { OmsJobControllerApi } = useApi();
+const { OmsTaskControllerApi } = useApi();
 
-const data = ref<OmsJob[]>([]);
+const data = ref<OmsTask[]>([]);
 const loading = ref(false);
 const total = ref(0);
 const pageNo = ref(1);
 const pageSize = ref(10);
 
 const columnVisibility = ref<VisibilityState>({
-  jobId: false,
+  taskId: false,
   createdUser: false,
   createTime: false,
+  allowRetry: false,
+  bizValue: false,
 });
 
 const filters = reactive({
-  jobId: "" as string,
-  taskType: "" as string,
+  taskId: "" as string,
+  taskTag: "" as string,
   status: "全部状态" as string,
 });
 
@@ -72,14 +74,61 @@ const getStatusVariant = (status?: number) => {
   return status !== undefined ? variantMap[status] : "badge-soft-gray";
 };
 
-const columns: ColumnDef<OmsJob>[] = [
+const columns: ColumnDef<OmsTask>[] = [
   {
-    header: "Job ID",
-    accessorKey: "jobId",
+    header: "Task ID",
+    accessorKey: "taskId",
   },
   {
-    header: "任务类型",
-    accessorKey: "taskType",
+    header: "任务标签",
+    accessorKey: "taskTag",
+    cell: (info) => {
+      const tag = info.row.original.taskTag;
+      if (!tag) return "-";
+      return h(resolveComponent("NBadge"), {
+        una: {
+          badgeDefaultVariant: "badge-soft-info",
+        },
+        class: "capitalize",
+        label: tag,
+      });
+    },
+  },
+  {
+    header: "业务标签",
+    accessorKey: "bizTag",
+    cell: (info) => {
+      const tag = info.row.original.bizTag;
+      if (!tag) return "-";
+      return h(resolveComponent("NBadge"), {
+        una: {
+          badgeDefaultVariant: "badge-soft-warning",
+        },
+        class: "capitalize",
+        label: tag,
+      });
+    },
+  },
+  {
+    header: "业务值",
+    accessorKey: "bizValue",
+  },
+  {
+    header: "允许重试",
+    accessorKey: "allowRetry",
+    cell: (info) => {
+      const allowRetry = info.row.original.allowRetry;
+      if (allowRetry === undefined || allowRetry === null) return "-";
+      const label = allowRetry === 1 ? "允许" : "不允许";
+      const variant = allowRetry === 1 ? "badge-soft-success" : "badge-soft-gray";
+      return h(resolveComponent("NBadge"), {
+        una: {
+          badgeDefaultVariant: variant,
+        },
+        class: "capitalize",
+        label,
+      });
+    },
   },
   {
     header: "状态",
@@ -135,14 +184,14 @@ const columns: ColumnDef<OmsJob>[] = [
     header: "操作",
     id: "actions",
     cell: (info) => {
-      const jobId = info.row.original.jobId;
+      const taskId = info.row.original.taskId;
       return h(resolveComponent("NButton"), {
         label: "详情",
         btn: "ghost-primary",
         size: "sm",
         leading: "i-heroicons-eye",
         onClick: () => {
-          if (jobId) navigateTo(`/oms/job/${jobId}`);
+          if (taskId) navigateTo(`/oms/task/${taskId}`);
         },
       });
     },
@@ -151,16 +200,16 @@ const columns: ColumnDef<OmsJob>[] = [
 
 const select = ref<RowSelectionState>();
 
-const table = useTemplateRef<Table<OmsJob>>("table");
+const table = useTemplateRef<Table<OmsTask>>("table");
 
 const fetchData = async () => {
   loading.value = true;
   try {
-    const result = await OmsJobControllerApi.omsJobListGet({
+    const result = await OmsTaskControllerApi.omsTaskListGet({
       pageNo: pageNo.value,
       pageSize: pageSize.value,
-      jobId: filters.jobId || undefined,
-      taskType: filters.taskType || undefined,
+      taskId: filters.taskId || undefined,
+      taskTag: filters.taskTag || undefined,
       status: statusLabelToValue(filters.status),
     });
 
@@ -169,7 +218,7 @@ const fetchData = async () => {
       total.value = result.data?.total || 0;
     }
   } catch (error) {
-    console.error("Failed to fetch jobs:", error);
+    console.error("Failed to fetch tasks:", error);
   } finally {
     loading.value = false;
   }
@@ -201,9 +250,9 @@ onMounted(() => {
       class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"
     >
       <div class="grid w-full gap-2 md:grid-cols-4">
-        <NInput v-model="filters.jobId" placeholder="Job ID" />
+        <NInput v-model="filters.taskId" placeholder="Task ID" />
 
-        <NInput v-model="filters.taskType" placeholder="任务类型" />
+        <NInput v-model="filters.taskTag" placeholder="任务标签" />
 
         <NSelect
           v-model="filters.status"
@@ -212,11 +261,7 @@ onMounted(() => {
           :_select-trigger="{
             class: 'w-full',
           }"
-        >
-          <template #leading>
-            <div class="i-lucide-filter h-4 w-4" />
-          </template>
-        </NSelect>
+        />
       </div>
 
       <div class="flex items-center gap-x-2 sm:ml-auto">
@@ -254,7 +299,7 @@ onMounted(() => {
       :columns
       :data
       enable-row-selection
-      row-id="jobId"
+      row-id="taskId"
     >
     </NTable>
 

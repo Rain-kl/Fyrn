@@ -2,7 +2,6 @@
 /* eslint-disable */
 export * from './MmsNovelControllerApi';
 export * from './UMmsNovelControllerApi';
-export * from './OmsJobControllerApi';
 export * from './OmsControllerApi';
 export * from './OmsParameterControllerApi';
 export * from './OmsTaskControllerApi';

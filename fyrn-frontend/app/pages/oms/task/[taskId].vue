@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const route = useRoute();
-const jobId = computed(() => route.params.jobId as string);
+const taskId = computed(() => route.params.taskId as string);
 
 useHead({
-  title: `任务详情 - ${jobId.value}`,
+  title: `任务详情 - ${taskId.value}`,
 });
 </script>
 
@@ -15,7 +15,7 @@ useHead({
         label="返回列表"
         btn="link"
         leading="i-lucide-arrow-left"
-        to="/oms/job"
+        to="/oms/task"
       />
     </div>
     <NCard
@@ -24,7 +24,7 @@ useHead({
         cardContent: 'p-4 h-full',
       }"
     >
-      <OmsJobDetail :jobId="jobId" />
+      <OmsTaskDetail :taskId="taskId" />
     </NCard>
   </div>
 </template>
