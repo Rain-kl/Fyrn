@@ -17,7 +17,7 @@ fyrn:
     access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
     bucket-name: fyrn
     endpoint: http://localhost:9000
-    region: us-east-1
+    region: us-west-1
 
   logging:
     level: info

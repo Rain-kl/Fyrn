@@ -23,18 +23,26 @@ import com.arctel.oms.service.OmsStorageService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.model.BucketAlreadyExistsException;
+import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -50,21 +58,57 @@ public class S3ServiceImpl implements OmsStorageService {
 
     @PostConstruct
     public void init() {
-        this.s3Client = S3Client.builder()
+        S3ClientBuilder s3ClientBuilder = S3Client.builder()
                 .region(Region.of(ossProperties.getRegion()))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(
                                 AwsBasicCredentials.create(
                                         ossProperties.getAccessKeyId(),
-                                        ossProperties.getAccessKeySecret()
-                                )
-                        )
-                )
-                // 如果是私有 S3 / 兼容 S3 的存储（比如 COS / OSS / MinIO）
-                // .endpointOverride(URI.create(ossProperties.getEndpoint()))
-                .build();
-
+                                        ossProperties.getAccessKeySecret())));
+        if (StringUtils.isNotBlank(ossProperties.getEndpoint())) {
+            this.s3Client = s3ClientBuilder
+                    // 如果是私有 S3 / 兼容 S3 的存储（比如 COS / OSS / MinIO）
+                    .endpointOverride(URI.create(ossProperties.getEndpoint()))
+                    // MinIO 需要使用 path-style 访问模式
+                    .forcePathStyle(true)
+                    .build();
+        } else {
+            this.s3Client = s3ClientBuilder.build();
+        }
         log.info("S3 client initialized, region={}", ossProperties.getRegion());
+
+        // 确保 bucket 存在
+        ensureBucketExists();
+    }
+
+    /**
+     * 确保 bucket 存在，如果不存在则创建
+     */
+    private void ensureBucketExists() {
+        String bucketName = ossProperties.getBucketName();
+        try {
+            // 检查 bucket 是否存在
+            s3Client.headBucket(HeadBucketRequest.builder()
+                    .bucket(bucketName)
+                    .build());
+            log.info("Bucket check pass: {}", bucketName);
+        } catch (NoSuchBucketException e) {
+            // Bucket 不存在，创建它
+            try {
+                s3Client.createBucket(CreateBucketRequest.builder()
+                        .bucket(bucketName)
+                        .build());
+                log.info("Bucket created successfully: {}", bucketName);
+            } catch (BucketAlreadyExistsException | BucketAlreadyOwnedByYouException ex) {
+                log.info("Bucket already exists (race condition): {}", bucketName);
+            } catch (Exception ex) {
+                log.error("Failed to create bucket: {}", bucketName, ex);
+                throw new BizException("Failed to create bucket: " + ex.getMessage());
+            }
+        } catch (Exception e) {
+            log.error("Failed to check bucket existence: {}", bucketName, e);
+            throw new BizException("Failed to check bucket: " + e.getMessage());
+        }
     }
 
     /**
@@ -89,8 +133,7 @@ public class S3ServiceImpl implements OmsStorageService {
                     .contentType(
                             contentType == null
                                     ? "application/octet-stream"
-                                    : contentType
-                    )
+                                    : contentType)
                     .contentLength((long) bytes.length)
                     .build();
 
@@ -135,7 +178,7 @@ public class S3ServiceImpl implements OmsStorageService {
     @Override
     public byte[] downloadBytes(String objectName) {
         try (InputStream in = downloadStream(objectName);
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
             copy(in, out);
             return out.toByteArray();
@@ -158,12 +201,11 @@ public class S3ServiceImpl implements OmsStorageService {
             }
 
             try (InputStream in = downloadStream(objectName);
-                 OutputStream out = Files.newOutputStream(
-                         targetFile,
-                         StandardOpenOption.CREATE,
-                         StandardOpenOption.TRUNCATE_EXISTING,
-                         StandardOpenOption.WRITE
-                 )) {
+                    OutputStream out = Files.newOutputStream(
+                            targetFile,
+                            StandardOpenOption.CREATE,
+                            StandardOpenOption.TRUNCATE_EXISTING,
+                            StandardOpenOption.WRITE)) {
 
                 copy(in, out);
             }

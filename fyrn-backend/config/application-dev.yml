@@ -12,9 +12,15 @@ fyrn:
     port: 6379
     password: root
 
-  minio:
+  oss:
     access-key-id: eZkIBk8WaWlfxjCx5OAW
     access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
     bucket-name: fyrn
     endpoint: http://host.docker.internal:9000
+    region: us-east-1
 
+  logging:
+    level: INFO
+
+  mybatis:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
