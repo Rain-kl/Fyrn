@@ -23,9 +23,10 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "minio")
+@ConfigurationProperties(prefix = "oss")
 public class OssProperties {
     private String endpoint;
+    private String region;
     private String accessKeyId;
     private String accessKeySecret;
     private String bucketName;

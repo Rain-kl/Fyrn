@@ -20,15 +20,18 @@ package com.arctel.oms.service.impl;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.infrastructure.config.OssProperties;
 import com.arctel.oms.service.OmsStorageService;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,20 +41,30 @@ import java.nio.file.StandardOpenOption;
 
 @Slf4j
 @Service
-public class MinioServiceImpl implements OmsStorageService {
+public class S3ServiceImpl implements OmsStorageService {
 
     @Resource
-    OssProperties ossProperties;
+    private OssProperties ossProperties;
 
-    private MinioClient minioClient;
+    private S3Client s3Client;
 
     @PostConstruct
     public void init() {
-        this.minioClient = MinioClient.builder()
-                .endpoint(ossProperties.getEndpoint())
-                .credentials(ossProperties.getAccessKeyId(), ossProperties.getAccessKeySecret())
+        this.s3Client = S3Client.builder()
+                .region(Region.of(ossProperties.getRegion()))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                                AwsBasicCredentials.create(
+                                        ossProperties.getAccessKeyId(),
+                                        ossProperties.getAccessKeySecret()
+                                )
+                        )
+                )
+                // 如果是私有 S3 / 兼容 S3 的存储（比如 COS / OSS / MinIO）
+                // .endpointOverride(URI.create(ossProperties.getEndpoint()))
                 .build();
-        log.info("MinIO client initialized with endpoint: {}", ossProperties.getEndpoint());
+
+        log.info("S3 client initialized, region={}", ossProperties.getRegion());
     }
 
     /**
@@ -70,40 +83,46 @@ public class MinioServiceImpl implements OmsStorageService {
         String bucketName = ossProperties.getBucketName();
 
         try {
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(objectName)
-                            .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
-                            .contentType(contentType == null ? "application/octet-stream" : contentType)
-                            .build()
-            );
+            PutObjectRequest request = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(objectName)
+                    .contentType(
+                            contentType == null
+                                    ? "application/octet-stream"
+                                    : contentType
+                    )
+                    .contentLength((long) bytes.length)
+                    .build();
+
+            s3Client.putObject(request, RequestBody.fromBytes(bytes));
+
         } catch (Exception e) {
-            log.error("文件上传失败:{}", e.getMessage(), e);
+            log.error("文件上传失败: {}", e.getMessage(), e);
             throw new BizException("文件上传失败:" + e.getMessage());
         }
 
-        String path = "/" + bucketName + objectName;
-        log.info("文件上传到:{}", path);
+        String path = "/" + bucketName + "/" + objectName;
+        log.info("文件上传到: {}", path);
         return path;
     }
 
     /**
-     * 下载文件（流式传输）
-     * <p>
-     * 返回 InputStream（实际类型 GetObjectResponse），调用方用完必须 close。
+     * 下载文件（流式）
+     * 返回 ResponseInputStream，调用方必须 close
      */
     @Override
     public InputStream downloadStream(String objectName) {
         String bucketName = ossProperties.getBucketName();
+
         try {
-            // GetObjectResponse extends InputStream
-            return minioClient.getObject(
-                    GetObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(objectName)
-                            .build()
-            );
+            GetObjectRequest request = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(objectName)
+                    .build();
+
+            // ResponseInputStream<GetObjectResponse> extends InputStream
+            return s3Client.getObject(request);
+
         } catch (Exception e) {
             log.error("文件下载失败: {}", e.getMessage(), e);
             throw new BizException("文件下载失败:" + e.getMessage());
@@ -111,15 +130,16 @@ public class MinioServiceImpl implements OmsStorageService {
     }
 
     /**
-     * 辅助：下载并返回 byte[]
-     * 注意：大文件不建议用此方法（会占用大量内存），优先用 downloadStream()。
+     * 下载为 byte[]
      */
     @Override
     public byte[] downloadBytes(String objectName) {
         try (InputStream in = downloadStream(objectName);
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
             copy(in, out);
             return out.toByteArray();
+
         } catch (Exception e) {
             log.error("文件下载为字节数组失败: {}", e.getMessage(), e);
             throw new BizException("文件下载为字节数组失败:" + e.getMessage());
@@ -127,14 +147,11 @@ public class MinioServiceImpl implements OmsStorageService {
     }
 
     /**
-     * 辅助：下载并保存到本地文件
-     *
-     * @return 保存后的目标路径
+     * 下载并保存到本地
      */
     @Override
     public Path downloadToFile(String objectName, Path targetFile) {
         try {
-            // 确保父目录存在
             Path parent = targetFile.getParent();
             if (parent != null) {
                 Files.createDirectories(parent);
@@ -147,11 +164,13 @@ public class MinioServiceImpl implements OmsStorageService {
                          StandardOpenOption.TRUNCATE_EXISTING,
                          StandardOpenOption.WRITE
                  )) {
+
                 copy(in, out);
             }
 
             log.info("文件已保存到本地: {}", targetFile.toAbsolutePath());
             return targetFile;
+
         } catch (Exception e) {
             log.error("文件下载并保存本地失败: {}", e.getMessage(), e);
             throw new BizException("文件下载并保存本地失败:" + e.getMessage());
@@ -159,7 +178,7 @@ public class MinioServiceImpl implements OmsStorageService {
     }
 
     /**
-     * 通用 copy（8KB buffer）
+     * 通用 copy
      */
     private static long copy(InputStream in, OutputStream out) throws Exception {
         byte[] buffer = new byte[8192];

@@ -38,8 +38,9 @@ mybatis-plus:
   global-config:
     banner: false
 
-minio:
-  access-key-id: ${fyrn.minio.access-key-id}
-  access-key-secret: ${fyrn.minio.access-key-secret}
-  bucket-name: ${fyrn.minio.bucket-name}
-  endpoint: ${fyrn.minio.endpoint}
+oss:
+  access-key-id: ${fyrn.oss.access-key-id}
+  access-key-secret: ${fyrn.oss.access-key-secret}
+  bucket-name: ${fyrn.oss.bucket-name}
+  endpoint: ${fyrn.oss.endpoint}
+  region: ${fyrn.oss.region}

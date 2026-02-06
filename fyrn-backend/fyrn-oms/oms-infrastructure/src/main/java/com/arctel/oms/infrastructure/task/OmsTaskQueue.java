@@ -25,6 +25,8 @@ import com.arctel.oms.infrastructure.task.base.BaseTaskQueue;
 import com.arctel.oms.service.OmsTaskService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -42,8 +44,9 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
 
     public OmsTask buildOmsTask(T input, String message) {
         OmsTask task = new OmsTask();
-
-        task.setTaskId(input.getTaskId());
+        if (StringUtils.isNotBlank(input.getTaskId())) {
+            task.setTaskId(input.getTaskId());
+        }
         task.setTaskTag(input.getTaskTag());
         task.setAllowRetry(input.getAllowRetry());
         task.setBizTag(input.getBizTag());
@@ -56,13 +59,16 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
         task.setCreateTime(new Date());
         task.setUpdateTime(new Date());
 
-        return omsTaskService.createTask(task);
+        omsTaskService.createTask(task);
+        if (StringUtils.isBlank(input.getTaskId())) {
+            input.setTaskId(task.getTaskId());
+        }
+        return task;
     }
 
-
+    @Transactional(rollbackFor = Exception.class)
     public OmsTask createTask(T taskMsg) {
-        log.info("Pushing task message to queue: {}", JSON.toJSONString(taskMsg));
-        OmsTask task = buildOmsTask(taskMsg, "Task created and queued.");
+        OmsTask task = buildOmsTask(taskMsg, "Task created.");
         log.info("Created task successfully: {}", JSON.toJSONString(task));
         super.push(taskMsg);
         return task;
