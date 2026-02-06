@@ -17,15 +17,17 @@
 
 package com.arctel.oms.controller;
 
+import org.springframework.web.bind.annotation.*;
+
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserCreateInput;
+import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserUpdateInput;
 import com.arctel.oms.output.UserInfoVo;
 import com.arctel.oms.service.OmsUserService;
+
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author hspcadmin

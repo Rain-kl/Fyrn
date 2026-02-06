@@ -18,14 +18,16 @@
 package com.arctel.oms.controller;
 
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.service.OmsAuthService;
 import com.arctel.oms.service.OmsUserService;
+
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/oms/auth")

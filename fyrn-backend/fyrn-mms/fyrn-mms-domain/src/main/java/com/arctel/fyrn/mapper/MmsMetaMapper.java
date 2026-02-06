@@ -20,7 +20,6 @@ package com.arctel.fyrn.mapper;
 import com.arctel.fyrn.entity.MmsMeta;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.List;
 
 /**
  * @author ryan
@@ -32,7 +31,3 @@ public interface MmsMetaMapper extends BaseMapper<MmsMeta> {
 
 
 }
-
-
-
-

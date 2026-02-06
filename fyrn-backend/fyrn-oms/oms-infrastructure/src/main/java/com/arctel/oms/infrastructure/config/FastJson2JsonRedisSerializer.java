@@ -17,13 +17,14 @@
 
 package com.arctel.oms.infrastructure.config;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONReader;
-import com.alibaba.fastjson2.JSONWriter;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-import java.nio.charset.StandardCharsets;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
 
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 

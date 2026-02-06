@@ -17,6 +17,11 @@
 
 package com.arctel.fyrn.task.handler;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import com.arctel.common.MockFunction;
 import com.arctel.fyrn.constants.MmsHandlerTagConstant;
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
@@ -26,11 +31,8 @@ import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
 import com.arctel.oms.infrastructure.task.OmsTaskHandler;
-import jakarta.annotation.Resource;
-import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.List;
+import jakarta.annotation.Resource;
 
 @Component
 public class FileToOssHandler extends OmsTaskHandler<DefaultTaskMessage> {

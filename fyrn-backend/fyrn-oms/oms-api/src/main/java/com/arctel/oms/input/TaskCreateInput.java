@@ -17,7 +17,6 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

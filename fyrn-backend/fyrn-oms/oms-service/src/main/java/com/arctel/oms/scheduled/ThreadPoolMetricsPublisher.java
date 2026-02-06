@@ -17,21 +17,22 @@
 
 package com.arctel.oms.scheduled;
 
-import com.arctel.oms.dto.ThreadPoolMetricsDTO;
-import jakarta.annotation.Resource;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Component;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.THREAD_POOL_METRICS;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import static com.arctel.oms.common.constants.RedisPrefixConstant.THREAD_POOL_METRICS;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
+
+import com.arctel.oms.dto.ThreadPoolMetricsDTO;
+
+import jakarta.annotation.Resource;
+import lombok.Getter;
 
 @Component
 public class ThreadPoolMetricsPublisher {

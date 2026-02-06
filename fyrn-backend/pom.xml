@@ -63,7 +63,7 @@
 
         <!-- ==================== Maven 插件版本 ==================== -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <spotless-maven-plugin.version>2.22.1</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     </properties>
 
@@ -257,14 +257,6 @@
                         <importOrder>
                             <order>java,javax,org,com,</order>
                         </importOrder>
-                        <!-- Google Java Format 格式化 -->
-                        <googleJavaFormat>
-                            <!-- 使用 AOSP 风格 (4空格缩进, 更接近传统 Java 风格) -->
-                            <!-- 如需使用 Google 风格 (2空格缩进), 改为 GOOGLE -->
-                            <style>AOSP</style>
-                            <!-- 格式化 Javadoc -->
-                            <formatJavadoc>true</formatJavadoc>
-                        </googleJavaFormat>
                         <!-- 清理行尾空白 -->
                         <trimTrailingWhitespace/>
                         <!-- 确保文件以换行结尾 -->

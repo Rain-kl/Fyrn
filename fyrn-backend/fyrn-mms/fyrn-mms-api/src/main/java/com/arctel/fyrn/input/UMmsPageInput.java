@@ -18,6 +18,7 @@
 package com.arctel.fyrn.input;
 
 import com.arctel.oms.common.base.BaseQueryPageInput;
+
 import lombok.Data;
 
 @Data

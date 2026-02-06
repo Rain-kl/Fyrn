@@ -17,15 +17,16 @@
 
 package com.arctel.common.utils;
 
-import com.arctel.oms.common.utils.CharsetUtil;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import com.arctel.oms.common.utils.CharsetUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 小说文件处理工具, 包括提取信息等
@@ -92,4 +93,3 @@ public class NovelUtil {
 
 
 }
-

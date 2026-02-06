@@ -17,11 +17,12 @@
 
 package com.arctel.oms.domain.entity;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * 系统参数表

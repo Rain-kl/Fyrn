@@ -17,10 +17,11 @@
 
 package com.arctel.fyrn.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.*;
+
+import lombok.Data;
 
 /**
  * 本地小说表

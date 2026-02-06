@@ -17,11 +17,13 @@
 
 package com.arctel.common.utils;
 
-import com.arctel.oms.common.utils.FileUtil;
-import lombok.extern.slf4j.Slf4j;
+import java.io.InputStream;
+
 import org.junit.jupiter.api.Test;
 
-import java.io.InputStream;
+import com.arctel.oms.common.utils.FileUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class FileUtilTest {

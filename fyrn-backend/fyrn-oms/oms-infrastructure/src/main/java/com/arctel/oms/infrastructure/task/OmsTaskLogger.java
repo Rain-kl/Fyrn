@@ -17,16 +17,17 @@
 
 package com.arctel.oms.infrastructure.task;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.arctel.oms.common.constants.LogConstant;
 import com.arctel.oms.domain.dto.TaskProgressDTO;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
 import com.arctel.oms.input.TaskProgressUpdateInput;
 import com.arctel.oms.service.OmsTaskService;
+
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public abstract class OmsTaskLogger<T extends BaseTaskMessage> {

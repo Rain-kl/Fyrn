@@ -17,10 +17,11 @@
 
 package com.arctel.common.config.jackson;
 
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 @Configuration
 public class JacksonLongAsStringConfig {

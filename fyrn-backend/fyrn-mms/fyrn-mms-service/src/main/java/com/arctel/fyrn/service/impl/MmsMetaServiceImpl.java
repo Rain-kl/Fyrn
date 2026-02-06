@@ -18,6 +18,10 @@
 package com.arctel.fyrn.service.impl;
 
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.arctel.fyrn.entity.MmsMeta;
 import com.arctel.fyrn.mapper.MmsMetaMapper;
 import com.arctel.fyrn.service.MmsMetaService;
@@ -26,9 +30,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
 * @author ryan
@@ -62,7 +63,3 @@ public class MmsMetaServiceImpl extends ServiceImpl<MmsMetaMapper, MmsMeta>
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
 }
-
-
-
-

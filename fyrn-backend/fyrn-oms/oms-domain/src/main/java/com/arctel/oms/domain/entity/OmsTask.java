@@ -17,13 +17,14 @@
 
 package com.arctel.oms.domain.entity;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * 任务表

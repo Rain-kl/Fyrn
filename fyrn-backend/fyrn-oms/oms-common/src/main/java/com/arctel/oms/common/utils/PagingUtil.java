@@ -18,13 +18,13 @@
 package com.arctel.oms.common.utils;
 
 
-import com.arctel.oms.common.base.BaseQueryPage;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.arctel.oms.common.base.BaseQueryPage;
 
 /**
  * 分页工具类

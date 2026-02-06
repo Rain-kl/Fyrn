@@ -18,16 +18,17 @@
 package com.arctel.fyrn.service;
 
 
-import com.arctel.fyrn.dto.LocalFileSimpleDTO;
-import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
-import com.arctel.fyrn.input.BindNovelFileInput;
-import com.arctel.fyrn.input.UMmsPageInput;
-import com.baomidou.mybatisplus.extension.service.IService;
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 
-import java.io.IOException;
+import com.arctel.fyrn.dto.LocalFileSimpleDTO;
+import com.arctel.fyrn.entity.MmsNovelFile;
+import com.arctel.fyrn.input.BindNovelFileInput;
+import com.arctel.fyrn.input.UMmsPageInput;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.common.utils.Result;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * UMmsNovelBizService, 原始文件处理服务

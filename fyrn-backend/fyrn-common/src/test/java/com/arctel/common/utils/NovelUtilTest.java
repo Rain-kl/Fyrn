@@ -18,10 +18,11 @@
 package com.arctel.common.utils;
 
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class NovelUtilTest {

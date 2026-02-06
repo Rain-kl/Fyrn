@@ -17,12 +17,14 @@
 
 package com.arctel.common.config.mybatis.handler;
 
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * MyBatis-Plus 自动填充处理器

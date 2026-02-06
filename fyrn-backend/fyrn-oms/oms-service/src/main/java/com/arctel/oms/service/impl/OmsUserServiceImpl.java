@@ -17,14 +17,21 @@
 
 package com.arctel.oms.service.impl;
 
-import com.arctel.oms.domain.entity.OmsUser;
-import com.arctel.oms.input.UserPageQueryInput;
-import com.arctel.oms.input.UserCreateInput;
-import com.arctel.oms.input.UserUpdateInput;
-import com.arctel.oms.domain.mapper.OmsUserMapper;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.exception.BizException;
+import com.arctel.oms.domain.entity.OmsUser;
+import com.arctel.oms.domain.mapper.OmsUserMapper;
+import com.arctel.oms.input.UserCreateInput;
+import com.arctel.oms.input.UserPageQueryInput;
+import com.arctel.oms.input.UserUpdateInput;
 import com.arctel.oms.output.UserInfoVo;
 import com.arctel.oms.service.OmsAuthService;
 import com.arctel.oms.service.OmsUserService;
@@ -34,12 +41,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author hspcadmin
@@ -122,7 +123,3 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
         return omsUser.getUserId();
     }
 }
-
-
-
-

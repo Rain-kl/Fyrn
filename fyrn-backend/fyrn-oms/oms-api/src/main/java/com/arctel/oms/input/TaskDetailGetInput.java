@@ -17,11 +17,11 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.common.base.BaseInput;
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 @Setter
 @AllArgsConstructor

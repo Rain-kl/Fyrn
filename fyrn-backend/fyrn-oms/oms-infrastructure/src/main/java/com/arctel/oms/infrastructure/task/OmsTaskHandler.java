@@ -23,10 +23,10 @@ import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
 import com.arctel.oms.infrastructure.task.base.BaseThreadPoolHandler;
 import com.arctel.oms.input.TaskUpdateInput;
 import com.arctel.oms.service.OmsTaskService;
+
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 
 @Slf4j
 public abstract class OmsTaskHandler<T extends BaseTaskMessage> extends OmsTaskLogger<T> implements BaseThreadPoolHandler<T> {

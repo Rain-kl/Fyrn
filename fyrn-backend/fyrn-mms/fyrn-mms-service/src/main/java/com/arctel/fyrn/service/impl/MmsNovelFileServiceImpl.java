@@ -17,16 +17,32 @@
 
 package com.arctel.fyrn.service.impl;
 
-import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.lang.UUID;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.arctel.common.utils.NovelUtil;
 import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovel;
 import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.fyrn.mapper.MmsNovelFileMapper;
-import com.arctel.fyrn.mapper.MmsNovelMapper;
 import com.arctel.fyrn.input.BindNovelFileInput;
 import com.arctel.fyrn.input.UMmsPageInput;
+import com.arctel.fyrn.mapper.MmsNovelFileMapper;
+import com.arctel.fyrn.mapper.MmsNovelMapper;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.fyrn.service.MmsNovelService;
 import com.arctel.oms.common.base.BaseQueryPage;
@@ -41,25 +57,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.lang.UUID;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Arctel
@@ -265,4 +267,3 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         return removeById(fileId);
     }
 }
-

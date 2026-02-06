@@ -17,18 +17,20 @@
 
 package com.arctel.oms.infrastructure.task;
 
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson2.JSON;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.domain.enums.TaskStatusEnum;
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
 import com.arctel.oms.infrastructure.task.base.BaseTaskQueue;
 import com.arctel.oms.service.OmsTaskService;
+
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 /**
  * 任务队列基类

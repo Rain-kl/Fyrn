@@ -17,7 +17,18 @@
 
 package com.arctel.oms.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_LOG_KEY_PREFIX;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_PROGRESS_KEY_PREFIX;
+
+import java.time.Duration;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.constants.LogConstant;
@@ -25,9 +36,9 @@ import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.domain.dto.TaskOverviewDTO;
 import com.arctel.oms.domain.dto.TaskProgressDTO;
 import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.domain.enums.TaskStatusEnum;
 import com.arctel.oms.domain.mapper.OmsTaskMapper;
 import com.arctel.oms.dto.ThreadPoolMetricsDTO;
-import com.arctel.oms.domain.enums.TaskStatusEnum;
 import com.arctel.oms.input.TaskDetailGetInput;
 import com.arctel.oms.input.TaskProgressUpdateInput;
 import com.arctel.oms.input.TaskUpdateInput;
@@ -39,18 +50,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.util.Date;
-import java.util.List;
-
-import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_LOG_KEY_PREFIX;
-import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_PROGRESS_KEY_PREFIX;
 
 /**
  * @author hspcadmin

@@ -17,11 +17,11 @@
 
 package com.arctel.fyrn.service;
 
+import java.util.List;
+
 import com.arctel.fyrn.entity.MmsNovel;
 import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.oms.common.base.BaseQueryPage;
-
-import java.util.List;
 
 /**
  * MmsNovelBizService, 本地小说业务服务

@@ -18,6 +18,7 @@
 package com.arctel.oms.input;
 
 import com.arctel.oms.domain.dto.TaskProgressDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

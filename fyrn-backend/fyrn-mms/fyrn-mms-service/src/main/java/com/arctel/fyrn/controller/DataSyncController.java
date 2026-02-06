@@ -19,17 +19,19 @@ package com.arctel.fyrn.controller;
 
 
 
-import com.arctel.fyrn.input.SyncMaterialInput;
-import com.arctel.fyrn.service.DataSyncService;
-import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsTask;
-import jakarta.annotation.Resource;
+import java.io.IOException;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import com.arctel.fyrn.input.SyncMaterialInput;
+import com.arctel.fyrn.service.DataSyncService;
+import com.arctel.oms.common.utils.Result;
+import com.arctel.oms.domain.entity.OmsTask;
+
+import jakarta.annotation.Resource;
 
 @RequestMapping("/sync")
 @RestController

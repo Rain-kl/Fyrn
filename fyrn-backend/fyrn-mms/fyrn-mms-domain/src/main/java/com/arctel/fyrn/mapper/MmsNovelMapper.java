@@ -29,7 +29,3 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface MmsNovelMapper extends BaseMapper<MmsNovel> {
 
 }
-
-
-
-

@@ -17,9 +17,9 @@
 
 package com.arctel.oms.dto;
 
-import lombok.Data;
-
 import java.util.concurrent.ThreadPoolExecutor;
+
+import lombok.Data;
 
 @Data
 public class ThreadPoolMetricsDTO {

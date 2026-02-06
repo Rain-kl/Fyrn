@@ -20,6 +20,7 @@ package com.arctel.oms.output;
 
 import com.arctel.oms.domain.dto.TaskProgressDTO;
 import com.arctel.oms.domain.entity.OmsTask;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

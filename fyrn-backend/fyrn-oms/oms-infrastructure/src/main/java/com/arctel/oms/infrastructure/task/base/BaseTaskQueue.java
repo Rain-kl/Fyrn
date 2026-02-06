@@ -17,22 +17,24 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import jakarta.annotation.Resource;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.data.redis.core.RedisTemplate;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE;
 
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS;
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
+import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 任务队列基类

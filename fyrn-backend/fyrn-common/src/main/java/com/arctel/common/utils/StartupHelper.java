@@ -17,13 +17,14 @@
 
 package com.arctel.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.Environment;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
+
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StartupHelper {
@@ -47,14 +48,14 @@ public class StartupHelper {
         String osName = System.getProperty("os.name");
         String osArch = System.getProperty("os.arch");
         log.info("""
-                        
+
                         ----------------------------------------------------------
                          _______   ______  _   _\s
                         |  ___\\\\ \\\\ / /  _ \\\\| \\\\ | |
                         | |_   \\\\ V /| |_) |  \\\\| |
                         |  _|   | | |  _ <| |\\\\  |
                         |_|     |_| |_| \\\\_\\\\_| \\\\_|
-                        
+
                         Application '{}' is running! Access URLs:
                         \t\
                         Local: \t\t{}://localhost:{}{}

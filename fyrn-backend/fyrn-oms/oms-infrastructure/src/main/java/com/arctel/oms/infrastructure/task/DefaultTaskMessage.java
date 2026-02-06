@@ -18,9 +18,9 @@
 package com.arctel.oms.infrastructure.task;
 
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
+
 import lombok.Data;
 
-import java.util.Date;
 
 @Data
 public class DefaultTaskMessage extends BaseTaskMessage {

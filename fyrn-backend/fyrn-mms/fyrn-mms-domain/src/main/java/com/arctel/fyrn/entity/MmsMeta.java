@@ -17,13 +17,14 @@
 
 package com.arctel.fyrn.entity;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * 小说元数据表

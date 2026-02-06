@@ -18,15 +18,8 @@
 package com.arctel.fyrn.controller;
 
 
-import com.arctel.fyrn.dto.LocalFileSimpleDTO;
-import com.arctel.fyrn.entity.MmsNovelFile;
-import com.arctel.fyrn.input.BindNovelFileInput;
-import com.arctel.fyrn.input.UMmsNovelPageInput;
-import com.arctel.fyrn.input.UMmsPageInput;
-import com.arctel.fyrn.service.MmsNovelFileService;
-import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
-import jakarta.annotation.Resource;
+import java.io.IOException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +28,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import com.arctel.fyrn.dto.LocalFileSimpleDTO;
+import com.arctel.fyrn.entity.MmsNovelFile;
+import com.arctel.fyrn.input.BindNovelFileInput;
+import com.arctel.fyrn.input.UMmsNovelPageInput;
+import com.arctel.fyrn.input.UMmsPageInput;
+import com.arctel.fyrn.service.MmsNovelFileService;
+import com.arctel.oms.common.base.BaseQueryPage;
+import com.arctel.oms.common.utils.Result;
+
+import jakarta.annotation.Resource;
 
 @RequestMapping("/umms")
 @RestController

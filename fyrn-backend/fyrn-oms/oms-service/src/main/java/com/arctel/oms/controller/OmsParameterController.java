@@ -18,15 +18,17 @@
 package com.arctel.oms.controller;
 
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.*;
+
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.utils.Result;
 import com.arctel.oms.domain.entity.OmsParameter;
 import com.arctel.oms.input.ParameterAddInput;
 import com.arctel.oms.input.ParameterQueryInput;
 import com.arctel.oms.service.OmsParameterService;
+
 import jakarta.annotation.Resource;
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/oms/parameter")
 @RestController

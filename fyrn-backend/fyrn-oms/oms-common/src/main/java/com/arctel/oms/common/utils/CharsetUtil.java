@@ -17,11 +17,11 @@
 
 package com.arctel.oms.common.utils;
 
-import org.mozilla.universalchardet.UniversalDetector;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import org.mozilla.universalchardet.UniversalDetector;
 
 /**
  * @author ryan

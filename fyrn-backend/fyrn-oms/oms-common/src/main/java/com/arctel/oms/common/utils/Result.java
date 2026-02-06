@@ -17,10 +17,11 @@
 
 package com.arctel.oms.common.utils;
 
-import com.arctel.oms.common.constants.CodeConstant;
-import lombok.Data;
-
 import java.io.Serializable;
+
+import com.arctel.oms.common.constants.CodeConstant;
+
+import lombok.Data;
 
 /**
  * 后端统一返回结果

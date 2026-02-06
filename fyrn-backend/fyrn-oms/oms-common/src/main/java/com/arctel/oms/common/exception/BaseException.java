@@ -17,9 +17,10 @@
 
 package com.arctel.oms.common.exception;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Setter
