@@ -13,141 +13,149 @@
  */
 
 import { mapValues } from '../runtime';
-import type { JobProgressDto } from './JobProgressDto';
-import {
-    JobProgressDtoFromJSON,
-    JobProgressDtoFromJSONTyped,
-    JobProgressDtoToJSON,
-    JobProgressDtoToJSONTyped,
-} from './JobProgressDto';
-
 /**
  * 
  * @export
- * @interface JobDetailOutput
+ * @interface OmsTask
  */
-export interface JobDetailOutput {
+export interface OmsTask {
     /**
      * 业务任务ID
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
-    jobId?: string;
+    taskId?: string;
     /**
-     * 任务类型，如 file_batch
+     * 任务标签, 用于分配到不同的处理器
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
-    taskType?: string;
+    taskTag?: string;
+    /**
+     * 该任务是否允许重试，0表示不允许重试，1表示允许重试
+     * @type {number}
+     * @memberof OmsTask
+     */
+    allowRetry?: number;
+    /**
+     * 业务标签
+     * @type {string}
+     * @memberof OmsTask
+     */
+    bizTag?: string;
+    /**
+     * 业务值
+     * @type {string}
+     * @memberof OmsTask
+     */
+    bizValue?: string;
     /**
      * 0=queued,1=running,2=success,3=failed,4=canceled
      * @type {number}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     status?: number;
     /**
      * 状态说明/失败摘要
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     message?: string;
     /**
+     * 任务对象(JSON格式), 重试时使用
+     * @type {string}
+     * @memberof OmsTask
+     */
+    taskObject?: string;
+    /**
      * 触发人
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     createdUser?: string;
     /**
      * 任务开始时间
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     startedTime?: string;
     /**
      * 任务结束时间
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     finishedTime?: string;
     /**
      * 创建时间
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     createTime?: string;
     /**
      * 修改时间
      * @type {string}
-     * @memberof JobDetailOutput
+     * @memberof OmsTask
      */
     updateTime?: string;
-    /**
-     * 
-     * @type {JobProgressDto}
-     * @memberof JobDetailOutput
-     */
-    jobProgressDTO?: JobProgressDto;
-    /**
-     * 
-     * @type {string}
-     * @memberof JobDetailOutput
-     */
-    jobLog?: string;
 }
 
 /**
- * Check if a given object implements the JobDetailOutput interface.
+ * Check if a given object implements the OmsTask interface.
  */
-export function instanceOfJobDetailOutput(value: object): value is JobDetailOutput {
+export function instanceOfOmsTask(value: object): value is OmsTask {
     return true;
 }
 
-export function JobDetailOutputFromJSON(json: any): JobDetailOutput {
-    return JobDetailOutputFromJSONTyped(json, false);
+export function OmsTaskFromJSON(json: any): OmsTask {
+    return OmsTaskFromJSONTyped(json, false);
 }
 
-export function JobDetailOutputFromJSONTyped(json: any, ignoreDiscriminator: boolean): JobDetailOutput {
+export function OmsTaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): OmsTask {
     if (json == null) {
         return json;
     }
     return {
         
-        'jobId': json['jobId'] == null ? undefined : json['jobId'],
-        'taskType': json['taskType'] == null ? undefined : json['taskType'],
+        'taskId': json['taskId'] == null ? undefined : json['taskId'],
+        'taskTag': json['taskTag'] == null ? undefined : json['taskTag'],
+        'allowRetry': json['allowRetry'] == null ? undefined : json['allowRetry'],
+        'bizTag': json['bizTag'] == null ? undefined : json['bizTag'],
+        'bizValue': json['bizValue'] == null ? undefined : json['bizValue'],
         'status': json['status'] == null ? undefined : json['status'],
         'message': json['message'] == null ? undefined : json['message'],
+        'taskObject': json['taskObject'] == null ? undefined : json['taskObject'],
         'createdUser': json['createdUser'] == null ? undefined : json['createdUser'],
         'startedTime': json['startedTime'] == null ? undefined : json['startedTime'],
         'finishedTime': json['finishedTime'] == null ? undefined : json['finishedTime'],
         'createTime': json['createTime'] == null ? undefined : json['createTime'],
         'updateTime': json['updateTime'] == null ? undefined : json['updateTime'],
-        'jobProgressDTO': json['jobProgressDTO'] == null ? undefined : JobProgressDtoFromJSON(json['jobProgressDTO']),
-        'jobLog': json['jobLog'] == null ? undefined : json['jobLog'],
     };
 }
 
-export function JobDetailOutputToJSON(json: any): JobDetailOutput {
-    return JobDetailOutputToJSONTyped(json, false);
+export function OmsTaskToJSON(json: any): OmsTask {
+    return OmsTaskToJSONTyped(json, false);
 }
 
-export function JobDetailOutputToJSONTyped(value?: JobDetailOutput | null, ignoreDiscriminator: boolean = false): any {
+export function OmsTaskToJSONTyped(value?: OmsTask | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'jobId': value['jobId'],
-        'taskType': value['taskType'],
+        'taskId': value['taskId'],
+        'taskTag': value['taskTag'],
+        'allowRetry': value['allowRetry'],
+        'bizTag': value['bizTag'],
+        'bizValue': value['bizValue'],
         'status': value['status'],
         'message': value['message'],
+        'taskObject': value['taskObject'],
         'createdUser': value['createdUser'],
         'startedTime': value['startedTime'],
         'finishedTime': value['finishedTime'],
         'createTime': value['createTime'],
         'updateTime': value['updateTime'],
-        'jobProgressDTO': JobProgressDtoToJSON(value['jobProgressDTO']),
-        'jobLog': value['jobLog'],
     };
 }
 

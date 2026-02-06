@@ -16,35 +16,35 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface JobProgressDto
+ * @interface TaskProgressDto
  */
-export interface JobProgressDto {
+export interface TaskProgressDto {
     /**
      * 
      * @type {number}
-     * @memberof JobProgressDto
+     * @memberof TaskProgressDto
      */
     current?: number;
     /**
      * 
      * @type {number}
-     * @memberof JobProgressDto
+     * @memberof TaskProgressDto
      */
     total?: number;
 }
 
 /**
- * Check if a given object implements the JobProgressDto interface.
+ * Check if a given object implements the TaskProgressDto interface.
  */
-export function instanceOfJobProgressDto(value: object): value is JobProgressDto {
+export function instanceOfTaskProgressDto(value: object): value is TaskProgressDto {
     return true;
 }
 
-export function JobProgressDtoFromJSON(json: any): JobProgressDto {
-    return JobProgressDtoFromJSONTyped(json, false);
+export function TaskProgressDtoFromJSON(json: any): TaskProgressDto {
+    return TaskProgressDtoFromJSONTyped(json, false);
 }
 
-export function JobProgressDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): JobProgressDto {
+export function TaskProgressDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskProgressDto {
     if (json == null) {
         return json;
     }
@@ -55,11 +55,11 @@ export function JobProgressDtoFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-export function JobProgressDtoToJSON(json: any): JobProgressDto {
-    return JobProgressDtoToJSONTyped(json, false);
+export function TaskProgressDtoToJSON(json: any): TaskProgressDto {
+    return TaskProgressDtoToJSONTyped(json, false);
 }
 
-export function JobProgressDtoToJSONTyped(value?: JobProgressDto | null, ignoreDiscriminator: boolean = false): any {
+export function TaskProgressDtoToJSONTyped(value?: TaskProgressDto | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
