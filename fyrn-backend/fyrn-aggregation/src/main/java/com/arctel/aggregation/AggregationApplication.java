@@ -17,6 +17,7 @@
 
 package com.arctel.aggregation;
 
+import com.arctel.common.utils.StartupHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,15 +28,13 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.arctel.common.utils.StartupHelper;
-
 @SpringBootApplication
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
 @MapperScan({"com.arctel.fyrn.mapper", "com.arctel.oms.domain.mapper"})
 @ComponentScan(basePackages = {"com.arctel.fyrn", "com.arctel.common", "com.arctel.oms"},
-    excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
 class AggregationApplication {
 
     public static void main(String[] args) {

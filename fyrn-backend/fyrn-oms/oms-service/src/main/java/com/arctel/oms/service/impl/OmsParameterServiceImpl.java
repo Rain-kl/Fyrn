@@ -17,14 +17,8 @@
 
 package com.arctel.oms.service.impl;
 
-
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.domain.entity.OmsParameter;
 import com.arctel.oms.domain.mapper.OmsParameterMapper;
@@ -34,11 +28,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author ryan
@@ -66,8 +63,7 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
                                 OmsParameter::getParamName, omsParameter.getParamName())
                         .eq(omsParameter.getEnabledFlag() != null,
                                 OmsParameter::getEnabledFlag, omsParameter.getEnabledFlag())
-                        .orderByDesc(OmsParameter::getParamCode)
-        );
+                        .orderByDesc(OmsParameter::getParamCode));
         List<OmsParameter> ordersList = result.getRecords();
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
@@ -80,7 +76,7 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
      */
     @Cacheable(value = "OmsParameter", key = "'ParamValueByCode:'+#paramCode", unless = "#result == null")
     @Override
-    public Object getParamValueByCode(int paramCode) {
+    public Object getParamValueByCode(Integer paramCode) {
         OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
         if (ObjectUtil.isNull(omsParameter)) {
             return null;
@@ -91,7 +87,6 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
         }
         return paramValue;
     }
-
 
     @CacheEvict(value = "OmsParameter", allEntries = true)
     @Override

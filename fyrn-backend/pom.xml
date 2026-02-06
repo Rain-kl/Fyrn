@@ -241,6 +241,8 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <!-- 保留方法参数名, 供 Spring SpEL 表达式使用 (如 @Cacheable) -->
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
 

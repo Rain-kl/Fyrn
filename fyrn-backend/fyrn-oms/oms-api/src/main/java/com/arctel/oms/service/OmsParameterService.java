@@ -17,7 +17,6 @@
 
 package com.arctel.oms.service;
 
-
 import java.io.Serializable;
 
 import com.arctel.oms.common.base.BaseQueryPage;
@@ -49,7 +48,7 @@ public interface OmsParameterService extends IService<OmsParameter> {
 
     BaseQueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 
-    Object getParamValueByCode(int paramCode);
+    Object getParamValueByCode(Integer paramCode);
 
     boolean clearCache();
 
