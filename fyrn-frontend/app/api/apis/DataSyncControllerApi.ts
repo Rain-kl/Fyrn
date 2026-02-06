@@ -15,15 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  ResultOmsTask,
   ResultString,
 } from '../models/index';
 import {
-    ResultOmsTaskFromJSON,
-    ResultOmsTaskToJSON,
     ResultStringFromJSON,
-    ResultStringToJSON,
 } from '../models/index';
+import {type ResultOmsTask, ResultOmsTaskFromJSON} from "~/api/models/ResultOmsTask";
 
 export interface SyncFileToOssPostRequest {
     size?: number;

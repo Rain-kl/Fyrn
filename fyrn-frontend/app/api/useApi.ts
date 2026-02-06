@@ -4,6 +4,7 @@ import {
     UMmsNovelControllerApi,
     OmsParameterControllerApi,
     OmsJobControllerApi,
+    OmsTaskControllerApi,
     OmsUserControllerApi,
     DataSyncControllerApi,
     type Middleware, MmsMetaControllerApi
@@ -86,6 +87,7 @@ export const useApi = () => {
         uMmsNovelApi: new UMmsNovelControllerApi(apiConfig),
         OmsParameterApi: new OmsParameterControllerApi(apiConfig),
         OmsJobControllerApi: new OmsJobControllerApi(apiConfig),
+        OmsTaskControllerApi: new OmsTaskControllerApi(apiConfig),
         OmsUserControllerApi: new OmsUserControllerApi(apiConfig),
         MmsMetaControllerApi: new MmsMetaControllerApi(apiConfig),
         DataSyncControllerApi: new DataSyncControllerApi(apiConfig),
