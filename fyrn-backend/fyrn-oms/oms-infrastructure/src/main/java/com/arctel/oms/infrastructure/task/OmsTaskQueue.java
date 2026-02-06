@@ -17,8 +17,6 @@
 
 package com.arctel.oms.infrastructure.task;
 
-import java.util.Date;
-
 import com.alibaba.fastjson2.JSON;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.domain.enums.TaskStatusEnum;
@@ -27,6 +25,8 @@ import com.arctel.oms.infrastructure.task.base.BaseTaskQueue;
 import com.arctel.oms.service.OmsTaskService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Date;
 
 /**
  * 任务队列基类
@@ -43,6 +43,7 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
     public OmsTask buildOmsTask(T input, String message) {
         OmsTask task = new OmsTask();
 
+        task.setTaskId(input.getTaskId());
         task.setTaskTag(input.getTaskTag());
         task.setAllowRetry(input.getAllowRetry());
         task.setBizTag(input.getBizTag());
@@ -63,14 +64,12 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
         log.info("Pushing task message to queue: {}", JSON.toJSONString(taskMsg));
         OmsTask task = buildOmsTask(taskMsg, "Task created and queued.");
         log.info("Created task successfully: {}", JSON.toJSONString(task));
-        taskMsg.setTaskId(task.getTaskId());
         super.push(taskMsg);
         return task;
     }
 
     public OmsTask createTask(T taskMsg, String message) {
         OmsTask task = buildOmsTask(taskMsg, message);
-        taskMsg.setTaskId(task.getTaskId());
         super.push(taskMsg);
         return task;
     }
