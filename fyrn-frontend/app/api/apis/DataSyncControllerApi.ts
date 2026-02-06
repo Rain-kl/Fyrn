@@ -15,18 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
-  ResultOmsJob,
+  ResultOmsTask,
   ResultString,
 } from '../models/index';
 import {
-    ResultOmsJobFromJSON,
-    ResultOmsJobToJSON,
+    ResultOmsTaskFromJSON,
+    ResultOmsTaskToJSON,
     ResultStringFromJSON,
     ResultStringToJSON,
 } from '../models/index';
 
 export interface SyncFileToOssPostRequest {
-    operator: string;
     size?: number;
 }
 
@@ -40,18 +39,7 @@ export class DataSyncControllerApi extends runtime.BaseAPI {
      * 同步本地文件到OSS
      */
     async syncFileToOssPostRaw(requestParameters: SyncFileToOssPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling syncFileToOssPost().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['size'] != null) {
             queryParameters['size'] = requestParameters['size'];
@@ -73,7 +61,7 @@ export class DataSyncControllerApi extends runtime.BaseAPI {
      * 
      * 同步本地文件到OSS
      */
-    async syncFileToOssPost(requestParameters: SyncFileToOssPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
+    async syncFileToOssPost(requestParameters: SyncFileToOssPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
         const response = await this.syncFileToOssPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -82,7 +70,7 @@ export class DataSyncControllerApi extends runtime.BaseAPI {
      * 
      * 同步小说任务
      */
-    async syncOssToMmsPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsJob>> {
+    async syncOssToMmsPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsTask>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -94,14 +82,14 @@ export class DataSyncControllerApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsJobFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsTaskFromJSON(jsonValue));
     }
 
     /**
      * 
      * 同步小说任务
      */
-    async syncOssToMmsPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsJob> {
+    async syncOssToMmsPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsTask> {
         const response = await this.syncOssToMmsPostRaw(initOverrides);
         return await response.value();
     }

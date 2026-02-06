@@ -18,7 +18,6 @@ import type {
   ResultBaseQueryPageLocalFileSimpleDto,
   ResultBaseQueryPageMmsNovelFile,
   ResultBoolean,
-  ResultOmsJob,
 } from '../models/index';
 import {
     ResultBaseQueryPageLocalFileSimpleDtoFromJSON,
@@ -27,8 +26,6 @@ import {
     ResultBaseQueryPageMmsNovelFileToJSON,
     ResultBooleanFromJSON,
     ResultBooleanToJSON,
-    ResultOmsJobFromJSON,
-    ResultOmsJobToJSON,
 } from '../models/index';
 
 export interface UmmsDownloadMaterialGetRequest {
@@ -62,34 +59,6 @@ export interface UmmsNovelPageGetRequest {
  * 
  */
 export class UMmsNovelControllerApi extends runtime.BaseAPI {
-
-    /**
-     * 
-     * 文件去重
-     */
-    async ummsDedupPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsJob>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/umms/dedup`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsJobFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * 文件去重
-     */
-    async ummsDedupPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsJob> {
-        const response = await this.ummsDedupPostRaw(initOverrides);
-        return await response.value();
-    }
 
     /**
      * 

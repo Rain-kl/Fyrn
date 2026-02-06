@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  AddParameterInput,
+  ParameterAddInput,
   ResultBaseQueryPageOmsParameter,
   ResultBoolean,
 } from '../models/index';
 import {
-    AddParameterInputFromJSON,
-    AddParameterInputToJSON,
+    ParameterAddInputFromJSON,
+    ParameterAddInputToJSON,
     ResultBaseQueryPageOmsParameterFromJSON,
     ResultBaseQueryPageOmsParameterToJSON,
     ResultBooleanFromJSON,
@@ -29,7 +29,7 @@ import {
 } from '../models/index';
 
 export interface OmsParameterEditPostRequest {
-    addParameterInput?: AddParameterInput;
+    parameterAddInput?: ParameterAddInput;
 }
 
 export interface OmsParameterPageGetRequest {
@@ -61,7 +61,7 @@ export class OmsParameterControllerApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AddParameterInputToJSON(requestParameters['addParameterInput']),
+            body: ParameterAddInputToJSON(requestParameters['parameterAddInput']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
