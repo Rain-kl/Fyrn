@@ -53,7 +53,7 @@
         <lombok.version>1.18.30</lombok.version>
         <hutool-all.version>5.8.40</hutool-all.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.0.1-android</guava.version>
         <fastjson2.version>2.0.36</fastjson2.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
 
@@ -201,6 +201,12 @@
                 <groupId>com.googlecode.juniversalchardet</groupId>
                 <artifactId>juniversalchardet</artifactId>
                 <version>${juniversalchardet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
