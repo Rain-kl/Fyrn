@@ -93,13 +93,14 @@ public class RequestLogAspect {
 
     /**
      * 记录请求日志，敏感参数值会被掩盖为 "***"
+     *
      * @param joinPoint 切点信息
-     * @param request 当前 HTTP 请求
+     * @param request   当前 HTTP 请求
      */
     private void logRequest(JoinPoint joinPoint, HttpServletRequest request) {
         try {
             MethodSignature ms = (MethodSignature) joinPoint.getSignature();
-            Map<String, Object> params = extractParams(ms.getParameterNames(), joinPoint.getArgs());
+            Map<String, String> params = extractParams(ms.getParameterNames(), joinPoint.getArgs());
 
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
                     .info("[OMS Aspect]Request uri={}, method={}, ip={}, params={}",
@@ -113,9 +114,10 @@ public class RequestLogAspect {
 
     /**
      * 记录响应日志，包含响应类型和处理耗时
+     *
      * @param joinPoint 切点信息
-     * @param request 当前 HTTP 请求
-     * @param result 目标方法的返回结果
+     * @param request   当前 HTTP 请求
+     * @param result    目标方法的返回结果
      * @param stopWatch 用于计算处理耗时
      */
     private void logResponse(JoinPoint joinPoint, HttpServletRequest request, Object result, StopWatch stopWatch) {
@@ -132,8 +134,8 @@ public class RequestLogAspect {
     }
 
 
-    private Map<String, Object> extractParams(String[] names, Object[] args) {
-        Map<String, Object> map = new HashMap<>();
+    private Map<String, String> extractParams(String[] names, Object[] args) {
+        Map<String, String> map = new HashMap<>();
         if (names == null) return map;
 
         for (int i = 0; i < names.length; i++) {
@@ -156,11 +158,12 @@ public class RequestLogAspect {
                 arg instanceof OutputStream;
     }
 
-    private Object safeValue(Object arg) {
-        if (arg instanceof String || arg instanceof Number || arg instanceof Boolean) {
-            return arg;
+    private String safeValue(Object arg) {
+        try {
+            return arg.toString();
+        } catch (Exception e) {
+            return arg.getClass().getSimpleName();
         }
-        return arg.getClass().getSimpleName();
     }
 
     private String getClientIp(HttpServletRequest request) {

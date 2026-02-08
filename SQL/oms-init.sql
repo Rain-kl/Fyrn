@@ -40,7 +40,7 @@ CREATE TABLE oms_task
     `biz_value`     TEXT          NOT NULL COMMENT '任务传值, json类型handler处理入参',
     `status`        TINYINT       NOT NULL COMMENT '0=queued,1=running,2=success,3=failed,4=canceled',
     `message`       VARCHAR(4096) NULL COMMENT '执行消息',
-    `task_object`    TEXT          NOT NULL COMMENT '任务对象(JSON格式), 重试时使用',
+    `task_object`   TEXT          NOT NULL COMMENT '任务对象(JSON格式), 重试时使用',
     `created_user`  VARCHAR(64)   NULL COMMENT '触发人',
     `started_time`  DATETIME(3)   NULL COMMENT '任务开始时间',
     `finished_time` DATETIME(3)   NULL COMMENT '任务结束时间',
@@ -62,7 +62,7 @@ CREATE TABLE `oms_user`
 (
     `user_id`         VARCHAR(64)  NOT NULL COMMENT '用户ID',
     `username`        VARCHAR(64)  NOT NULL COMMENT '登录用户名',
-    `password`        VARCHAR(255) NOT NULL COMMENT '登录密码(加密)',
+    `password`        VARCHAR(255) NULL COMMENT '登录密码(加密)',
     `nickname`        VARCHAR(64)  NULL COMMENT '用户昵称',
     `email`           VARCHAR(128) NULL COMMENT '邮箱',
     `phone`           VARCHAR(32)  NULL COMMENT '手机号',

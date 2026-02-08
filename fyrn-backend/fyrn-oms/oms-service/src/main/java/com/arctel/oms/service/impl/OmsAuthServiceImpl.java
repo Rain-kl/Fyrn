@@ -17,19 +17,17 @@
 
 package com.arctel.oms.service.impl;
 
-import java.util.Date;
-
-import org.springframework.stereotype.Service;
-
+import cn.hutool.crypto.digest.BCrypt;
 import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.exception.BizException;
 import com.arctel.oms.domain.entity.OmsUser;
 import com.arctel.oms.domain.mapper.OmsUserMapper;
 import com.arctel.oms.service.OmsAuthService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
-import cn.hutool.crypto.digest.BCrypt;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @author hspcadmin
@@ -78,7 +76,7 @@ public class OmsAuthServiceImpl implements OmsAuthService {
 
 
     public void passCheck(String passwd) {
-        if (passwd.length() < 8) {
+        if (passwd.length() < 6) {
             throw new BizException(ErrorConstant.CHECK_FAILED, "密码长度不能少于8位");
         }
     }
