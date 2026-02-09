@@ -38,6 +38,10 @@
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-infrastructure</artifactId>
+        </dependency>
 
 
     </dependencies>

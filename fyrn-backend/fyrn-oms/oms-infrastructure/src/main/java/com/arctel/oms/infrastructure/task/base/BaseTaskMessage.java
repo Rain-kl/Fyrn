@@ -17,6 +17,8 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
+import cn.hutool.core.lang.UUID;
+import com.alibaba.fastjson2.JSON;
 import lombok.Data;
 
 @Data
@@ -47,5 +49,41 @@ public class BaseTaskMessage {
      */
     private String bizValue;
 
+    public BaseTaskMessage build() {
+        this.taskId = UUID.randomUUID().toString();
+        return this;
+    }
 
+    public BaseTaskMessage buildTaskMessage(String taskTag, int allowRetry, String bizTag, String bizValue) {
+        if (this.taskId == null) {
+            throw new IllegalArgumentException("taskId cannot be null");
+        }
+        this.taskTag = taskTag;
+        this.allowRetry = allowRetry;
+        this.bizTag = bizTag;
+        this.bizValue = bizValue;
+        return this;
+    }
+
+    public BaseTaskMessage buildTaskMessage(String taskTag, String bizTag, String bizValue) {
+        if (this.taskId == null) {
+            throw new IllegalArgumentException("taskId cannot be null");
+        }
+        this.taskTag = taskTag;
+        this.allowRetry = 0;
+        this.bizTag = bizTag;
+        this.bizValue = bizValue;
+        return this;
+    }
+
+    public BaseTaskMessage buildTaskMessage(String taskTag, String bizTag, Object bizValue) {
+        if (this.taskId == null) {
+            throw new IllegalArgumentException("taskId cannot be null");
+        }
+        this.taskTag = taskTag;
+        this.allowRetry = 0;
+        this.bizTag = bizTag;
+        this.bizValue = JSON.toJSONString(bizValue);
+        return this;
+    }
 }

@@ -17,24 +17,22 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS;
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
-import jakarta.annotation.Resource;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS_PREFIX;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE_PREFIX;
 
 /**
  * 任务队列基类
@@ -73,6 +71,8 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
     /**
      * 获取任务池监听器
+     *
+     * @return 如果需要消费任务, 则必须注册监听器, 仅发布任务返回 null
      */
     public abstract BaseThreadPoolListener<T> getPoolListener();
 
@@ -87,14 +87,19 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
         this.queueConfig = getTaskQueueConfig();
         // 任务队列注册
         register();
-        // 初始化定时任务线程池
-        this.scheduledExecutor = new ScheduledThreadPoolExecutor(1,
-                new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-%d").build());
-        // 启动心跳保持
-        keepAlive();
 
-        // 启动自动消费任务
-        autoConsumption();
+        // 如果注册了监听器，则启动心跳保持和自动消费任务
+        if (listener != null) {
+            // 初始化定时任务线程池
+            this.scheduledExecutor = new ScheduledThreadPoolExecutor(1,
+                    new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-%d").build());
+
+            // 启动心跳保持
+            keepAlive();
+
+            // 启动自动消费任务
+            autoConsumption();
+        }
     }
 
     public void register() {
@@ -108,7 +113,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     public void keepAlive() {
         scheduledExecutor.scheduleWithFixedDelay(() -> {
             try {
-                String queue_key = TASK_METRICS + registrationInfo.getQueueName();
+                String queue_key = TASK_METRICS_PREFIX + registrationInfo.getQueueName();
                 redisTemplate.opsForValue().set(queue_key, registrationInfo);
                 redisTemplate.expire(queue_key,
                         Duration.ofMinutes(queueConfig.getKeepAliveInterval() * KEEP_ALIVE_TOLERANCE_FACTOR));
@@ -147,7 +152,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      *
      */
     public int getQueueSize() {
-        Long size = redisTemplate.opsForList().size(TASK_QUEUE + registrationInfo.getQueueName());
+        Long size = redisTemplate.opsForList().size(TASK_QUEUE_PREFIX + registrationInfo.getQueueName());
         return size != null ? size.intValue() : 0;
     }
 
@@ -162,7 +167,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
             return false;
         }
         checkTaskMessage(taskMsg);
-        redisTemplate.opsForList().rightPush(TASK_QUEUE + registrationInfo.getQueueName(), taskMsg);
+        redisTemplate.opsForList().rightPush(TASK_QUEUE_PREFIX + registrationInfo.getQueueName(), taskMsg);
         return true;
     }
 
@@ -179,7 +184,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      * 获取任务信息
      */
     public T pop() {
-        Object o = redisTemplate.opsForList().rightPop(TASK_QUEUE + registrationInfo.getQueueName());
+        Object o = redisTemplate.opsForList().rightPop(TASK_QUEUE_PREFIX + registrationInfo.getQueueName());
         return registrationInfo.getTaskMessageClazz().cast(o);
     }
 

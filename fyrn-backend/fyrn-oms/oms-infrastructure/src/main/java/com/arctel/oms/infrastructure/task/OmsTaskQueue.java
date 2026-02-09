@@ -17,20 +17,18 @@
 
 package com.arctel.oms.infrastructure.task;
 
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson2.JSON;
 import com.arctel.oms.domain.entity.OmsTask;
 import com.arctel.oms.domain.enums.TaskStatusEnum;
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
 import com.arctel.oms.infrastructure.task.base.BaseTaskQueue;
 import com.arctel.oms.service.OmsTaskService;
-
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * 任务队列基类
@@ -44,6 +42,9 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
     @Resource
     OmsTaskService omsTaskService;
 
+    /**
+     * 保存任务信息到数据库，并构建OmsTask对象
+     */
     public OmsTask buildOmsTask(T input, String message) {
         OmsTask task = new OmsTask();
         if (StringUtils.isNotBlank(input.getTaskId())) {

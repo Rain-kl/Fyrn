@@ -19,16 +19,19 @@ package com.arctel.oms.common.constants;
 
 public class RedisPrefixConstant {
 
-    public static final String JOB_PROGRESS_KEY_PREFIX = "oms:job:progress:";
-
-    public static final String JOB_LOG_KEY_PREFIX = "oms:job:log:";
 
     public static final String DEFAULT_THREAD_POOL_PREFIX = "oms:thread:default:";
 
     public static final String THREAD_POOL_METRICS = DEFAULT_THREAD_POOL_PREFIX + "metrics:";
 
-    public static final String TASK_QUEUE = "oms:task:queue:";
+    public static final String TASK_PROGRESS_KEY_PREFIX = "oms:task:progress:";
 
-    public static final String TASK_METRICS = "oms:task:metrics:";
+    public static final String TASK_LOG_KEY_PREFIX = "oms:task:log:";
+
+    public static final String TASK_QUEUE_PREFIX = "oms:task:queue:";
+
+    public static final String TASK_METRICS_PREFIX = "oms:task:metrics:";
+
+    public static final String TASK_VALUE_PREFIX = "oms:task:value:";
 
 }

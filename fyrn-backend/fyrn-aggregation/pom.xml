@@ -35,6 +35,18 @@
             <artifactId>oms-service</artifactId>
         </dependency>
 
+      <!-- OPKIT 模块 -->
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-agent</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-service</artifactId>
+        </dependency>
+
         <!-- Spring 相关 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

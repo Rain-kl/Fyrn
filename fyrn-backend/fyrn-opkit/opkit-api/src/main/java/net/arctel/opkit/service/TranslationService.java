@@ -2,7 +2,7 @@ package net.arctel.opkit.service;
 
 import net.arctel.opkit.input.TranslationBaseInput;
 
-public interface TranslationService {
+public interface TranslationService extends BaseService{
 
     /**
      * 翻译文本

@@ -33,8 +33,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableCaching
 @EnableTransactionManagement
 @MapperScan({"com.arctel.fyrn.mapper", "com.arctel.oms.domain.mapper"})
-@ComponentScan(basePackages = {"com.arctel.fyrn", "com.arctel.common", "com.arctel.oms"},
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
+@ComponentScan(basePackages = {
+        "com.arctel.fyrn",
+        "com.arctel.common",
+        "com.arctel.oms",
+        "net.arctel.opkit",
+        "net.arctel.agent"
+}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
 class AggregationApplication {
 
     public static void main(String[] args) {

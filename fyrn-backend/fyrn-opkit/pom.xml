@@ -21,6 +21,7 @@
         <module>opkit-service</module>
         <module>opkit-common</module>
         <module>opkit-domain</module>
+        <module>opkit-agent</module>
     </modules>
 
 

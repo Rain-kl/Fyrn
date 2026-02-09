@@ -15,30 +15,13 @@
  * limitations under the License.
  */
 
-package com.arctel.fyrn.task;
+package net.arctel.agent.opkit;
 
 import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
-import com.arctel.oms.infrastructure.task.OmsTaskQueue;
 import com.arctel.oms.infrastructure.task.base.BaseThreadPoolListener;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import static com.arctel.common.constants.QueueConstant.MMS_QUEUE_NAME;
-
 @Component
-public class MmsSvrQueue extends OmsTaskQueue<DefaultTaskMessage> {
+public class OpKitPoolListener extends BaseThreadPoolListener<DefaultTaskMessage> {
 
-    @Resource
-    MmsSvrPoolListener dataSyncPoolListener;
-
-    @Override
-    public BaseThreadPoolListener<DefaultTaskMessage> getPoolListener() {
-        return dataSyncPoolListener;
-    }
-
-    @Override
-    public RegistrationInfo<DefaultTaskMessage> getRegistrationInfo() {
-        return new RegistrationInfo<>(MMS_QUEUE_NAME, "Data Synchronization Task Queue",
-                DefaultTaskMessage.class);
-    }
 }

@@ -15,57 +15,31 @@
  * limitations under the License.
  */
 
-package com.arctel.oms.infrastructure.task;
+package com.arctel.oms.infrastructure.task.fast;
 
-import com.arctel.oms.domain.entity.OmsTask;
-import com.arctel.oms.domain.enums.TaskStatusEnum;
 import com.arctel.oms.infrastructure.task.base.BaseTaskMessage;
 import com.arctel.oms.infrastructure.task.base.BaseThreadPoolHandler;
-import com.arctel.oms.input.TaskUpdateInput;
-import com.arctel.oms.service.OmsTaskService;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public abstract class OmsTaskHandler<T extends BaseTaskMessage> extends OmsTaskLogger<T> implements BaseThreadPoolHandler<T> {
+public abstract class FastTaskHandler<T extends BaseTaskMessage> extends FastTaskLogger<T> implements BaseThreadPoolHandler<T> {
 
-    protected OmsTask omsTask;
-
-    protected T taskMsg;
-
-    @Resource
-    public OmsTaskService omsTaskService;
-
-    @Override
-    public OmsTask getOmsTask() {
-        return omsTask;
-    }
-
-    @Override
-    public OmsTaskService getOmsTaskService() {
-        return omsTaskService;
-    }
+    protected T taskMessage;
 
     @Override
     protected T getTaskMessage() {
-        return taskMsg;
+        return taskMessage;
     }
 
     @Override
     public void doProcess(T taskMsg) {
-        this.omsTask = omsTaskService.getTaskById(taskMsg.getTaskId());
-        omsTaskService.updateTask(
-                new TaskUpdateInput(taskMsg.getTaskId(), TaskStatusEnum.RUNNING.getValue()));
+        this.taskMessage = taskMsg;
         try {
             handleTask(taskMsg);
-            omsTaskService.updateTask(
-                    new TaskUpdateInput(taskMsg.getTaskId(), TaskStatusEnum.SUCCESS.getValue()));
             log.info("Handler {} process task {} success", getHandlerId(), taskMsg.getTaskId());
         } catch (Exception e) {
             log.error("Handler {} process task {} failed: {}", getHandlerId(), taskMsg.getTaskId(), e.getMessage(), e);
-            omsTaskService.updateTask(
-                    new TaskUpdateInput(taskMsg.getTaskId(), TaskStatusEnum.FAILED.getValue()));
         }
     }
 

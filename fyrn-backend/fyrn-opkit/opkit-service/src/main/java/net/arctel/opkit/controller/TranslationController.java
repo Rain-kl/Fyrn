@@ -37,6 +37,7 @@ public class TranslationController {
      */
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Result<String> translate(TranslationBaseInput input) {
-        return Result.success(translationService.translate(input));
+        String taskId = translationService.translate(input);
+        return Result.success(translationService.queryResponse(taskId, String.class));
     }
 }

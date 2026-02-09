@@ -17,18 +17,7 @@
 
 package com.arctel.oms.service.impl;
 
-import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_LOG_KEY_PREFIX;
-import static com.arctel.oms.common.constants.RedisPrefixConstant.JOB_PROGRESS_KEY_PREFIX;
-
-import java.time.Duration;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
+import cn.hutool.core.util.ObjectUtil;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
 import com.arctel.oms.common.constants.LogConstant;
@@ -50,9 +39,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.Date;
+import java.util.List;
+
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_LOG_KEY_PREFIX;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_PROGRESS_KEY_PREFIX;
 
 /**
  * @author hspcadmin
@@ -107,7 +105,7 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
     public TaskDetailOutput getTaskDetail(TaskDetailGetInput input) {
         OmsTask omsTask = getTaskById(input.getTaskId());
         TaskProgressDTO taskProgressDTO = (TaskProgressDTO) redisTemplate.opsForValue()
-                .get(JOB_PROGRESS_KEY_PREFIX + input.getTaskId());
+                .get(TASK_PROGRESS_KEY_PREFIX + input.getTaskId());
         String taskLog = getLog(input.getTaskId());
         TaskDetailOutput output = new TaskDetailOutput();
         BeanUtils.copyProperties(omsTask, output);
@@ -132,7 +130,7 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
             writeLog(LogConstant.INFO, input.getTaskId(), bizLog);
         }
         // 更新进度到 Redis，设置10分钟过期
-        String key = JOB_PROGRESS_KEY_PREFIX + input.getTaskId();
+        String key = TASK_PROGRESS_KEY_PREFIX + input.getTaskId();
         redisTemplate.opsForValue().set(key, input.getTaskProgressDTO(), Duration.ofMinutes(10));
         return true;
     }
@@ -176,7 +174,7 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
 
     @Override
     public void writeLog(String logLevel, String taskId, String bizLog) {
-        String key = JOB_LOG_KEY_PREFIX + taskId;
+        String key = TASK_LOG_KEY_PREFIX + taskId;
         // 追加到头部（最新在前）
         String formatLog = "[" + logLevel + "] [" + new Date() + "] " + bizLog;
         redisTemplate.opsForList().leftPush(key, formatLog);
@@ -194,7 +192,7 @@ public class OmsTaskServiceImpl extends ServiceImpl<OmsTaskMapper, OmsTask>
 
     @Override
     public String getLog(String taskId, int limit) {
-        String key = JOB_LOG_KEY_PREFIX + taskId;
+        String key = TASK_LOG_KEY_PREFIX + taskId;
         List<Object> bizLog = redisTemplate.opsForList().range(key, 0, limit);
         if (bizLog == null || bizLog.isEmpty()) {
             return "";
