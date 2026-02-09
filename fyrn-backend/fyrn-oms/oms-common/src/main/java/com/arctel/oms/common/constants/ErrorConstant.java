@@ -26,8 +26,11 @@ public class ErrorConstant {
     public static final String DATA_NOT_EXIST = "4004";
     public static final String PERMISSION_DENIED = "4005";
     public static final String CHECK_FAILED = "4006";
+    public static final String PARAMETER_ERROR = "4007";
 
     public static final String DOWNLOAD_FAILED = "5001";
+    public static final String EXTERNAL_SERVICE_ERROR = "5002";
+
 
 
 }

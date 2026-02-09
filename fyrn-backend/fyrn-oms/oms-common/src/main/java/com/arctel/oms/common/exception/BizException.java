@@ -33,6 +33,10 @@ public class BizException extends BaseException {
         super(ErrorConstant.COMMON_ERROR, cause, message);
     }
 
+    public BizException(String errorCode, String message, Throwable cause) {
+        super(errorCode, cause, message);
+    }
+
     public BizException(String errorCode, Throwable cause, String... messages) {
         super(errorCode, cause, messages);
     }
