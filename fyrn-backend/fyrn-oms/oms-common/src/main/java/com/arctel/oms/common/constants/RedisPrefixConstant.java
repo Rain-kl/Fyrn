@@ -19,7 +19,6 @@ package com.arctel.oms.common.constants;
 
 public class RedisPrefixConstant {
 
-
     public static final String DEFAULT_THREAD_POOL_PREFIX = "oms:thread:default:";
 
     public static final String THREAD_POOL_METRICS = DEFAULT_THREAD_POOL_PREFIX + "metrics:";
@@ -33,5 +32,9 @@ public class RedisPrefixConstant {
     public static final String TASK_METRICS_PREFIX = "oms:task:metrics:";
 
     public static final String TASK_VALUE_PREFIX = "oms:task:value:";
+
+    public static final String TASK_STREAM_PREFIX = "oms:task:stream:";
+
+    public static final String TASK_RSP_NOTIFY_PREFIX = "oms:task:rsp:notify:";
 
 }

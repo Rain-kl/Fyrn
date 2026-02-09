@@ -17,33 +17,47 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS_PREFIX;
+import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_STREAM_PREFIX;
+
+import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.connection.stream.MapRecord;
+import org.springframework.data.redis.connection.stream.ReadOffset;
+import org.springframework.data.redis.connection.stream.StreamOffset;
+import org.springframework.data.redis.connection.stream.StreamReadOptions;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StreamOperations;
+
+import com.alibaba.fastjson2.JSON;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import java.time.Duration;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_METRICS_PREFIX;
-import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_QUEUE_PREFIX;
 
 /**
  * 任务队列基类
  * 设计: 一个模块一个任务队列，在队列注册监听器
+ * 使用 Redis Stream 实现阻塞式消费，避免轮询
  *
  * @param <T>
  */
 @Slf4j
-public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements InitializingBean {
+public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements InitializingBean, DisposableBean {
 
     private static final Long KEEP_ALIVE_TOLERANCE_FACTOR = 5L;
+    private static final String TASK_DATA_FIELD = "data";
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -56,6 +70,14 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
     private ScheduledExecutorService scheduledExecutor;
 
+    /** Stream 消费线程 */
+    private Thread consumerThread;
+
+    /** 控制消费线程是否继续运行 */
+    private final AtomicBoolean running = new AtomicBoolean(false);
+
+    /** 当前 Stream 读取位置，初始为 $ (只消费新消息) */
+    private volatile String lastReadId = "$";
 
     /**
      * 获取注册信息, 将任务队列注册到系统中
@@ -76,7 +98,6 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
      */
     public abstract BaseThreadPoolListener<T> getPoolListener();
 
-
     @Override
     public void afterPropertiesSet() {
         initTaskQueue();
@@ -90,15 +111,16 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
         // 如果注册了监听器，则启动心跳保持和自动消费任务
         if (listener != null) {
-            // 初始化定时任务线程池
+            // 初始化定时任务线程池 (仅用于心跳)
             this.scheduledExecutor = new ScheduledThreadPoolExecutor(1,
-                    new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-%d").build());
+                    new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-heartbeat-%d")
+                            .build());
 
             // 启动心跳保持
             keepAlive();
 
-            // 启动自动消费任务
-            autoConsumption();
+            // 启动 Stream 阻塞消费
+            startStreamConsumer();
         }
     }
 
@@ -125,22 +147,76 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     }
 
     /**
-     * 自动消费任务
+     * 启动 Stream 阻塞消费线程
      */
-    private void autoConsumption() {
-        scheduledExecutor.schedule(() -> {
-            try {
-                T taskMsg = pop();
-                if (taskMsg != null) {
-                    submit2Listener(taskMsg);
+    private void startStreamConsumer() {
+        running.set(true);
+        String streamKey = getStreamKey();
+
+        consumerThread = new Thread(() -> {
+            StreamOperations<String, String, String> streamOps = redisTemplate.opsForStream();
+            // 阻塞读取超时时间
+            Duration blockTimeout = Duration.ofSeconds(queueConfig.getBlockTimeoutSeconds());
+
+            log.info("Stream consumer started for queue: {}, stream key: {}", registrationInfo.getQueueName(),
+                    streamKey);
+
+            while (running.get()) {
+                try {
+                    // 使用 XREAD BLOCK 阻塞读取
+                    StreamReadOptions options = StreamReadOptions.empty()
+                            .count(queueConfig.getBatchSize())
+                            .block(blockTimeout);
+
+                    @SuppressWarnings("unchecked")
+                    List<MapRecord<String, String, String>> records = streamOps.read(
+                            options,
+                            StreamOffset.create(streamKey, ReadOffset.from(lastReadId)));
+
+                    if (records != null && !records.isEmpty()) {
+                        for (MapRecord<String, String, String> record : records) {
+                            try {
+                                // 更新最后读取的 ID
+                                lastReadId = record.getId().getValue();
+
+                                // 解析任务消息
+                                String taskData = record.getValue().get(TASK_DATA_FIELD);
+                                if (taskData != null) {
+                                    T taskMsg = JSON.parseObject(taskData, registrationInfo.getTaskMessageClazz());
+                                    if (taskMsg != null) {
+                                        submit2Listener(taskMsg);
+                                    }
+                                }
+
+                                // 删除已处理的消息，控制 Stream 内存占用
+                                streamOps.delete(streamKey, record.getId());
+                            } catch (Exception e) {
+                                log.error("Failed to process stream record {} from queue: {}",
+                                        record.getId(), registrationInfo.getQueueName(), e);
+                            }
+                        }
+                    }
+                    // 超时返回 null 是正常的，继续循环
+                } catch (Exception e) {
+                    if (running.get()) {
+                        log.error("Stream consumer error for queue: {}, will retry...",
+                                registrationInfo.getQueueName(), e);
+                        // 发生错误时短暂休眠避免频繁重试
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
                 }
-            } catch (Throwable e) {
-                log.error("Failed to consume task from queue: {}", registrationInfo.getQueueName(), e);
-            } finally {
-                autoConsumption();
             }
 
-        }, queueConfig.getWorkingInterval(), TimeUnit.SECONDS);
+            log.info("Stream consumer stopped for queue: {}", registrationInfo.getQueueName());
+        }, registrationInfo.getQueueName() + "-consumer");
+
+        consumerThread.setDaemon(true);
+        consumerThread.start();
     }
 
     private void submit2Listener(T taskMsg) {
@@ -148,26 +224,31 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     }
 
     /**
-     * 获取队列长度
-     *
+     * 获取队列长度 (Stream 长度)
      */
     public int getQueueSize() {
-        Long size = redisTemplate.opsForList().size(TASK_QUEUE_PREFIX + registrationInfo.getQueueName());
+        Long size = redisTemplate.opsForStream().size(getStreamKey());
         return size != null ? size.intValue() : 0;
     }
 
     /**
-     * 添加任务信息
+     * 添加任务信息到 Stream
      *
      * @param taskMsg 任务信息
      */
     public Boolean push(T taskMsg) {
         if (getQueueSize() >= queueConfig.getMaxQueueSize()) {
-            log.warn("Task queue {} is full, cannot add new task {}", registrationInfo.getQueueName(), taskMsg.getTaskId());
+            log.warn("Task queue {} is full, cannot add new task {}", registrationInfo.getQueueName(),
+                    taskMsg.getTaskId());
             return false;
         }
         checkTaskMessage(taskMsg);
-        redisTemplate.opsForList().rightPush(TASK_QUEUE_PREFIX + registrationInfo.getQueueName(), taskMsg);
+
+        // 使用 XADD 添加到 Stream
+        String taskData = JSON.toJSONString(taskMsg);
+        redisTemplate.opsForStream().add(
+                MapRecord.create(getStreamKey(), Collections.singletonMap(TASK_DATA_FIELD, taskData)));
+
         return true;
     }
 
@@ -181,13 +262,44 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     }
 
     /**
-     * 获取任务信息
+     * 获取 Stream key
      */
-    public T pop() {
-        Object o = redisTemplate.opsForList().rightPop(TASK_QUEUE_PREFIX + registrationInfo.getQueueName());
-        return registrationInfo.getTaskMessageClazz().cast(o);
+    private String getStreamKey() {
+        return TASK_STREAM_PREFIX + registrationInfo.getQueueName();
     }
 
+    /**
+     * 优雅关闭资源
+     */
+    @Override
+    public void destroy() {
+        log.info("Shutting down task queue: {}",
+                registrationInfo != null ? registrationInfo.getQueueName() : "unknown");
+
+        // 停止消费线程
+        running.set(false);
+        if (consumerThread != null) {
+            consumerThread.interrupt();
+            try {
+                consumerThread.join(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        // 关闭定时任务线程池
+        if (scheduledExecutor != null) {
+            scheduledExecutor.shutdown();
+            try {
+                if (!scheduledExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+                    scheduledExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduledExecutor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
     @Data
     @AllArgsConstructor
@@ -209,16 +321,20 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
          */
         private Long keepAliveInterval;
         /**
-         * 默认工作间隔时间，单位秒
+         * Stream 阻塞读取超时时间，单位秒
          */
-        private Long workingInterval;
+        private Long blockTimeoutSeconds;
+        /**
+         * 每次读取的批量大小
+         */
+        private Long batchSize;
 
         public TaskQueueConfig() {
             this.maxQueueSize = 100L;
             this.keepAliveInterval = 5L;
-            this.workingInterval = 1L;
+            this.blockTimeoutSeconds = 5L;
+            this.batchSize = 10L;
         }
     }
-
 
 }

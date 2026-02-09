@@ -17,31 +17,52 @@
 
 package com.arctel.oms.infrastructure.task.base;
 
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+
+import jakarta.annotation.Resource;
 
 public abstract class BaseTaskRspCollector<T extends BaseTaskMessage> {
 
     @Resource
     public RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired(required = false)
+    private RedisMessageListenerContainer listenerContainer;
+
     protected abstract T getTaskMessage();
 
     /**
-     * 收集任务响应结果，存储到Redis中，过期时间7天
+     * 收集任务响应结果，存储到Redis中，过期时间7天，同时发布通知
      */
     public void collectResponse(Object response) {
         T taskMessage = getTaskMessage();
         TaskRspCollectorUtil.collectResponse(redisTemplate, taskMessage, response);
     }
 
+    /**
+     * 阻塞式获取响应结果
+     * 如果 listenerContainer 可用，使用 Pub/Sub 阻塞等待；否则退化为轮询
+     */
     public Object getResponse() {
         T taskMessage = getTaskMessage();
+        if (listenerContainer != null) {
+            return TaskRspCollectorUtil.getResponse(redisTemplate, listenerContainer, taskMessage.getTaskId());
+        }
+        // 降级到旧的轮询方式
         return TaskRspCollectorUtil.getResponse(redisTemplate, taskMessage.getTaskId());
     }
 
+    /**
+     * 阻塞式获取响应结果（带类型转换）
+     */
     public <R> R getResponse(Class<R> clazz) {
         T taskMessage = getTaskMessage();
+        if (listenerContainer != null) {
+            return TaskRspCollectorUtil.getResponse(redisTemplate, listenerContainer, taskMessage.getTaskId(), clazz);
+        }
+        // 降级到旧的轮询方式
         return TaskRspCollectorUtil.getResponse(redisTemplate, taskMessage.getTaskId(), clazz);
     }
 

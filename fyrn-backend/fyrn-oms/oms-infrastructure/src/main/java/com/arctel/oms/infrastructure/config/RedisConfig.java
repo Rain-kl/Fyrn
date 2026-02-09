@@ -17,12 +17,18 @@
 
 package com.arctel.oms.infrastructure.config;
 
+import java.util.concurrent.Executors;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 @Configuration
 public class RedisConfig {
 
@@ -37,13 +43,26 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
 
         // 使用 JSON 序列化 value（支持任意对象）
-        FastJson2JsonRedisSerializer<Object> jsonSerializer =
-                new FastJson2JsonRedisSerializer<>(Object.class);
+        FastJson2JsonRedisSerializer<Object> jsonSerializer = new FastJson2JsonRedisSerializer<>(Object.class);
 
         template.setValueSerializer(jsonSerializer);
         template.setHashValueSerializer(jsonSerializer);
 
         template.afterPropertiesSet();
         return template;
+    }
+
+    /**
+     * Redis 消息监听容器，用于 Pub/Sub 阻塞式响应获取
+     * 使用 CachedThreadPool 以最小化空闲时内存占用
+     */
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        // 使用 CachedThreadPool，空闲线程会被回收
+        container.setTaskExecutor(Executors.newCachedThreadPool(
+                new ThreadFactoryBuilder().setNameFormat("redis-listener-%d").setDaemon(true).build()));
+        return container;
     }
 }
