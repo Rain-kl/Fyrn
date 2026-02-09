@@ -21,6 +21,7 @@
         <module>fyrn-common</module>
         <module>fyrn-mms</module>
         <module>fyrn-oms</module>
+        <module>fyrn-opkit</module>
         <module>fyrn-aggregation</module>
     </modules>
 
@@ -150,6 +151,30 @@
             <dependency>
                 <groupId>com.arctel.platform</groupId>
                 <artifactId>oms-service</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+
+            <!--
+                OPKIT 模块版本管理
+            -->
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-api</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-service</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-domain</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-common</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
 
