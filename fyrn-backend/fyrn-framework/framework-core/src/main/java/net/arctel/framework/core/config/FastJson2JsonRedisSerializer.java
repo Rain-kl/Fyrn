@@ -19,7 +19,6 @@ package net.arctel.framework.core.config;
 
 import java.nio.charset.StandardCharsets;
 
-import lombok.AllArgsConstructor;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
