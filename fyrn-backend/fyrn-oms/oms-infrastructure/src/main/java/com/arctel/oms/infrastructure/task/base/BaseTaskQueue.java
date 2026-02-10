@@ -23,14 +23,17 @@ import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_STREAM_PR
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.connection.stream.Consumer;
 import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.data.redis.connection.stream.ReadOffset;
 import org.springframework.data.redis.connection.stream.StreamOffset;
@@ -81,9 +84,14 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     /**
-     * 当前 Stream 读取位置，初始为 $ (只消费新消息)
+     * 消费组名称
      */
-    private volatile String lastReadId;
+    private String consumerGroup;
+
+    /**
+     * 当前实例的消费者名称
+     */
+    private String consumerName;
 
     /**
      * 获取注册信息, 将任务队列注册到系统中
@@ -122,8 +130,11 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
                     new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-heartbeat-%d")
                             .build());
 
-            // 初始化 Stream 读取位置
-            this.lastReadId = queueConfig.getLastReadId();
+            // 初始化消费组与消费者名称
+            this.consumerGroup = registrationInfo.getQueueName() + "-group";
+            this.consumerName = registrationInfo.getQueueName() + "-" + UUID.randomUUID();
+            log.info("Initialized task queue: {}, consumer group: {}, consumer name: {}",
+                    registrationInfo.getQueueName(), consumerGroup, consumerName);
 
             // 启动心跳保持
             keepAlive();
@@ -164,6 +175,7 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
         consumerThread = new Thread(() -> {
             StreamOperations<String, String, String> streamOps = redisTemplate.opsForStream();
+            ensureConsumerGroup(streamOps, streamKey, consumerGroup);
             // 阻塞读取超时时间
             Duration blockTimeout = Duration.ofSeconds(queueConfig.getBlockTimeoutSeconds());
 
@@ -179,15 +191,13 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
                     @SuppressWarnings("unchecked")
                     List<MapRecord<String, String, String>> records = streamOps.read(
+                            Consumer.from(consumerGroup, consumerName),
                             options,
-                            StreamOffset.create(streamKey, ReadOffset.from(lastReadId)));
+                            StreamOffset.create(streamKey, ReadOffset.lastConsumed()));
 
                     if (records != null && !records.isEmpty()) {
                         for (MapRecord<String, String, String> record : records) {
                             try {
-                                // 更新最后读取的 ID
-                                lastReadId = record.getId().getValue();
-
                                 // 解析任务消息
                                 String taskData = record.getValue().get(TASK_DATA_FIELD);
                                 if (taskData != null) {
@@ -197,7 +207,8 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
                                     }
                                 }
 
-                                // 删除已处理的消息，控制 Stream 内存占用
+                                // 确认并删除已处理的消息，避免重复消费
+                                streamOps.acknowledge(streamKey, consumerGroup, record.getId());
                                 streamOps.delete(streamKey, record.getId());
                             } catch (Exception e) {
                                 log.error("Failed to process stream record {} from queue: {}",
@@ -230,6 +241,59 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
     private void submit2Listener(T taskMsg) {
         listener.submit2Pool(taskMsg);
+    }
+
+
+    /**
+     * 确保消费组存在，如果不存在则创建
+     *
+     * @param streamOps Stream 操作对象
+     * @param streamKey Stream key
+     * @param group     消费组名称
+     */
+    private void ensureConsumerGroup(StreamOperations<String, String, String> streamOps,
+                                     String streamKey, String group) {
+        if (!queueConfig.isCreateGroupOnStart()) {
+            return;
+        }
+        try {
+            streamOps.createGroup(streamKey, resolveGroupReadOffset(), group);
+        } catch (Exception e) {
+            // 如果消费组已存在，继续执行；如果 Stream 不存在，则先添加一条消息再创建消费组
+            if (StrUtil.containsIgnoreCase(e.getMessage(), "BUSYGROUP")) {
+                return;
+            }
+            if (StrUtil.containsIgnoreCase(e.getMessage(), "NOGROUP")
+                    || StrUtil.containsIgnoreCase(e.getMessage(), "ERR")) {
+                try {
+                    MapRecord<String, String, String> record = MapRecord.create(streamKey,
+                            Collections.singletonMap(TASK_DATA_FIELD, "init"));
+                    var recordId = streamOps.add(record);
+                    streamOps.createGroup(streamKey, resolveGroupReadOffset(), group);
+                    if (recordId != null) {
+                        streamOps.delete(streamKey, recordId);
+                    }
+                    return;
+                } catch (Exception inner) {
+                    log.error("Failed to create stream consumer group for queue: {}",
+                            registrationInfo.getQueueName(), inner);
+                }
+            }
+            log.error("Failed to ensure stream consumer group for queue: {}",
+                    registrationInfo.getQueueName(), e);
+        }
+    }
+
+    /**
+     * 解析消费组的初始读取位置
+     */
+    private ReadOffset resolveGroupReadOffset() {
+        String lastReadId = queueConfig.getLastReadId();
+        // 默认从头开始消费，如果配置为 LAST_READ_NEW_MESSAGES 则只消费新消息
+        if (TaskQueueConfig.LAST_READ_NEW_MESSAGES.equals(lastReadId)) {
+            return ReadOffset.latest();
+        }
+        return ReadOffset.from(lastReadId);
     }
 
     /**
@@ -350,12 +414,18 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
          */
         private String lastReadId;
 
+        /**
+         * 启动时自动创建消费组
+         */
+        private boolean createGroupOnStart;
+
         public TaskQueueConfig() {
             this.maxQueueSize = 100L;
             this.keepAliveInterval = 5L;
             this.blockTimeoutSeconds = 5L;
             this.batchSize = 10L;
             this.lastReadId = LAST_READ_FROM_BEGINNING;
+            this.createGroupOnStart = true;
         }
     }
 

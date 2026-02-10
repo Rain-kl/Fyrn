@@ -83,4 +83,8 @@ public abstract class OmsTaskQueue<T extends BaseTaskMessage> extends BaseTaskQu
         return task;
     }
 
+    @Override
+    public Boolean push(T taskMsg) {
+        throw new UnsupportedOperationException("Please use createTask() to create and push tasks, which ensures task information is saved to the database.");
+    }
 }
