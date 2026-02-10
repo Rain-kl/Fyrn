@@ -26,13 +26,12 @@
         </dependency>
         <dependency>
             <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-infrastructure</artifactId>
+            <artifactId>oms-infra</artifactId>
         </dependency>
 
-        <!-- 监控 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
         </dependency>
 
         <!-- 测试 -->

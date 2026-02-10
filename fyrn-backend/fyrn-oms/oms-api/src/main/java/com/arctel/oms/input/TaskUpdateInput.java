@@ -17,7 +17,7 @@
 
 package com.arctel.oms.input;
 
-import com.arctel.oms.domain.enums.TaskStatusEnum;
+import com.arctel.oms.common.enums.TaskStatusEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

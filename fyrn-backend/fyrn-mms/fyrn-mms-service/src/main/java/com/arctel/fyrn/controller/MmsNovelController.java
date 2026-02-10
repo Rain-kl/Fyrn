@@ -20,6 +20,7 @@ package com.arctel.fyrn.controller;
 
 import java.util.List;
 
+import net.arctel.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,6 @@ import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.fyrn.input.MmsPageInput;
 import com.arctel.fyrn.service.MmsNovelService;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
 
 import jakarta.annotation.Resource;
 

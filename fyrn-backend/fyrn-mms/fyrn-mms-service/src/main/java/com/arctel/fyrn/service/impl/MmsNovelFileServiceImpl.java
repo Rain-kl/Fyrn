@@ -28,11 +28,12 @@ import com.arctel.fyrn.input.BindNovelFileInput;
 import com.arctel.fyrn.input.UMmsPageInput;
 import com.arctel.fyrn.mapper.MmsNovelFileMapper;
 import com.arctel.fyrn.mapper.MmsNovelMapper;
+import com.arctel.fyrn.output.DownloadResult;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.fyrn.service.MmsNovelService;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
-import com.arctel.oms.common.exception.BizException;
+import net.arctel.framework.exception.BizException;
 import com.arctel.oms.common.utils.FileUtil;
 import com.arctel.oms.common.utils.PagingUtil;
 import com.arctel.oms.service.OmsParameterService;
@@ -44,9 +45,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,9 +56,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Arctel
@@ -188,13 +185,15 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
             }
         }
     }
-
+    /**
+     * 下载素材 - 返回文件数据和响应头信息，不直接返回 ResponseEntity
+     */
     @Override
-    public ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId) {
+    public DownloadResult downloadMaterial(String mmsNovelFileId) {
         // 1. 获取数据库记录
         MmsNovelFile mmsNovelFile = getById(mmsNovelFileId);
         if (mmsNovelFile == null) {
-            return ResponseEntity.notFound().build();
+            throw new BizException(ErrorConstant.DOWNLOAD_FAILED, "Downloaded file is empty");
         }
 
         // 2. 从对象存储下载字节数组
@@ -206,24 +205,27 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
         }
 
         if (fileBytes == null || fileBytes.length == 0) {
-            return ResponseEntity.notFound().build();
+            throw new BizException(ErrorConstant.DOWNLOAD_FAILED, "Downloaded file is empty");
         }
 
-        // 3. 设置响应头：强制下载 + 文件名（建议对文件名做 URL 编码）
+        // 3. 构建文件名和响应头信息
         String fileName = mmsNovelFile.getFileName();
         Long novelId = mmsNovelFile.getNovelId();
         if (novelId != null) {
             MmsNovel mmsNovel = mmsNovelMapper.selectById(novelId);
             fileName = NovelUtil.buildNovelFileName(mmsNovel.getNovelTitle(), mmsNovel.getNovelAuthor());
         }
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // 防止空格变加号
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 通用二进制流
-        headers.setContentDispositionFormData("attachment", encodedFileName);
-        headers.setContentLength(fileBytes.length);
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20"); // 防止空格变加号
 
-        return ResponseEntity.ok().headers(headers).body(fileBytes);
+        // 4. 构建响应头配置（不包含 ResponseEntity 相关类）
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        headers.put("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
+        headers.put("Content-Length", String.valueOf(fileBytes.length));
+
+        return DownloadResult.success(fileBytes, headers, encodedFileName);
     }
 
     @Override

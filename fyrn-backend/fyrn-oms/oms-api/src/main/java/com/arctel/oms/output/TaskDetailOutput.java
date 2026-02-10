@@ -18,8 +18,8 @@
 package com.arctel.oms.output;
 
 
-import com.arctel.oms.domain.dto.TaskProgressDTO;
-import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.dto.TaskProgressDTO;
+import com.arctel.oms.entity.OmsTask;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

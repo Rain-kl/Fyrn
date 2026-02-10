@@ -23,11 +23,13 @@ import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.fyrn.input.BindNovelFileInput;
 import com.arctel.fyrn.input.UMmsNovelPageInput;
 import com.arctel.fyrn.input.UMmsPageInput;
+import com.arctel.fyrn.output.DownloadResult;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.common.utils.Result;
 import jakarta.annotation.Resource;
+import net.arctel.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,7 +105,17 @@ public class UMmsNovelController {
      */
     @GetMapping("/downloadMaterial")
     public ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId) {
-        return uMmsNovelService.downloadMaterial(mmsNovelFileId);
+        DownloadResult result = uMmsNovelService.downloadMaterial(mmsNovelFileId);
+
+        // 将 Map 转换为 HttpHeaders
+        HttpHeaders headers = new HttpHeaders();
+        if (result.getHeaders() != null) {
+            result.getHeaders().forEach(headers::set);
+        }
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(result.getFileData());
     }
 
 

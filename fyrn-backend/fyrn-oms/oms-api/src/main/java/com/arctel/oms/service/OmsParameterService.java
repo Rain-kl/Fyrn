@@ -20,7 +20,7 @@ package com.arctel.oms.service;
 import java.io.Serializable;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.domain.entity.OmsParameter;
+import com.arctel.oms.entity.OmsParameter;
 import com.arctel.oms.input.ParameterAddInput;
 import com.baomidou.mybatisplus.extension.service.IService;
 

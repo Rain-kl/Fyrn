@@ -30,8 +30,8 @@ import com.arctel.fyrn.mapper.MmsNovelMapper;
 import com.arctel.fyrn.service.MmsNovelFileService;
 import com.arctel.fyrn.service.MmsNovelService;
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
-import com.arctel.oms.infrastructure.task.OmsTaskHandler;
+import com.arctel.oms.infra.task.DefaultTaskMessage;
+import com.arctel.oms.infra.task.OmsTaskHandler;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import jakarta.annotation.Resource;

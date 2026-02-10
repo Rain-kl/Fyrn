@@ -19,14 +19,15 @@ package com.arctel.common.exception;
 
 import java.util.stream.Collectors;
 
+import net.arctel.framework.exception.BizException;
+import net.arctel.framework.utils.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.arctel.oms.common.exception.BizException;
-import com.arctel.oms.common.utils.Result;
+
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

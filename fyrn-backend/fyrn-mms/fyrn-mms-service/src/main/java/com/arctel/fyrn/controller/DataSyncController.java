@@ -21,6 +21,7 @@ package com.arctel.fyrn.controller;
 
 import java.io.IOException;
 
+import net.arctel.framework.utils.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arctel.fyrn.input.SyncMaterialInput;
 import com.arctel.fyrn.service.DataSyncService;
-import com.arctel.oms.common.utils.Result;
-import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.entity.OmsTask;
 
 import jakarta.annotation.Resource;
 

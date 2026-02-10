@@ -18,21 +18,27 @@
         <!-- Fyrn 模块 -->
         <dependency>
             <groupId>com.arctel</groupId>
-            <artifactId>fyrn-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.arctel</groupId>
-            <artifactId>fyrn-mms-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.arctel</groupId>
             <artifactId>fyrn-mms-service</artifactId>
+        </dependency>
+
+        <!-- framework 模块 -->
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>framework-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>framework-web</artifactId>
         </dependency>
 
         <!-- OMS 模块 -->
         <dependency>
             <groupId>com.arctel.platform</groupId>
             <artifactId>oms-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.arctel.platform</groupId>
+            <artifactId>oms-app</artifactId>
         </dependency>
 
       <!-- OPKIT 模块 -->
@@ -45,6 +51,11 @@
         <dependency>
             <groupId>net.arctel.platform</groupId>
             <artifactId>opkit-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-app</artifactId>
         </dependency>
 
         <!-- Spring 相关 -->

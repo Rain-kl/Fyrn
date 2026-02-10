@@ -17,8 +17,8 @@
 
 package net.arctel.agent.opkit.handler;
 
-import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
-import com.arctel.oms.infrastructure.task.fast.FastTaskHandler;
+import com.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.framework.core.task.fast.FastTaskHandler;
 import org.springframework.stereotype.Component;
 
 import static net.arctel.opkit.common.constants.TaskTagConstant.OPKIT_TRANS_TAG;

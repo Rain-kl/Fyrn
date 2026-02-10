@@ -22,9 +22,9 @@ import com.arctel.fyrn.dto.LocalFileSimpleDTO;
 import com.arctel.fyrn.entity.MmsNovelFile;
 import com.arctel.fyrn.input.BindNovelFileInput;
 import com.arctel.fyrn.input.UMmsPageInput;
+import com.arctel.fyrn.output.DownloadResult;
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
@@ -59,7 +59,7 @@ public interface MmsNovelFileService extends IService<MmsNovelFile> {
      * @param mmsNovelFileId 物料ID
      * @return
      */
-    ResponseEntity<byte[]> downloadMaterial(String mmsNovelFileId);
+    DownloadResult downloadMaterial(String mmsNovelFileId);
 
     /**
      * 绑定小说文件到 MMS

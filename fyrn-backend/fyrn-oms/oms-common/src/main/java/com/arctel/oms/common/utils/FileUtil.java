@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.arctel.oms.common.constants.ErrorConstant;
-import com.arctel.oms.common.exception.BizException;
 
 import lombok.extern.slf4j.Slf4j;
+import net.arctel.framework.exception.BizException;
 
 @Slf4j
 public class FileUtil {

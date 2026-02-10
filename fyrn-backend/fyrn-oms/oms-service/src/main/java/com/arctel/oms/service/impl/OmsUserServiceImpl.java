@@ -26,9 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.arctel.oms.common.base.BaseQueryPage;
 import com.arctel.oms.common.constants.ErrorConstant;
-import com.arctel.oms.common.exception.BizException;
-import com.arctel.oms.domain.entity.OmsUser;
-import com.arctel.oms.domain.mapper.OmsUserMapper;
+import net.arctel.framework.exception.BizException;
+import com.arctel.oms.entity.OmsUser;
+import com.arctel.oms.mapper.OmsUserMapper;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserUpdateInput;

@@ -18,7 +18,7 @@
 package com.arctel.oms.service;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.domain.entity.OmsTask;
+import com.arctel.oms.entity.OmsTask;
 import com.arctel.oms.input.*;
 import com.arctel.oms.output.TaskDetailOutput;
 import com.arctel.oms.output.TaskMonitorOutput;

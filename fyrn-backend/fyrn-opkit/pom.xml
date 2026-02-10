@@ -20,8 +20,8 @@
         <module>opkit-api</module>
         <module>opkit-service</module>
         <module>opkit-common</module>
-        <module>opkit-domain</module>
         <module>opkit-agent</module>
+        <module>opkit-app</module>
     </modules>
 
 
@@ -56,24 +56,6 @@
                 <artifactId>opkit-domain</artifactId>
                 <version>${opkit.version}</version>
             </dependency>
-
-            <!-- ==================== 独立部署时取消注释以下配置 ==================== -->
-            <!--
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-bom</artifactId>
-                <version>${mybatis-plus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            -->
         </dependencies>
     </dependencyManagement>
 

@@ -19,7 +19,7 @@ package com.arctel.oms.common.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.arctel.oms.common.constants.ErrorConstant;
-import com.arctel.oms.common.exception.BizException;
+import net.arctel.framework.exception.BizException;
 import okhttp3.*;
 import okhttp3.Request.Builder;
 import org.apache.commons.collections4.MapUtils;

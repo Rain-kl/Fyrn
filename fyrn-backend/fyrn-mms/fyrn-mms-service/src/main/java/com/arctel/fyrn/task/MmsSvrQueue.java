@@ -17,9 +17,9 @@
 
 package com.arctel.fyrn.task;
 
-import com.arctel.oms.infrastructure.task.DefaultTaskMessage;
-import com.arctel.oms.infrastructure.task.OmsTaskQueue;
-import com.arctel.oms.infrastructure.task.base.BaseThreadPoolListener;
+import com.arctel.oms.infra.task.DefaultTaskMessage;
+import com.arctel.oms.infra.task.OmsTaskQueue;
+import net.arctel.framework.core.task.BaseThreadPoolListener;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

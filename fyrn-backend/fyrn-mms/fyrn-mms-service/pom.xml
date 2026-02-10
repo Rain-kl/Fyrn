@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-infrastructure</artifactId>
+            <artifactId>oms-infra</artifactId>
         </dependency>
     </dependencies>
 

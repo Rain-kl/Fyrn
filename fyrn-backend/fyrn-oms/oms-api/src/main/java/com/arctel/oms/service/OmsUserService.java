@@ -20,7 +20,7 @@ package com.arctel.oms.service;
 import java.io.Serializable;
 
 import com.arctel.oms.common.base.BaseQueryPage;
-import com.arctel.oms.domain.entity.OmsUser;
+import com.arctel.oms.entity.OmsUser;
 import com.arctel.oms.input.UserCreateInput;
 import com.arctel.oms.input.UserPageQueryInput;
 import com.arctel.oms.input.UserUpdateInput;

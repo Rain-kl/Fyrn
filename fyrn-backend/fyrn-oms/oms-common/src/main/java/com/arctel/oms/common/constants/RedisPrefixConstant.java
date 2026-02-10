@@ -27,14 +27,4 @@ public class RedisPrefixConstant {
 
     public static final String TASK_LOG_KEY_PREFIX = "oms:task:log:";
 
-    public static final String TASK_QUEUE_PREFIX = "oms:task:queue:";
-
-    public static final String TASK_METRICS_PREFIX = "oms:task:metrics:";
-
-    public static final String TASK_STREAM_PREFIX = "oms:task:stream:";
-
-    public static final String TASK_VALUE_PREFIX = "oms:task:rsp:value:";
-
-    public static final String TASK_RSP_NOTIFY_PREFIX = "oms:task:rsp:notify:";
-
 }

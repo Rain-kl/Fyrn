@@ -32,10 +32,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
-@MapperScan({"com.arctel.fyrn.mapper", "com.arctel.oms.domain.mapper"})
+@MapperScan({"com.arctel.fyrn.mapper", "com.arctel.oms.mapper"})
 @ComponentScan(basePackages = {
         "com.arctel.fyrn",
         "com.arctel.common",
+        "net.arctel.framework",
         "com.arctel.oms",
         "net.arctel.opkit",
 //        "net.arctel.agent"

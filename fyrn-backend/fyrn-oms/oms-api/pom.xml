@@ -26,6 +26,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

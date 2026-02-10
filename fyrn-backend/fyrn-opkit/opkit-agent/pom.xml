@@ -11,9 +11,15 @@
 
     <artifactId>opkit-agent</artifactId>
     <dependencies>
+
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>framework-core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.arctel.platform</groupId>
-            <artifactId>oms-infrastructure</artifactId>
+            <artifactId>oms-infra</artifactId>
         </dependency>
 
         <dependency>

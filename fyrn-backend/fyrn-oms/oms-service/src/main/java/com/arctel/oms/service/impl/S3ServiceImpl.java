@@ -28,8 +28,8 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.arctel.oms.common.exception.BizException;
-import com.arctel.oms.infrastructure.config.OssProperties;
+import net.arctel.framework.exception.BizException;
+import com.arctel.oms.config.OssProperties;
 import com.arctel.oms.service.OmsStorageService;
 
 import jakarta.annotation.PostConstruct;
