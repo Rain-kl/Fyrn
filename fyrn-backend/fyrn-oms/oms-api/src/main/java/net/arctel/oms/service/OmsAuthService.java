@@ -30,4 +30,6 @@ public interface OmsAuthService {
     String updatePassword(String userId, String password);
 
     UserInfoVo login(String userName, String password);
+
+    UserInfoVo getInfo();
 }

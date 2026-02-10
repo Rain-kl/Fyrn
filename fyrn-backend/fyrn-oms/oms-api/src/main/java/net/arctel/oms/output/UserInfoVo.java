@@ -65,6 +65,7 @@ public class UserInfoVo {
      */
     private Date lastLoginTime;
 
+
     public static UserInfoVo convertOmsUser(OmsUser omsUser){
         UserInfoVo userInfoVo = new UserInfoVo();
         userInfoVo.userId = omsUser.getUserId();
@@ -75,6 +76,4 @@ public class UserInfoVo {
         userInfoVo.status = omsUser.getStatus();
         return userInfoVo;
     }
-
-
 }

@@ -19,6 +19,7 @@ package net.arctel.oms.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import com.alibaba.fastjson2.JSON;
 import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.framework.exception.BizException;
 import net.arctel.oms.entity.OmsUser;
@@ -58,9 +59,16 @@ public class OmsAuthServiceImpl implements OmsAuthService {
             }
         }
         omsUser.setLastLoginTime(new Date());
+        UserInfoVo userInfoVo = UserInfoVo.convertOmsUser(omsUser);
+        StpUtil.login(JSON.toJSONString(userInfoVo));
         omsUserMapper.updateById(omsUser);
-        StpUtil.login(omsUser.getUserId());
-        return UserInfoVo.convertOmsUser(omsUser);
+        return userInfoVo;
+    }
+
+    @Override
+    public UserInfoVo getInfo() {
+        String userInfoVoJson = (String)StpUtil.getLoginId();
+        return JSON.parseObject(userInfoVoJson, UserInfoVo.class);
     }
 
 

@@ -20,6 +20,7 @@ package net.arctel.common.exception;
 import java.util.stream.Collectors;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.util.SaResult;
 import net.arctel.framework.exception.BizException;
 import net.arctel.framework.utils.Result;
 import net.arctel.oms.common.constants.ErrorConstant;
@@ -96,8 +97,26 @@ public class GlobalExceptionHandler {
      * 登录异常
      */
     @ExceptionHandler(NotLoginException.class)
-    public Result<String> handleException(NotLoginException e) {
-        return Result.error(ErrorConstant.UNAUTHORIZED, "非法请求");
+    public Result<String> handlerNotLoginException(NotLoginException nle)
+            throws Exception {
+
+        // 打印堆栈，以供调试
+        log.error("系统异常", nle);
+
+        // 判断场景值，定制化异常信息
+        String message = switch (nle.getType()) {
+            case NotLoginException.NOT_TOKEN -> "未能读取到有效 token";
+            case NotLoginException.INVALID_TOKEN -> "token 无效";
+            case NotLoginException.TOKEN_TIMEOUT -> "token 已过期";
+            case NotLoginException.BE_REPLACED -> "token 已被顶下线";
+            case NotLoginException.KICK_OUT -> "token 已被踢下线";
+            case NotLoginException.TOKEN_FREEZE -> "token 已被冻结";
+            case NotLoginException.NO_PREFIX -> "未按照指定前缀提交 token";
+            default -> "当前会话未登录";
+        };
+
+        // 返回给前端
+        return Result.error(message);
     }
 
 
@@ -107,6 +126,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception e) {
         log.error("系统异常", e);
-        return Result.error("系统异常: " + e.getMessage());
+        return Result.error(ErrorConstant.SYSTEM_ERROR, "系统异常: " + e.getMessage());
     }
 }

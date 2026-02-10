@@ -20,6 +20,7 @@ package net.arctel.oms.controller;
 
 import net.arctel.framework.utils.Result;
 import net.arctel.oms.output.UserInfoVo;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,9 +49,24 @@ public class OmsAuthController {
         return Result.success(omsUserService.createUser(input));
     }
 
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @return
+     */
     @PostMapping("/login")
     public Result<UserInfoVo> login(String username, String password) {
         return Result.success(omsAuthService.login(username, password));
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @return
+     */
+    @GetMapping("/info")
+    public Result<UserInfoVo> getInfo() {
+        return Result.success(omsAuthService.getInfo());
     }
 
 }

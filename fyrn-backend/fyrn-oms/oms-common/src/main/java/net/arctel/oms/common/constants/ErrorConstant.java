@@ -31,6 +31,7 @@ public class ErrorConstant {
     public static final String CHECK_FAILED = "4006";
     public static final String PARAMETER_ERROR = "4007";
 
+    public static final String SYSTEM_ERROR = "5000";
     public static final String DOWNLOAD_FAILED = "5001";
     public static final String EXTERNAL_SERVICE_ERROR = "5002";
     public static final String TIMEOUT_ERROR = "5003";
