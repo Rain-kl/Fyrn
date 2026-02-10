@@ -260,24 +260,8 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
             streamOps.createGroup(streamKey, resolveGroupReadOffset(), group);
         } catch (Exception e) {
             // 如果消费组已存在，继续执行；如果 Stream 不存在，则先添加一条消息再创建消费组
-            if (StrUtil.containsIgnoreCase(e.getMessage(), "BUSYGROUP")) {
+            if (StrUtil.containsIgnoreCase(e.getCause().toString(), "BUSYGROUP")) {
                 return;
-            }
-            if (StrUtil.containsIgnoreCase(e.getMessage(), "NOGROUP")
-                    || StrUtil.containsIgnoreCase(e.getMessage(), "ERR")) {
-                try {
-                    MapRecord<String, String, String> record = MapRecord.create(streamKey,
-                            Collections.singletonMap(TASK_DATA_FIELD, "init"));
-                    var recordId = streamOps.add(record);
-                    streamOps.createGroup(streamKey, resolveGroupReadOffset(), group);
-                    if (recordId != null) {
-                        streamOps.delete(streamKey, recordId);
-                    }
-                    return;
-                } catch (Exception inner) {
-                    log.error("Failed to create stream consumer group for queue: {}",
-                            registrationInfo.getQueueName(), inner);
-                }
             }
             log.error("Failed to ensure stream consumer group for queue: {}",
                     registrationInfo.getQueueName(), e);
