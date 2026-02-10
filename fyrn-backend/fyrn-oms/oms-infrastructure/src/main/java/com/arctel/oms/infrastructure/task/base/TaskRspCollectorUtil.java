@@ -23,6 +23,8 @@ import static com.arctel.oms.common.constants.RedisPrefixConstant.TASK_VALUE_PRE
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import com.arctel.oms.common.constants.ErrorConstant;
+import com.arctel.oms.common.exception.BizException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.alibaba.fastjson2.JSON;
@@ -38,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskRspCollectorUtil {
 
     /** 默认等待超时时间（秒） */
-    private static final long DEFAULT_TIMEOUT_SECONDS = 30L;
+    private static final long DEFAULT_TIMEOUT_SECONDS = 20L;
 
     /** 响应结果过期时间（天） */
     private static final long RESPONSE_EXPIRE_DAYS = 7L;
@@ -108,8 +110,7 @@ public class TaskRspCollectorUtil {
                 // 收到通知，获取并删除结果
                 return getAndDelete(redisTemplate, redisKey);
             } else {
-                // 超时，最后再检查一次
-                return getAndDelete(redisTemplate, redisKey);
+                throw new BizException(ErrorConstant.TIMEOUT_ERROR,"响应超时，未收到任务结果");
             }
         } catch (Exception e) {
             log.warn("Error while waiting for task response: {}, error: {}", taskId, e.getMessage());

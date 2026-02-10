@@ -1,0 +1,46 @@
+info:
+  project:
+    version: "0.1.1"
+
+server:
+  port: 45601
+
+spring:
+  application:
+    name: fyrn-aggregation
+  profiles:
+    active: prod
+  main:
+    allow-circular-references: true
+    banner-mode: off
+  datasource:
+    driver-class-name: ${fyrn.datasource.driver-class-name}
+    url: jdbc:mysql://${fyrn.datasource.host}:${fyrn.datasource.port}/${fyrn.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${fyrn.datasource.username}
+    password: ${fyrn.datasource.password}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+  data:
+    redis:
+      host: ${fyrn.redis.host}
+      port: ${fyrn.redis.port}
+      password: ${fyrn.redis.password}
+
+logging:
+  level:
+    root: ${fyrn.logging.level}
+
+mybatis-plus:
+  configuration:
+    log-impl: ${fyrn.mybatis.log-impl:org.apache.ibatis.logging.nologging.NoLoggingImpl}
+  global-config:
+    banner: false
+
+oss:
+  access-key-id: ${fyrn.oss.access-key-id}
+  access-key-secret: ${fyrn.oss.access-key-secret}
+  bucket-name: ${fyrn.oss.bucket-name}
+  endpoint: ${fyrn.oss.endpoint}
+  region: ${fyrn.oss.region}

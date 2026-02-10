@@ -70,14 +70,20 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
 
     private ScheduledExecutorService scheduledExecutor;
 
-    /** Stream 消费线程 */
+    /**
+     * Stream 消费线程
+     */
     private Thread consumerThread;
 
-    /** 控制消费线程是否继续运行 */
+    /**
+     * 控制消费线程是否继续运行
+     */
     private final AtomicBoolean running = new AtomicBoolean(false);
 
-    /** 当前 Stream 读取位置，初始为 $ (只消费新消息) */
-    private volatile String lastReadId = "$";
+    /**
+     * 当前 Stream 读取位置，初始为 $ (只消费新消息)
+     */
+    private volatile String lastReadId;
 
     /**
      * 获取注册信息, 将任务队列注册到系统中
@@ -115,6 +121,9 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
             this.scheduledExecutor = new ScheduledThreadPoolExecutor(1,
                     new ThreadFactoryBuilder().setNameFormat(registrationInfo.getQueueName() + "-heartbeat-%d")
                             .build());
+
+            // 初始化 Stream 读取位置
+            this.lastReadId = queueConfig.getLastReadId();
 
             // 启动心跳保持
             keepAlive();
@@ -312,6 +321,13 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
     @Data
     @AllArgsConstructor
     public static class TaskQueueConfig {
+
+        /**
+         * Stream 读取位置，初始为 $ (只消费新消息)，也可以配置为 0-0 (从头开始消费)
+         */
+        public static final String LAST_READ_NEW_MESSAGES = "$";
+        public static final String LAST_READ_FROM_BEGINNING = "0-0";
+
         /**
          * 任务队列容量
          */
@@ -329,11 +345,17 @@ public abstract class BaseTaskQueue<T extends BaseTaskMessage> implements Initia
          */
         private Long batchSize;
 
+        /**
+         * Stream 读取位置，初始为 $ (只消费新消息)，可以通过配置覆盖默认值
+         */
+        private String lastReadId;
+
         public TaskQueueConfig() {
             this.maxQueueSize = 100L;
             this.keepAliveInterval = 5L;
             this.blockTimeoutSeconds = 5L;
             this.batchSize = 10L;
+            this.lastReadId = LAST_READ_FROM_BEGINNING;
         }
     }
 
