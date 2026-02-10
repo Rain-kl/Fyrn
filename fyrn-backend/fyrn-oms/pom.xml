@@ -74,11 +74,6 @@
             <!-- ==================== OMS 内部模块 ==================== -->
             <dependency>
                 <groupId>com.arctel.platform</groupId>
-                <artifactId>oms-domain</artifactId>
-                <version>${oms.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.arctel.platform</groupId>
                 <artifactId>oms-common</artifactId>
                 <version>${oms.version}</version>
             </dependency>
@@ -90,6 +85,11 @@
             <dependency>
                 <groupId>com.arctel.platform</groupId>
                 <artifactId>oms-infra</artifactId>
+                <version>${oms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.arctel.platform</groupId>
+                <artifactId>oms-app</artifactId>
                 <version>${oms.version}</version>
             </dependency>
             <dependency>

@@ -180,6 +180,11 @@
             -->
             <dependency>
                 <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-agent</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>opkit-api</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
