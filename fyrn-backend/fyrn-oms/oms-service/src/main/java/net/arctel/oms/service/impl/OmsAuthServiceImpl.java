@@ -17,11 +17,13 @@
 
 package net.arctel.oms.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.framework.exception.BizException;
 import net.arctel.oms.entity.OmsUser;
 import net.arctel.oms.mapper.OmsUserMapper;
+import net.arctel.oms.output.UserInfoVo;
 import net.arctel.oms.service.OmsAuthService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
@@ -42,20 +44,23 @@ public class OmsAuthServiceImpl implements OmsAuthService {
 
 
     @Override
-    public Boolean login(String userId, String password) {
+    public UserInfoVo login(String userName, String password) {
         passCheck(password);
         OmsUser omsUser = omsUserMapper.selectOne(
                 new LambdaQueryWrapper<OmsUser>()
-                        .eq(OmsUser::getUserId, userId));
+                        .eq(OmsUser::getUsername, userName));
         if (omsUser == null) {
             throw new BizException(ErrorConstant.USER_NOT_FOUND, "用户不存在");
         }
-        if (!BCrypt.checkpw(password, omsUser.getPassword())) {
-            throw new BizException(ErrorConstant.COMMON_ERROR, "密码错误");
+        if (!password.equals(omsUser.getPassword())) {
+            if (!BCrypt.checkpw(password, omsUser.getPassword())) {
+                throw new BizException(ErrorConstant.COMMON_ERROR, "密码错误");
+            }
         }
         omsUser.setLastLoginTime(new Date());
         omsUserMapper.updateById(omsUser);
-        return true;
+        StpUtil.login(omsUser.getUserId());
+        return UserInfoVo.convertOmsUser(omsUser);
     }
 
 
@@ -77,7 +82,7 @@ public class OmsAuthServiceImpl implements OmsAuthService {
 
     public void passCheck(String passwd) {
         if (passwd.length() < 6) {
-            throw new BizException(ErrorConstant.CHECK_FAILED, "密码长度不能少于8位");
+            throw new BizException(ErrorConstant.CHECK_FAILED, "密码长度不能少于6位");
         }
     }
 }

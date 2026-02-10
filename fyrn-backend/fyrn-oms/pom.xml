@@ -44,7 +44,8 @@
     <properties>
         <!-- OMS 版本号, 独立于主项目版本 -->
         <oms.version>${project.version}</oms.version>
-        
+        <sa-token.version>1.44.0</sa-token.version>
+
         <!-- ==================== 独立部署时取消注释以下配置 ==================== -->
         <!--
         <java.version>17</java.version>
@@ -115,6 +116,14 @@
                 <scope>import</scope>
             </dependency>
             -->
+
+            <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

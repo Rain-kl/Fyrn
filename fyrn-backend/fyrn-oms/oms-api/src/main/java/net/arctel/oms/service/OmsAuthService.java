@@ -17,6 +17,8 @@
 
 package net.arctel.oms.service;
 
+import net.arctel.oms.output.UserInfoVo;
+
 /**
 * @author hspcadmin
 * @description 针对表【oms_user(系统用户表)】的数据库操作Service
@@ -27,5 +29,5 @@ public interface OmsAuthService {
 
     String updatePassword(String userId, String password);
 
-    Boolean login(String userId, String password);
+    UserInfoVo login(String userName, String password);
 }

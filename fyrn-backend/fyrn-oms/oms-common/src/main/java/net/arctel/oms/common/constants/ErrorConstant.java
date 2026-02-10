@@ -18,6 +18,9 @@
 package net.arctel.oms.common.constants;
 
 public class ErrorConstant {
+
+    public static final String UNAUTHORIZED = "401";
+
     public static final String COMMON_ERROR = "4000";
     public static final String FILE_NOT_FOUND = "4001";
     public static final String USER_NOT_FOUND = "4011";

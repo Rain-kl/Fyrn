@@ -21,6 +21,7 @@ package net.arctel.oms.output;
 import java.util.Date;
 
 import lombok.Data;
+import net.arctel.oms.entity.OmsUser;
 
 @Data
 public class UserInfoVo {
@@ -63,6 +64,17 @@ public class UserInfoVo {
      * 最后登录时间
      */
     private Date lastLoginTime;
+
+    public static UserInfoVo convertOmsUser(OmsUser omsUser){
+        UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.userId = omsUser.getUserId();
+        userInfoVo.username = omsUser.getUsername();
+        userInfoVo.nickname = omsUser.getNickname();
+        userInfoVo.email = omsUser.getEmail();
+        userInfoVo.phone = omsUser.getPhone();
+        userInfoVo.status = omsUser.getStatus();
+        return userInfoVo;
+    }
 
 
 }

@@ -19,14 +19,15 @@ package net.arctel.common.exception;
 
 import java.util.stream.Collectors;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import net.arctel.framework.exception.BizException;
 import net.arctel.framework.utils.Result;
+import net.arctel.oms.common.constants.ErrorConstant;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 
 
 import jakarta.validation.ConstraintViolation;
@@ -85,11 +86,20 @@ public class GlobalExceptionHandler {
     /**
      * 业务异常
      */
-    @ExceptionHandler( BizException.class)
+    @ExceptionHandler(BizException.class)
     public Result<String> handleException(BizException e) {
         log.error("业务异常", e);
         return Result.error("错误: " + e.getMessage());
     }
+
+    /**
+     * 登录异常
+     */
+    @ExceptionHandler(NotLoginException.class)
+    public Result<String> handleException(NotLoginException e) {
+        return Result.error(ErrorConstant.UNAUTHORIZED, "非法请求");
+    }
+
 
     /**
      * 处理其他异常

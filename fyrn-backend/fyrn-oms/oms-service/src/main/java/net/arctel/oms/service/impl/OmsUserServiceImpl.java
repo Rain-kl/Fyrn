@@ -19,6 +19,7 @@ package net.arctel.oms.service.impl;
 
 import java.util.List;
 
+import net.arctel.framework.utils.ThrowUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,8 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw new BizException(ErrorConstant.CHECK_FAILED, "用户名和密码不能为空");
         }
+        boolean exists = this.exists(new LambdaQueryWrapper<OmsUser>().eq(OmsUser::getUsername, username));
+        ThrowUtils.throwIf(exists, ErrorConstant.CHECK_FAILED, "用户名已存在");
         OmsUser omsUser = new OmsUser();
         BeanUtils.copyProperties(input, omsUser);
         // 安全因素, 修改密码操作使用专用接口

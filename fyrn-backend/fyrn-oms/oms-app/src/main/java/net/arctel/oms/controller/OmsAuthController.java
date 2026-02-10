@@ -19,6 +19,7 @@ package net.arctel.oms.controller;
 
 
 import net.arctel.framework.utils.Result;
+import net.arctel.oms.output.UserInfoVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,4 +47,10 @@ public class OmsAuthController {
     public Result<String> register(UserCreateInput input) {
         return Result.success(omsUserService.createUser(input));
     }
+
+    @PostMapping("/login")
+    public Result<UserInfoVo> login(String username, String password) {
+        return Result.success(omsAuthService.login(username, password));
+    }
+
 }
