@@ -26,7 +26,8 @@ spring:
     redis:
       host: ${fyrn.redis.host}
       port: ${fyrn.redis.port}
-      password: ${fyrn.redis.password}
+      password: ${fyrn.redis.password:}
+      database: ${fyrn.redis.database:0}
 
 logging:
   level:

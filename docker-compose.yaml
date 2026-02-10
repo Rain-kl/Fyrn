@@ -1,7 +1,6 @@
 version: '3.8'
 services:
   minio:
-    container_name: minio
     image: minio/minio:RELEASE.2025-04-22T22-12-26Z
     ports:
       - "59000:9000"
@@ -17,7 +16,6 @@ services:
 
   mariadb:
     image: mariadb:10.11
-    container_name: my_mariadb
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
@@ -31,7 +29,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: redis-server
     restart: unless-stopped
     ports:
       - "56379:6379"

@@ -52,7 +52,7 @@ public class TranslationController {
     /**
      * 基础翻译接口
      */
-    @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public Result<String> translate(TranslationBaseInput input) {
         String taskId = translationService.translate(input);
         return Result.success(translationService.queryResponse(taskId, String.class));
