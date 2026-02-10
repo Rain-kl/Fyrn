@@ -17,7 +17,7 @@
 
 package net.arctel.opkit.queue;
 
-import com.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.oms.infra.task.DefaultTaskMessage;
 import net.arctel.framework.core.task.BaseTaskQueue;
 import net.arctel.framework.core.task.BaseThreadPoolListener;
 import org.springframework.stereotype.Component;

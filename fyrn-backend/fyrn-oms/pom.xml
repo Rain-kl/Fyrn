@@ -10,7 +10,7 @@
     <!-- 并取消注释下方 "独立部署时的配置" 部分 -->
     <!-- ====================================================================== -->
     <parent>
-        <groupId>com.arctel</groupId>
+        <groupId>net.arctel</groupId>
         <artifactId>fyrn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -19,7 +19,7 @@
     <!-- OMS 模块基本信息 -->
     <!-- 使用独立的 groupId 便于将来独立拆分 -->
     <!-- ====================================================================== -->
-    <groupId>com.arctel.platform</groupId>
+    <groupId>net.arctel.platform</groupId>
     <artifactId>oms</artifactId>
     <packaging>pom</packaging>
 
@@ -73,27 +73,27 @@
         <dependencies>
             <!-- ==================== OMS 内部模块 ==================== -->
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-common</artifactId>
                 <version>${oms.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-api</artifactId>
                 <version>${oms.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-infra</artifactId>
                 <version>${oms.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-app</artifactId>
                 <version>${oms.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-service</artifactId>
                 <version>${oms.version}</version>
             </dependency>

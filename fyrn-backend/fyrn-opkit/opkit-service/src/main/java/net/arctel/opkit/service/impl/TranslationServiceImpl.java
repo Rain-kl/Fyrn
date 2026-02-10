@@ -17,7 +17,7 @@
 
 package net.arctel.opkit.service.impl;
 
-import com.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.oms.infra.task.DefaultTaskMessage;
 import jakarta.annotation.Resource;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.queue.OpKitProducerQueue;

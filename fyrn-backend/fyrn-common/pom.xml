@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.arctel</groupId>
+        <groupId>net.arctel</groupId>
         <artifactId>fyrn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -17,7 +17,7 @@
     <dependencies>
         <!-- OMS 公共依赖 (跨模块共享) -->
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
         </dependency>
 

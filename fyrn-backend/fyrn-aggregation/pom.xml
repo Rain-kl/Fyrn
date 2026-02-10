@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.arctel</groupId>
+        <groupId>net.arctel</groupId>
         <artifactId>fyrn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -17,7 +17,7 @@
     <dependencies>
         <!-- Fyrn 模块 -->
         <dependency>
-            <groupId>com.arctel</groupId>
+            <groupId>net.arctel</groupId>
             <artifactId>fyrn-mms-service</artifactId>
         </dependency>
 
@@ -33,11 +33,11 @@
 
         <!-- OMS 模块 -->
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-app</artifactId>
         </dependency>
 
@@ -93,7 +93,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.arctel.aggregation.AggregationApplication</mainClass>
+                    <mainClass>net.arctel.aggregation.AggregationApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

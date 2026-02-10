@@ -21,11 +21,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-infra</artifactId>
         </dependency>
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.arctel.platform</groupId>
+        <groupId>net.arctel.platform</groupId>
         <artifactId>oms</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -17,15 +17,15 @@
     <dependencies>
         <!-- OMS 内部依赖 -->
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.arctel.platform</groupId>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>oms-infra</artifactId>
         </dependency>
 

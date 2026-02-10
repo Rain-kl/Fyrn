@@ -6,7 +6,7 @@
     <!-- ====================================================================== -->
     <!-- 项目基本信息 -->
     <!-- ====================================================================== -->
-    <groupId>com.arctel</groupId>
+    <groupId>net.arctel</groupId>
     <artifactId>fyrn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -107,24 +107,24 @@
             <!-- ==================== 内部模块版本管理 ==================== -->
             <!-- Fyrn 核心模块 -->
             <dependency>
-                <groupId>com.arctel</groupId>
+                <groupId>net.arctel</groupId>
                 <artifactId>fyrn-common</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
 
             <!-- Fyrn MMS 模块 -->
             <dependency>
-                <groupId>com.arctel</groupId>
+                <groupId>net.arctel</groupId>
                 <artifactId>fyrn-mms-api</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel</groupId>
+                <groupId>net.arctel</groupId>
                 <artifactId>fyrn-mms-domain</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel</groupId>
+                <groupId>net.arctel</groupId>
                 <artifactId>fyrn-mms-service</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
@@ -145,31 +145,31 @@
 
             <!-- 
                 OMS 模块版本管理 
-                注意: fyrn-oms 使用独立的 groupId (com.arctel.platform), 
+                注意: fyrn-oms 使用独立的 groupId (net.arctel.platform),
                 为将来独立拆分做准备。OMS 模块内部依赖在 fyrn-oms/pom.xml 中管理。
             -->
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-common</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-api</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-infra</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-service</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.arctel.platform</groupId>
+                <groupId>net.arctel.platform</groupId>
                 <artifactId>oms-app</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>

@@ -31,11 +31,11 @@ fyrn-aggregation → fyrn-mms-service → fyrn-mms-api → fyrn-common → oms-c
 
 ### 包结构
 
-- Controller: `com.arctel.<module>.controller` (在 `*-service` 模块中)
-- Service 接口: `com.arctel.<module>.service` (在 `*-api` 模块中)
-- Service 实现: `com.arctel.<module>.service.impl` (在 `*-service` 模块中)
-- Entity: `com.arctel.<module>.entity` (在 `*-domain` 模块中)
-- Mapper: `com.arctel.<module>.mapper` (在 `*-domain` 模块中)
+- Controller: `net.arctel.<module>.controller` (在 `*-service` 模块中)
+- Service 接口: `net.arctel.<module>.service` (在 `*-api` 模块中)
+- Service 实现: `net.arctel.<module>.service.impl` (在 `*-service` 模块中)
+- Entity: `net.arctel.<module>.entity` (在 `*-domain` 模块中)
+- Mapper: `net.arctel.<module>.mapper` (在 `*-domain` 模块中)
 
 ### API 响应格式
 
