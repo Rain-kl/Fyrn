@@ -40,4 +40,15 @@ public class MmsPageInput extends BaseQueryPageInput {
      * 小说作者
      */
     private String novelAuthor;
+
+    @Override
+    public String toString() {
+        return "MmsPageInput{" +
+                "novelId=" + novelId +
+                ", novelTitle='" + novelTitle + '\'' +
+                ", novelAuthor='" + novelAuthor + '\'' +
+                ", pageNo=" + getPageNo() +
+                ", pageSize=" + getPageSize() +
+                '}';
+    }
 }
