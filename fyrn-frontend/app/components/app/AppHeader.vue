@@ -1,5 +1,41 @@
 <script setup lang="ts">
 import ColorMode from "~/components/button/ColorMode.vue";
+import { useApi } from '~/api/useApi'
+
+const { OmsAuthControllerApi } = useApi()
+const userInfo = useState<any>('user', () => null) // Global state for user
+
+// Fetch user info on mount if not present? Or maybe middleware does it?
+// For now, let's assume we fetch it if missing.
+onMounted(async () => {
+    if (!userInfo.value) {
+        try {
+            const res = await OmsAuthControllerApi.omsAuthInfoGet()
+            if (res.code === 200) {
+                userInfo.value = res.data
+            }
+        } catch (e) {
+            // Not logged in or error
+        }
+    }
+})
+
+const userMenuItems = [
+  [{
+    label: 'Profile',
+    to: '/oms/user',
+    icon: 'i-lucide-user-circle'
+  }],
+  [{
+    label: 'Logout',
+    icon: 'i-lucide-log-out',
+    click: () => {
+        // Handle logout
+        userInfo.value = null
+        useRouter().push('/oms/auth/login')
+    }
+  }]
+]
 
 const items = [
   {
@@ -56,10 +92,23 @@ const items = [
 <template>
   <header class="app-header">
     <div>
-      <NNavigationMenu :items indicator />
+      <NNavigationMenu :items="items" indicator />
     </div>
 
     <div class="app-header__actions">
+      <div v-if="userInfo" class="flex items-center gap-2">
+         <NDropdown :items="userMenuItems">
+            <NButton 
+              :label="userInfo.nickname || userInfo.username" 
+              leading="i-lucide-user" 
+              btn="ghost"
+            />
+         </NDropdown>
+      </div>
+      <div v-else>
+         <NButton to="/oms/auth/login" label="Login" btn="ghost" size="sm" />
+      </div>
+
       <ColorMode />
       <NThemeSwitcher />
     </div>

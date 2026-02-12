@@ -5,6 +5,7 @@ import {
     OmsParameterControllerApi,
     OmsTaskControllerApi,
     OmsUserControllerApi,
+    OmsAuthControllerApi, // Add this
     DataSyncControllerApi,
     type Middleware, MmsMetaControllerApi
 } from '~/api/index'
@@ -89,5 +90,6 @@ export const useApi = () => {
         OmsUserControllerApi: new OmsUserControllerApi(apiConfig),
         MmsMetaControllerApi: new MmsMetaControllerApi(apiConfig),
         DataSyncControllerApi: new DataSyncControllerApi(apiConfig),
+        OmsAuthControllerApi: new OmsAuthControllerApi(apiConfig), // Add this
     }
 }
