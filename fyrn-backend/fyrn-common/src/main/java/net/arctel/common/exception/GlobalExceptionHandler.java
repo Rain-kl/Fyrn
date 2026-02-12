@@ -20,7 +20,6 @@ package net.arctel.common.exception;
 import java.util.stream.Collectors;
 
 import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.util.SaResult;
 import net.arctel.framework.exception.BizException;
 import net.arctel.framework.utils.Result;
 import net.arctel.oms.common.constants.ErrorConstant;

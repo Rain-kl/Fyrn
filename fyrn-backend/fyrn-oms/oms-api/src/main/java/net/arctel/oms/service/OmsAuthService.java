@@ -17,7 +17,6 @@
 
 package net.arctel.oms.service;
 
-import net.arctel.oms.entity.OmsUser;
 import net.arctel.oms.output.UserInfoVo;
 
 /**

@@ -77,9 +77,7 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
     @Override
     public UserInfoVo getUserById(String userId) {
         OmsUser omsUser = this.getById(userId);
-        UserInfoVo userInfoVo = new UserInfoVo();
-        BeanUtils.copyProperties(omsUser, userInfoVo);
-        return userInfoVo;
+        return OmsUser.buildUserInfoVo(omsUser);
     }
 
     @Override
@@ -101,11 +99,7 @@ public class OmsUserServiceImpl extends ServiceImpl<OmsUserMapper, OmsUser>
                                 OmsUser::getStatus, input.getStatus())
                         .orderByDesc(OmsUser::getUserId)
         );
-        List<UserInfoVo> ordersList = result.getRecords().stream().map(omsUser -> {
-            UserInfoVo userInfoVo = new UserInfoVo();
-            BeanUtils.copyProperties(omsUser, userInfoVo);
-            return userInfoVo;
-        }).toList();
+        List<UserInfoVo> ordersList = OmsUser.buildListUserInfoVoList(result.getRecords());
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
 

@@ -25,11 +25,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.output.UserInfoVo;
 
 /**
@@ -102,9 +98,9 @@ public class OmsUser {
     private Date updateTime;
 
 
-    public static List<UserInfoVo> buildListUserInfoVoList(BaseQueryPage<OmsUser> userBaseQueryPage) {
+    public static List<UserInfoVo> buildListUserInfoVoList(List<OmsUser> userBaseQueryPage) {
         List<UserInfoVo> result = new ArrayList<>();
-        for (OmsUser row : userBaseQueryPage.getRows()) {
+        for (OmsUser row : userBaseQueryPage) {
             result.add(OmsUser.buildUserInfoVo(row));
         }
         return result;

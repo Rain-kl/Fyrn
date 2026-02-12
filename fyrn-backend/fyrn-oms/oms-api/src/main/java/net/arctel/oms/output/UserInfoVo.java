@@ -18,16 +18,12 @@
 package net.arctel.oms.output;
 
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.arctel.oms.common.base.BaseQueryPage;
-import net.arctel.oms.entity.OmsUser;
 
 @Data
 @NoArgsConstructor

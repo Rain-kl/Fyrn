@@ -19,7 +19,6 @@ package net.arctel.oms.controller;
 
 
 import net.arctel.framework.utils.Result;
-import net.arctel.oms.entity.OmsUser;
 import net.arctel.oms.output.UserInfoVo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
