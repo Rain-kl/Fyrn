@@ -97,8 +97,7 @@ public class GlobalExceptionHandler {
      * 登录异常
      */
     @ExceptionHandler(NotLoginException.class)
-    public Result<String> handlerNotLoginException(NotLoginException nle)
-            throws Exception {
+    public Result<String> handlerNotLoginException(NotLoginException nle) {
 
         // 打印堆栈，以供调试
         log.error("系统异常", nle);
@@ -116,7 +115,7 @@ public class GlobalExceptionHandler {
         };
 
         // 返回给前端
-        return Result.error(message);
+        return Result.error(ErrorConstant.UNAUTHORIZED, message);
     }
 
 
@@ -126,6 +125,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception e) {
         log.error("系统异常", e);
-        return Result.error(ErrorConstant.SYSTEM_ERROR, "系统异常: " + e.getMessage());
+        // 生产环境建议返回通用错误信息
+        return Result.error(ErrorConstant.SYSTEM_ERROR, "系统异常，请稍后重试");
     }
 }

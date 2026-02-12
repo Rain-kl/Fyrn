@@ -86,7 +86,7 @@ public class RequestLogAspect {
         } catch (Exception e) {
             stopWatch.stop();
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
-                    .error("[OMS Aspect]请求异常 - URI:{}, 耗时: {}ms", request.getRequestURI(), stopWatch.getTotalTimeMillis(), e);
+                    .error("[Framework Aspect]请求异常 - URI:{}, 耗时: {}ms", request.getRequestURI(), stopWatch.getTotalTimeMillis());
             throw e;
         }
     }
@@ -103,12 +103,12 @@ public class RequestLogAspect {
             Map<String, String> params = extractParams(ms.getParameterNames(), joinPoint.getArgs());
 
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
-                    .info("[OMS Aspect]Request uri={}, method={}, ip={}, params={}",
+                    .info("[Framework Aspect]Request uri={}, method={}, ip={}, params={}",
                             request.getRequestURI(), request.getMethod(), getClientIp(request), params);
 
         } catch (Exception e) {
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
-                    .info("[OMS Aspect]Log request failed", e);
+                    .info("[Framework Aspect]Log request failed", e);
         }
     }
 
@@ -123,13 +123,13 @@ public class RequestLogAspect {
     private void logResponse(JoinPoint joinPoint, HttpServletRequest request, Object result, StopWatch stopWatch) {
         try {
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
-                    .info("[OMS Aspect]Response uri={}, cost={}ms, resultType={}",
+                    .info("[Framework Aspect]Response uri={}, cost={}ms, resultType={}",
                             request.getRequestURI(),
                             stopWatch.getTotalTimeMillis(),
                             result == null ? "null" : result.getClass().getSimpleName());
         } catch (Exception e) {
             LoggerFactory.getLogger(joinPoint.getTarget().getClass())
-                    .info("[OMS Aspect]Log response failed", e);
+                    .info("[Framework Aspect]Log response failed", e);
         }
     }
 
