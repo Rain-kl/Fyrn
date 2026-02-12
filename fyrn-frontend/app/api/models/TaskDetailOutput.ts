@@ -70,12 +70,6 @@ export interface TaskDetailOutput {
      */
     message?: string;
     /**
-     * 任务对象(JSON格式), 重试时使用
-     * @type {string}
-     * @memberof TaskDetailOutput
-     */
-    taskObject?: string;
-    /**
      * 触发人
      * @type {string}
      * @memberof TaskDetailOutput
@@ -143,7 +137,6 @@ export function TaskDetailOutputFromJSONTyped(json: any, ignoreDiscriminator: bo
         'bizValue': json['bizValue'] == null ? undefined : json['bizValue'],
         'status': json['status'] == null ? undefined : json['status'],
         'message': json['message'] == null ? undefined : json['message'],
-        'taskObject': json['taskObject'] == null ? undefined : json['taskObject'],
         'createdUser': json['createdUser'] == null ? undefined : json['createdUser'],
         'startedTime': json['startedTime'] == null ? undefined : json['startedTime'],
         'finishedTime': json['finishedTime'] == null ? undefined : json['finishedTime'],
@@ -172,7 +165,6 @@ export function TaskDetailOutputToJSONTyped(value?: TaskDetailOutput | null, ign
         'bizValue': value['bizValue'],
         'status': value['status'],
         'message': value['message'],
-        'taskObject': value['taskObject'],
         'createdUser': value['createdUser'],
         'startedTime': value['startedTime'],
         'finishedTime': value['finishedTime'],

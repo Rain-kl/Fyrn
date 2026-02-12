@@ -16,11 +16,19 @@
 import * as runtime from '../runtime';
 import type {
   ResultString,
+  ResultUserInfoVo,
 } from '../models/index';
 import {
     ResultStringFromJSON,
     ResultStringToJSON,
+    ResultUserInfoVoFromJSON,
+    ResultUserInfoVoToJSON,
 } from '../models/index';
+
+export interface OmsAuthLoginPostRequest {
+    username?: string;
+    password?: string;
+}
 
 export interface OmsAuthRegisterPostRequest {
     username?: string;
@@ -35,6 +43,70 @@ export interface OmsAuthRegisterPostRequest {
  * 
  */
 export class OmsAuthControllerApi extends runtime.BaseAPI {
+
+    /**
+     * 
+     * 获取当前登录用户信息
+     */
+    async omsAuthInfoGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultUserInfoVo>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/oms/auth/info`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultUserInfoVoFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 获取当前登录用户信息
+     */
+    async omsAuthInfoGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultUserInfoVo> {
+        const response = await this.omsAuthInfoGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * 用户登录
+     */
+    async omsAuthLoginPostRaw(requestParameters: OmsAuthLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultUserInfoVo>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['username'] != null) {
+            queryParameters['username'] = requestParameters['username'];
+        }
+
+        if (requestParameters['password'] != null) {
+            queryParameters['password'] = requestParameters['password'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/oms/auth/login`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultUserInfoVoFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 用户登录
+     */
+    async omsAuthLoginPost(requestParameters: OmsAuthLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultUserInfoVo> {
+        const response = await this.omsAuthLoginPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * 
