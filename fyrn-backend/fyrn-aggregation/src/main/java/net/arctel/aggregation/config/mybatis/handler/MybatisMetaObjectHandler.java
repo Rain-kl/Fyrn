@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package net.arctel.common.config.mybatis.handler;
+package net.arctel.aggregation.config.mybatis.handler;
 
 import java.util.Date;
 

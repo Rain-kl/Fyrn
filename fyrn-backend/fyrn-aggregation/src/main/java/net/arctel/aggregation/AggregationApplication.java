@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @MapperScan({"net.arctel.fyrn.mapper", "net.arctel.oms.mapper"})
 @ComponentScan(basePackages = {
+        "net.arctel.aggregation",
         "net.arctel.fyrn",
         "net.arctel.common",
         "net.arctel.framework",
