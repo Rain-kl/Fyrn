@@ -6,7 +6,7 @@ import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
 import SyncConfigDialog from "~/components/mms/SyncConfigDialog.vue";
 
-const { uMmsNovelApi } = useApi();
+const { uMmsNovelApi,DataSyncControllerApi } = useApi();
 const { toast } = useToast();
 
 const data = ref<LocalFileSimpleDto[]>([]);
@@ -53,7 +53,6 @@ const fetchData = async () => {
     const pageSize = table.value?.getState().pagination.pageSize ?? 10;
 
     const result = await uMmsNovelApi.ummsLocalPageGet({
-      operator: "admin",
       pageNo: pageIndex + 1,
       pageSize: pageSize,
     });
@@ -76,7 +75,7 @@ const handleSyncClick = () => {
 const handleSync = async (size: number) => {
   syncing.value = true;
   try {
-    const result = await uMmsNovelApi.ummsSyncMaterialGet({
+    const result = await DataSyncControllerApi.syncFileToOssPost({
       operator: "admin",
       size: size,
     });

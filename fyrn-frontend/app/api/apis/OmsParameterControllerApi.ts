@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  AddParameterInput,
+  ParameterAddInput,
   ResultBaseQueryPageOmsParameter,
   ResultBoolean,
 } from '../models/index';
 import {
-    AddParameterInputFromJSON,
-    AddParameterInputToJSON,
+    ParameterAddInputFromJSON,
+    ParameterAddInputToJSON,
     ResultBaseQueryPageOmsParameterFromJSON,
     ResultBaseQueryPageOmsParameterToJSON,
     ResultBooleanFromJSON,
@@ -29,11 +29,10 @@ import {
 } from '../models/index';
 
 export interface OmsParameterEditPostRequest {
-    addParameterInput?: AddParameterInput;
+    parameterAddInput?: ParameterAddInput;
 }
 
 export interface OmsParameterPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
     paramCode?: number;
@@ -62,7 +61,7 @@ export class OmsParameterControllerApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AddParameterInputToJSON(requestParameters['addParameterInput']),
+            body: ParameterAddInputToJSON(requestParameters['parameterAddInput']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
@@ -82,18 +81,7 @@ export class OmsParameterControllerApi extends runtime.BaseAPI {
      * 分页查询参数列表
      */
     async omsParameterPageGetRaw(requestParameters: OmsParameterPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageOmsParameter>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling omsParameterPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -131,7 +119,7 @@ export class OmsParameterControllerApi extends runtime.BaseAPI {
      * 
      * 分页查询参数列表
      */
-    async omsParameterPageGet(requestParameters: OmsParameterPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageOmsParameter> {
+    async omsParameterPageGet(requestParameters: OmsParameterPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageOmsParameter> {
         const response = await this.omsParameterPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

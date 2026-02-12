@@ -18,8 +18,6 @@ import type {
   ResultBaseQueryPageLocalFileSimpleDto,
   ResultBaseQueryPageMmsNovelFile,
   ResultBoolean,
-  ResultOmsJob,
-  ResultString,
 } from '../models/index';
 import {
     ResultBaseQueryPageLocalFileSimpleDtoFromJSON,
@@ -28,10 +26,6 @@ import {
     ResultBaseQueryPageMmsNovelFileToJSON,
     ResultBooleanFromJSON,
     ResultBooleanToJSON,
-    ResultOmsJobFromJSON,
-    ResultOmsJobToJSON,
-    ResultStringFromJSON,
-    ResultStringToJSON,
 } from '../models/index';
 
 export interface UmmsDownloadMaterialGetRequest {
@@ -39,7 +33,6 @@ export interface UmmsDownloadMaterialGetRequest {
 }
 
 export interface UmmsLocalPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
 }
@@ -51,51 +44,21 @@ export interface UmmsNovelBindPostRequest {
     novelAuthor?: string;
 }
 
+export interface UmmsNovelDeletePostRequest {
+    fileId?: string;
+}
+
 export interface UmmsNovelPageGetRequest {
-    operator: string;
     pageNo?: number;
     pageSize?: number;
     novelId?: string;
     fileName?: string;
 }
 
-export interface UmmsSyncMaterialGetRequest {
-    operator: string;
-    size?: number;
-}
-
 /**
  * 
  */
 export class UMmsNovelControllerApi extends runtime.BaseAPI {
-
-    /**
-     * 
-     * 文件去重
-     */
-    async ummsDedupPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultOmsJob>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/umms/dedup`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultOmsJobFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * 文件去重
-     */
-    async ummsDedupPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultOmsJob> {
-        const response = await this.ummsDedupPostRaw(initOverrides);
-        return await response.value();
-    }
 
     /**
      * 
@@ -134,18 +97,7 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 获取未处理的小说列表
      */
     async ummsLocalPageGetRaw(requestParameters: UmmsLocalPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageLocalFileSimpleDto>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsLocalPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -171,7 +123,7 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 获取未处理的小说列表
      */
-    async ummsLocalPageGet(requestParameters: UmmsLocalPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageLocalFileSimpleDto> {
+    async ummsLocalPageGet(requestParameters: UmmsLocalPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageLocalFileSimpleDto> {
         const response = await this.ummsLocalPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -222,21 +174,42 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
 
     /**
      * 
+     * 删除物料文件
+     */
+    async ummsNovelDeletePostRaw(requestParameters: UmmsNovelDeletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBoolean>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['fileId'] != null) {
+            queryParameters['fileId'] = requestParameters['fileId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/umms/novel/delete`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 删除物料文件
+     */
+    async ummsNovelDeletePost(requestParameters: UmmsNovelDeletePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
+        const response = await this.ummsNovelDeletePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
      * 查询物料分页列表
      */
     async ummsNovelPageGetRaw(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBaseQueryPageMmsNovelFile>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsNovelPageGet().'
-            );
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
 
         if (requestParameters['pageNo'] != null) {
             queryParameters['pageNo'] = requestParameters['pageNo'];
@@ -270,51 +243,8 @@ export class UMmsNovelControllerApi extends runtime.BaseAPI {
      * 
      * 查询物料分页列表
      */
-    async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
+    async ummsNovelPageGet(requestParameters: UmmsNovelPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageMmsNovelFile> {
         const response = await this.ummsNovelPageGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
-     * 同步素材到 oos
-     */
-    async ummsSyncMaterialGetRaw(requestParameters: UmmsSyncMaterialGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
-        if (requestParameters['operator'] == null) {
-            throw new runtime.RequiredError(
-                'operator',
-                'Required parameter "operator" was null or undefined when calling ummsSyncMaterialGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['operator'] != null) {
-            queryParameters['operator'] = requestParameters['operator'];
-        }
-
-        if (requestParameters['size'] != null) {
-            queryParameters['size'] = requestParameters['size'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/umms/syncMaterial`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResultStringFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * 同步素材到 oos
-     */
-    async ummsSyncMaterialGet(requestParameters: UmmsSyncMaterialGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
-        const response = await this.ummsSyncMaterialGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

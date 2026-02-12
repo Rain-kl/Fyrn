@@ -47,7 +47,6 @@ watch(() => props.open, async (isOpen) => {
       isLoadingInfo.value = true;
       try {
         const result = await mmsNovelApi.mmsPageGet({
-          operator: "admin",
           novelId: props.file.novelId,
           pageNo: 1,
           pageSize: 1,
@@ -81,7 +80,6 @@ const handleSearch = async (query: string) => {
   isSearching.value = true;
   try {
     const result = await mmsNovelApi.mmsPageGet({
-      operator: "admin",
       novelTitle: query,
       pageNo: 1,
       pageSize: 10,

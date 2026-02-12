@@ -16,72 +16,64 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface AddParameterInput
+ * @interface ParameterAddInput
  */
-export interface AddParameterInput {
-    /**
-     * 操作人
-     * @type {string}
-     * @memberof AddParameterInput
-     */
-    operator: string;
+export interface ParameterAddInput {
     /**
      * 主键
      * @type {number}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     paramCode?: number;
     /**
      * 参数名称
      * @type {string}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     paramName?: string;
     /**
      * 参数类型
      * @type {string}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     kindCode?: string;
     /**
      * 参数值
      * @type {string}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     paramValue?: string;
     /**
      * 参数描述
      * @type {string}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     paramDesc?: string;
     /**
      * 是否启用
      * @type {number}
-     * @memberof AddParameterInput
+     * @memberof ParameterAddInput
      */
     enabledFlag?: number;
 }
 
 /**
- * Check if a given object implements the AddParameterInput interface.
+ * Check if a given object implements the ParameterAddInput interface.
  */
-export function instanceOfAddParameterInput(value: object): value is AddParameterInput {
-    if (!('operator' in value) || value['operator'] === undefined) return false;
+export function instanceOfParameterAddInput(value: object): value is ParameterAddInput {
     return true;
 }
 
-export function AddParameterInputFromJSON(json: any): AddParameterInput {
-    return AddParameterInputFromJSONTyped(json, false);
+export function ParameterAddInputFromJSON(json: any): ParameterAddInput {
+    return ParameterAddInputFromJSONTyped(json, false);
 }
 
-export function AddParameterInputFromJSONTyped(json: any, ignoreDiscriminator: boolean): AddParameterInput {
+export function ParameterAddInputFromJSONTyped(json: any, ignoreDiscriminator: boolean): ParameterAddInput {
     if (json == null) {
         return json;
     }
     return {
         
-        'operator': json['operator'],
         'paramCode': json['paramCode'] == null ? undefined : json['paramCode'],
         'paramName': json['paramName'] == null ? undefined : json['paramName'],
         'kindCode': json['kindCode'] == null ? undefined : json['kindCode'],
@@ -91,18 +83,17 @@ export function AddParameterInputFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function AddParameterInputToJSON(json: any): AddParameterInput {
-    return AddParameterInputToJSONTyped(json, false);
+export function ParameterAddInputToJSON(json: any): ParameterAddInput {
+    return ParameterAddInputToJSONTyped(json, false);
 }
 
-export function AddParameterInputToJSONTyped(value?: AddParameterInput | null, ignoreDiscriminator: boolean = false): any {
+export function ParameterAddInputToJSONTyped(value?: ParameterAddInput | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'operator': value['operator'],
         'paramCode': value['paramCode'],
         'paramName': value['paramName'],
         'kindCode': value['kindCode'],

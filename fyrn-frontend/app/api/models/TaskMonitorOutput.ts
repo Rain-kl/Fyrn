@@ -20,61 +20,61 @@ import {
     ThreadPoolMetricsDtoToJSON,
     ThreadPoolMetricsDtoToJSONTyped,
 } from './ThreadPoolMetricsDto';
-import type { JobOverviewDto } from './JobOverviewDto';
+import type { TaskOverviewDto } from './TaskOverviewDto';
 import {
-    JobOverviewDtoFromJSON,
-    JobOverviewDtoFromJSONTyped,
-    JobOverviewDtoToJSON,
-    JobOverviewDtoToJSONTyped,
-} from './JobOverviewDto';
+    TaskOverviewDtoFromJSON,
+    TaskOverviewDtoFromJSONTyped,
+    TaskOverviewDtoToJSON,
+    TaskOverviewDtoToJSONTyped,
+} from './TaskOverviewDto';
 
 /**
  * 
  * @export
- * @interface JobMonitorOutput
+ * @interface TaskMonitorOutput
  */
-export interface JobMonitorOutput {
+export interface TaskMonitorOutput {
     /**
      * 
      * @type {ThreadPoolMetricsDto}
-     * @memberof JobMonitorOutput
+     * @memberof TaskMonitorOutput
      */
     threadPoolMetricsDTO?: ThreadPoolMetricsDto;
     /**
      * 
-     * @type {JobOverviewDto}
-     * @memberof JobMonitorOutput
+     * @type {TaskOverviewDto}
+     * @memberof TaskMonitorOutput
      */
-    jobOverviewDto?: JobOverviewDto;
+    taskOverviewDTO?: TaskOverviewDto;
 }
 
 /**
- * Check if a given object implements the JobMonitorOutput interface.
+ * Check if a given object implements the TaskMonitorOutput interface.
  */
-export function instanceOfJobMonitorOutput(value: object): value is JobMonitorOutput {
+export function instanceOfTaskMonitorOutput(value: object): value is TaskMonitorOutput {
     return true;
 }
 
-export function JobMonitorOutputFromJSON(json: any): JobMonitorOutput {
-    return JobMonitorOutputFromJSONTyped(json, false);
+export function TaskMonitorOutputFromJSON(json: any): TaskMonitorOutput {
+    return TaskMonitorOutputFromJSONTyped(json, false);
 }
 
-export function JobMonitorOutputFromJSONTyped(json: any, ignoreDiscriminator: boolean): JobMonitorOutput {
+export function TaskMonitorOutputFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskMonitorOutput {
     if (json == null) {
         return json;
     }
     return {
         
         'threadPoolMetricsDTO': json['threadPoolMetricsDTO'] == null ? undefined : ThreadPoolMetricsDtoFromJSON(json['threadPoolMetricsDTO']),
-        'jobOverviewDto': json['jobOverviewDto'] == null ? undefined : JobOverviewDtoFromJSON(json['jobOverviewDto']),
+        'taskOverviewDTO': json['taskOverviewDTO'] == null ? undefined : TaskOverviewDtoFromJSON(json['taskOverviewDTO']),
     };
 }
 
-export function JobMonitorOutputToJSON(json: any): JobMonitorOutput {
-    return JobMonitorOutputToJSONTyped(json, false);
+export function TaskMonitorOutputToJSON(json: any): TaskMonitorOutput {
+    return TaskMonitorOutputToJSONTyped(json, false);
 }
 
-export function JobMonitorOutputToJSONTyped(value?: JobMonitorOutput | null, ignoreDiscriminator: boolean = false): any {
+export function TaskMonitorOutputToJSONTyped(value?: TaskMonitorOutput | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -82,7 +82,7 @@ export function JobMonitorOutputToJSONTyped(value?: JobMonitorOutput | null, ign
     return {
         
         'threadPoolMetricsDTO': ThreadPoolMetricsDtoToJSON(value['threadPoolMetricsDTO']),
-        'jobOverviewDto': JobOverviewDtoToJSON(value['jobOverviewDto']),
+        'taskOverviewDTO': TaskOverviewDtoToJSON(value['taskOverviewDTO']),
     };
 }
 

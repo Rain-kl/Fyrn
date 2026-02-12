@@ -30,36 +30,44 @@ const handleConfirm = () => {
 </script>
 
 <template>
-  <NAlertDialog :open="open" @update:open="emit('update:open', $event)">
-    <NAlertDialogContent class="sm:max-w-[425px]">
-      <NAlertDialogHeader>
-        <NAlertDialogTitle>同步配置</NAlertDialogTitle>
-        <NAlertDialogDescription>
-          设置同步到 OOS 的文件数量。默认 -1 表示无限制。
-        </NAlertDialogDescription>
-      </NAlertDialogHeader>
-
-      <div class="flex flex-col gap-4 py-4">
-        <div class="flex items-center gap-2">
-          <NCheckbox v-model="unlimited" label="不限制同步数量" />
-        </div>
-
-        <NFormGroup v-if="!unlimited" label="同步数量">
-          <NInput
-            v-model.number="syncSize"
-            type="number"
-            placeholder="请输入同步数量"
-          />
-          <p class="text-xs text-muted mt-2">提示：输入要同步的文件数量</p>
-        </NFormGroup>
+  <NDialog
+    :open="open"
+    @update:open="emit('update:open', $event)"
+    title="同步配置"
+    description="设置同步到 OOS 的文件数量。默认 -1 表示无限制。"
+    class="sm:max-w-[425px]"
+    :una="{
+      dialogOverlay: 'bg-black/20 backdrop-blur-sm',
+    }"
+  >
+    <div class="flex flex-col gap-4 py-4">
+      <div class="flex items-center gap-2">
+        <NCheckbox v-model="unlimited" label="不限制同步数量" />
       </div>
 
-      <NAlertDialogFooter>
-        <NAlertDialogCancel> 取消 </NAlertDialogCancel>
-        <NAlertDialogAction @click="handleConfirm">
-          确认同步
-        </NAlertDialogAction>
-      </NAlertDialogFooter>
-    </NAlertDialogContent>
-  </NAlertDialog>
+      <NFormGroup v-if="!unlimited" label="同步数量">
+        <NInput
+          v-model.number="syncSize"
+          type="number"
+          placeholder="请输入同步数量"
+        />
+        <p class="text-xs text-muted mt-2">提示：输入要同步的文件数量</p>
+      </NFormGroup>
+    </div>
+
+    <template #footer>
+      <div class="flex justify-end gap-3">
+        <NButton
+          label="取消"
+          btn="ghost-gray"
+          @click="emit('update:open', false)"
+        />
+        <NButton
+          label="确认同步"
+          btn="primary"
+          @click="handleConfirm"
+        />
+      </div>
+    </template>
+  </NDialog>
 </template>

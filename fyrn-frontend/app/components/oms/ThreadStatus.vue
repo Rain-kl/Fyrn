@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApi } from "~/api/useApi";
 
-const { JobControllerApi } = useApi();
+const { OmsJobControllerApi } = useApi();
 
 // Define reactive state for data
 const monitorData = ref<any>(null);
@@ -11,7 +11,7 @@ const loading = ref(false);
 const fetchData = async () => {
   loading.value = true;
   try {
-    const res = await JobControllerApi.omsJobMonitorGet();
+    const res = await OmsJobControllerApi.omsJobMonitorGet();
     if (res.code === 200) {
       monitorData.value = res.data;
     }

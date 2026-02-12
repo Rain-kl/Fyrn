@@ -3,13 +3,18 @@ import {
     MmsNovelControllerApi,
     UMmsNovelControllerApi,
     OmsParameterControllerApi,
-    JobControllerApi,
-    type Middleware
+    OmsTaskControllerApi,
+    OmsUserControllerApi,
+    OmsAuthControllerApi, // Add this
+    DataSyncControllerApi,
+    type Middleware, MmsMetaControllerApi
 } from '~/api/index'
 
 export const useApi = () => {
     const config = useRuntimeConfig()
     const { toast } = useToast()
+    const router = useRouter()
+    const userState = useState<any>('user', () => null)
 
     // Error handling middleware
     const errorMiddleware: Middleware = {
@@ -18,6 +23,12 @@ export const useApi = () => {
             
             // Check HTTP status first
             if (response && (response.status < 200 || response.status >= 300)) {
+                if (response.status === 401) {
+                     userState.value = null
+                     router.push('/oms/auth/login')
+                     return response;
+                }
+
                 try {
                     const data = await response.clone().json();
                     toast({
@@ -43,14 +54,20 @@ export const useApi = () => {
                 try {
                     const data = await response.clone().json();
                     if (data.code && data.code !== 200) {
-                        toast({
-                            title: '操作失败',
-                            description: data.msg || `错误代码: ${data.code}`,
-                            toast: 'soft-warning',
-                            progress: 'warning',
-                            showProgress: true,
-                            closable: true,
-                        });
+                        if (data.code === 401) {
+                            userState.value = null
+                            router.push('/oms/auth/login')
+                            // Avoid toast for auth redirect to not spam user, or modify as needed
+                        } else {
+                            toast({
+                                title: '操作失败',
+                                description: data.msg || `错误代码: ${data.code}`,
+                                toast: 'soft-warning',
+                                progress: 'warning',
+                                showProgress: true,
+                                closable: true,
+                            });
+                        }
                     }
                 } catch {
                     // Ignore JSON parse errors for non-JSON responses
@@ -83,6 +100,10 @@ export const useApi = () => {
         mmsNovelApi: new MmsNovelControllerApi(apiConfig),
         uMmsNovelApi: new UMmsNovelControllerApi(apiConfig),
         OmsParameterApi: new OmsParameterControllerApi(apiConfig),
-        JobControllerApi: new JobControllerApi(apiConfig),
+        OmsTaskControllerApi: new OmsTaskControllerApi(apiConfig),
+        OmsUserControllerApi: new OmsUserControllerApi(apiConfig),
+        MmsMetaControllerApi: new MmsMetaControllerApi(apiConfig),
+        DataSyncControllerApi: new DataSyncControllerApi(apiConfig),
+        OmsAuthControllerApi: new OmsAuthControllerApi(apiConfig), // Add this
     }
 }

@@ -16,84 +16,105 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface OmsJob
+ * @interface OmsTask
  */
-export interface OmsJob {
+export interface OmsTask {
     /**
      * 业务任务ID
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
-    jobId?: string;
+    taskId?: string;
     /**
-     * 任务类型，如 file_batch
+     * 任务标签, 用于分配到不同的处理器
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
-    taskType?: string;
+    taskTag?: string;
+    /**
+     * 该任务是否允许重试，0表示不允许重试，1表示允许重试
+     * @type {number}
+     * @memberof OmsTask
+     */
+    allowRetry?: number;
+    /**
+     * 业务标签
+     * @type {string}
+     * @memberof OmsTask
+     */
+    bizTag?: string;
+    /**
+     * 业务值
+     * @type {string}
+     * @memberof OmsTask
+     */
+    bizValue?: string;
     /**
      * 0=queued,1=running,2=success,3=failed,4=canceled
      * @type {number}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     status?: number;
     /**
      * 状态说明/失败摘要
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     message?: string;
     /**
      * 触发人
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     createdUser?: string;
     /**
      * 任务开始时间
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     startedTime?: string;
     /**
      * 任务结束时间
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     finishedTime?: string;
     /**
      * 创建时间
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     createTime?: string;
     /**
      * 修改时间
      * @type {string}
-     * @memberof OmsJob
+     * @memberof OmsTask
      */
     updateTime?: string;
 }
 
 /**
- * Check if a given object implements the OmsJob interface.
+ * Check if a given object implements the OmsTask interface.
  */
-export function instanceOfOmsJob(value: object): value is OmsJob {
+export function instanceOfOmsTask(value: object): value is OmsTask {
     return true;
 }
 
-export function OmsJobFromJSON(json: any): OmsJob {
-    return OmsJobFromJSONTyped(json, false);
+export function OmsTaskFromJSON(json: any): OmsTask {
+    return OmsTaskFromJSONTyped(json, false);
 }
 
-export function OmsJobFromJSONTyped(json: any, ignoreDiscriminator: boolean): OmsJob {
+export function OmsTaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): OmsTask {
     if (json == null) {
         return json;
     }
     return {
         
-        'jobId': json['jobId'] == null ? undefined : json['jobId'],
-        'taskType': json['taskType'] == null ? undefined : json['taskType'],
+        'taskId': json['taskId'] == null ? undefined : json['taskId'],
+        'taskTag': json['taskTag'] == null ? undefined : json['taskTag'],
+        'allowRetry': json['allowRetry'] == null ? undefined : json['allowRetry'],
+        'bizTag': json['bizTag'] == null ? undefined : json['bizTag'],
+        'bizValue': json['bizValue'] == null ? undefined : json['bizValue'],
         'status': json['status'] == null ? undefined : json['status'],
         'message': json['message'] == null ? undefined : json['message'],
         'createdUser': json['createdUser'] == null ? undefined : json['createdUser'],
@@ -104,19 +125,22 @@ export function OmsJobFromJSONTyped(json: any, ignoreDiscriminator: boolean): Om
     };
 }
 
-export function OmsJobToJSON(json: any): OmsJob {
-    return OmsJobToJSONTyped(json, false);
+export function OmsTaskToJSON(json: any): OmsTask {
+    return OmsTaskToJSONTyped(json, false);
 }
 
-export function OmsJobToJSONTyped(value?: OmsJob | null, ignoreDiscriminator: boolean = false): any {
+export function OmsTaskToJSONTyped(value?: OmsTask | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'jobId': value['jobId'],
-        'taskType': value['taskType'],
+        'taskId': value['taskId'],
+        'taskTag': value['taskTag'],
+        'allowRetry': value['allowRetry'],
+        'bizTag': value['bizTag'],
+        'bizValue': value['bizValue'],
         'status': value['status'],
         'message': value['message'],
         'createdUser': value['createdUser'],

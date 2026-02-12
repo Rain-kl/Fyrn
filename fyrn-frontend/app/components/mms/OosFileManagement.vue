@@ -7,7 +7,7 @@ import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
 import NovelBindDialog from "~/components/mms/NovelBindDialog.vue";
 
-const { uMmsNovelApi, mmsNovelApi } = useApi();
+const { uMmsNovelApi, DataSyncControllerApi} = useApi();
 const { toast } = useToast();
 
 const data = ref<MmsNovelFile[]>([]);
@@ -35,6 +35,9 @@ const columns: ColumnDef<MmsNovelFile>[] = [
     accessorKey: "novelId",
     cell: (info) => {
       const novelId = info.row.original.novelId;
+      if (novelId === "-1") {
+        return h("span", { class: "text-warning" }, "待关联");
+      }
       if (novelId) {
         return h(resolveComponent("NButton"), {
           label: "已关联",
@@ -79,11 +82,12 @@ const columns: ColumnDef<MmsNovelFile>[] = [
     header: "操作",
     id: "actions",
     cell: (info) => {
-      return h("div", { class: "flex gap-2" }, [
+      return h("div", { class: "flex gap-3" }, [
         h(resolveComponent("NButton"), {
           label: "绑定",
-          btn: "ghost-primary",
+          btn: "link-primary",
           size: "sm",
+          class: "p-0 h-auto font-normal",
           onClick: () => {
             selectedFile.value = info.row.original;
             bindDialogOpen.value = true;
@@ -91,8 +95,9 @@ const columns: ColumnDef<MmsNovelFile>[] = [
         }),
         h(resolveComponent("NButton"), {
           label: "下载",
-          btn: "ghost-primary",
+          btn: "link-primary",
           size: "sm",
+          class: "p-0 h-auto font-normal",
           loading: info.row.original.id
             ? downloadingIds.value.has(info.row.original.id)
             : false,
@@ -100,6 +105,30 @@ const columns: ColumnDef<MmsNovelFile>[] = [
             handleDownload(info.row.original);
           },
         }),
+        h(
+          resolveComponent("NAlertDialog"),
+          {
+            title: "确认删除",
+            description: `确定要删除文件 ${info.row.original.fileName} 吗？`,
+            _alertDialogAction: {
+              label: "确定",
+              btn: "solid-error",
+              onClick: () => handleDelete(info.row.original),
+            },
+            _alertDialogCancel: {
+              label: "取消",
+            },
+          },
+          {
+            trigger: () =>
+              h(resolveComponent("NButton"), {
+                label: "删除",
+                btn: "link-error",
+                size: "sm",
+                class: "p-0 h-auto font-normal",
+              }),
+          },
+        ),
       ]);
     },
   },
@@ -115,7 +144,6 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const result = await uMmsNovelApi.ummsNovelPageGet({
-      operator: "admin",
       pageNo: pageNo.value,
       pageSize: pageSize.value,
       novelId: filters.novelId || undefined,
@@ -157,10 +185,40 @@ const handleDownload = async (file: MmsNovelFile) => {
   }
 };
 
+const handleDelete = async (file: MmsNovelFile) => {
+  if (!file.id) return;
+  try {
+    const result = await uMmsNovelApi.ummsNovelDeletePost({
+      fileId: String(file.id),
+    });
+    if (result.code === 200) {
+      toast({
+        title: "删除成功",
+        description: `文件 ${file.fileName} 已删除`,
+        toast: "soft-success",
+        progress: "success",
+        showProgress: true,
+        closable: true,
+      });
+      fetchData();
+    }
+  } catch (error) {
+    console.error("Failed to delete file:", error);
+    toast({
+      title: "删除失败",
+      description: "删除文件时发生错误",
+      toast: "soft-error",
+      progress: "error",
+      showProgress: true,
+      closable: true,
+    });
+  }
+};
+
 const handleSync = async () => {
   syncing.value = true;
   try {
-    const result = await mmsNovelApi.mmsSyncPost();
+    const result = await DataSyncControllerApi.syncOssToMmsPost();
     if (result.code === 200) {
       toast({
         title: "开始同步任务",
@@ -198,7 +256,7 @@ watch(
     pageNo.value = 1;
     fetchData();
   },
-  { deep: true }
+  { deep: true },
 );
 
 onMounted(() => {
@@ -246,6 +304,8 @@ onMounted(() => {
       :loading
       :columns
       :data
+      :row-count="total"
+      manual-pagination
       enable-row-selection
       row-id="id"
     >

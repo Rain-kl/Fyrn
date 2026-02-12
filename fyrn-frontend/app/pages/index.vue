@@ -15,13 +15,13 @@
       </div>
 
       <div class="space-y-4">
-        <FormLogin />
-
-        <div class="border border-base rounded-md p-4 text-center text-sm">
-          No account yet?
-          <NLink btn="link square" to="/">
-            Create an account here
-          </NLink>
+        <!-- <FormLogin /> -->
+        <div class="border border-base rounded-md p-8 text-center space-y-4">
+             <p class="text-lg font-medium">Welcome to Fyrn System</p>
+             <div class="flex justify-center gap-4">
+                <NButton to="/oms/auth/login" label="Sign In" leading="i-lucide-log-in" />
+                <NButton to="/oms/auth/register" label="Register" btn="outline" leading="i-lucide-user-plus" />
+             </div>
         </div>
       </div>
     </div>
