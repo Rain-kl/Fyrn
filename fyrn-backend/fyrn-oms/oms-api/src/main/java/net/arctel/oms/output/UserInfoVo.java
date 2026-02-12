@@ -18,12 +18,21 @@
 package net.arctel.oms.output;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.entity.OmsUser;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserInfoVo {
     /**
      * 用户ID
@@ -65,15 +74,14 @@ public class UserInfoVo {
      */
     private Date lastLoginTime;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
-    public static UserInfoVo convertOmsUser(OmsUser omsUser){
-        UserInfoVo userInfoVo = new UserInfoVo();
-        userInfoVo.userId = omsUser.getUserId();
-        userInfoVo.username = omsUser.getUsername();
-        userInfoVo.nickname = omsUser.getNickname();
-        userInfoVo.email = omsUser.getEmail();
-        userInfoVo.phone = omsUser.getPhone();
-        userInfoVo.status = omsUser.getStatus();
-        return userInfoVo;
-    }
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
+
 }

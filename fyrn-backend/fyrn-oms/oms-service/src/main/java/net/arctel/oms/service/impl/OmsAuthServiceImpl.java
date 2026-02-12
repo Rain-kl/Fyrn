@@ -19,7 +19,6 @@ package net.arctel.oms.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
-import com.alibaba.fastjson2.JSON;
 import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.framework.exception.BizException;
 import net.arctel.oms.entity.OmsUser;
@@ -45,6 +44,12 @@ public class OmsAuthServiceImpl implements OmsAuthService {
 
 
     @Override
+    public void logout() {
+        StpUtil.logout();
+    }
+
+
+    @Override
     public UserInfoVo login(String userName, String password) {
         passCheck(password);
         OmsUser omsUser = omsUserMapper.selectOne(
@@ -59,21 +64,23 @@ public class OmsAuthServiceImpl implements OmsAuthService {
             }
         }
         omsUser.setLastLoginTime(new Date());
-        UserInfoVo userInfoVo = UserInfoVo.convertOmsUser(omsUser);
-        StpUtil.login(JSON.toJSONString(userInfoVo));
+
+        UserInfoVo userInfoVo = OmsUser.buildUserInfoVo(omsUser);
+        StpUtil.login(userInfoVo.getUserId());
         omsUserMapper.updateById(omsUser);
         return userInfoVo;
     }
 
     @Override
-    public UserInfoVo getInfo() {
-        String userInfoVoJson = (String)StpUtil.getLoginId();
-        return JSON.parseObject(userInfoVoJson, UserInfoVo.class);
+    public UserInfoVo getUserInfo() {
+        String userId = (String) StpUtil.getLoginId();
+        OmsUser omsUser = omsUserMapper.selectById(userId);
+        return OmsUser.buildUserInfoVo(omsUser);
     }
 
 
     @Override
-    public String updatePassword(String userId, String password) {
+    public void updatePassword(String userId, String password) {
         passCheck(password);
         String hashPasswd = BCrypt.hashpw(password, BCrypt.gensalt());
         OmsUser omsUser = omsUserMapper.selectOne(
@@ -84,7 +91,6 @@ public class OmsAuthServiceImpl implements OmsAuthService {
         }
         omsUser.setPassword(hashPasswd);
         omsUserMapper.updateById(omsUser);
-        return userId;
     }
 
 

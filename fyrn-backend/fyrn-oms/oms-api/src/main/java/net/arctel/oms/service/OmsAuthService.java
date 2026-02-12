@@ -17,19 +17,22 @@
 
 package net.arctel.oms.service;
 
+import net.arctel.oms.entity.OmsUser;
 import net.arctel.oms.output.UserInfoVo;
 
 /**
-* @author hspcadmin
-* @description 针对表【oms_user(系统用户表)】的数据库操作Service
-* @createDate 2025-12-30 14:04:20
-*/
+ * @author hspcadmin
+ * @description 针对表【oms_user(系统用户表)】的数据库操作Service
+ * @createDate 2025-12-30 14:04:20
+ */
 public interface OmsAuthService {
 
 
-    String updatePassword(String userId, String password);
+    void updatePassword(String userId, String password);
+
+    void logout();
 
     UserInfoVo login(String userName, String password);
 
-    UserInfoVo getInfo();
+    UserInfoVo getUserInfo();
 }
