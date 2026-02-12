@@ -16,83 +16,95 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UserInfoVo
+ * @interface OmsUser
  */
-export interface UserInfoVo {
+export interface OmsUser {
     /**
      * 用户ID
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     userId?: string;
     /**
      * 登录用户名
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     username?: string;
     /**
+     * 登录密码(加密)
+     * @type {string}
+     * @memberof OmsUser
+     */
+    password?: string;
+    /**
      * 用户昵称
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     nickname?: string;
     /**
      * 邮箱
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     email?: string;
     /**
      * 手机号
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     phone?: string;
     /**
      * 用户状态：0=禁用，1=正常，2=锁定
      * @type {number}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     status?: number;
     /**
      * 最后登录IP
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     lastLoginIp?: string;
     /**
      * 最后登录时间
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     lastLoginTime?: string;
     /**
+     * 创建人
+     * @type {string}
+     * @memberof OmsUser
+     */
+    createdUser?: string;
+    /**
      * 创建时间
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     createTime?: string;
     /**
      * 修改时间
      * @type {string}
-     * @memberof UserInfoVo
+     * @memberof OmsUser
      */
     updateTime?: string;
 }
 
 /**
- * Check if a given object implements the UserInfoVo interface.
+ * Check if a given object implements the OmsUser interface.
  */
-export function instanceOfUserInfoVo(value: object): value is UserInfoVo {
+export function instanceOfOmsUser(value: object): value is OmsUser {
     return true;
 }
 
-export function UserInfoVoFromJSON(json: any): UserInfoVo {
-    return UserInfoVoFromJSONTyped(json, false);
+export function OmsUserFromJSON(json: any): OmsUser {
+    return OmsUserFromJSONTyped(json, false);
 }
 
-export function UserInfoVoFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserInfoVo {
+export function OmsUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): OmsUser {
     if (json == null) {
         return json;
     }
@@ -100,22 +112,24 @@ export function UserInfoVoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'userId': json['userId'] == null ? undefined : json['userId'],
         'username': json['username'] == null ? undefined : json['username'],
+        'password': json['password'] == null ? undefined : json['password'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'email': json['email'] == null ? undefined : json['email'],
         'phone': json['phone'] == null ? undefined : json['phone'],
         'status': json['status'] == null ? undefined : json['status'],
         'lastLoginIp': json['lastLoginIp'] == null ? undefined : json['lastLoginIp'],
         'lastLoginTime': json['lastLoginTime'] == null ? undefined : json['lastLoginTime'],
+        'createdUser': json['createdUser'] == null ? undefined : json['createdUser'],
         'createTime': json['createTime'] == null ? undefined : json['createTime'],
         'updateTime': json['updateTime'] == null ? undefined : json['updateTime'],
     };
 }
 
-export function UserInfoVoToJSON(json: any): UserInfoVo {
-    return UserInfoVoToJSONTyped(json, false);
+export function OmsUserToJSON(json: any): OmsUser {
+    return OmsUserToJSONTyped(json, false);
 }
 
-export function UserInfoVoToJSONTyped(value?: UserInfoVo | null, ignoreDiscriminator: boolean = false): any {
+export function OmsUserToJSONTyped(value?: OmsUser | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -124,12 +138,14 @@ export function UserInfoVoToJSONTyped(value?: UserInfoVo | null, ignoreDiscrimin
         
         'userId': value['userId'],
         'username': value['username'],
+        'password': value['password'],
         'nickname': value['nickname'],
         'email': value['email'],
         'phone': value['phone'],
         'status': value['status'],
         'lastLoginIp': value['lastLoginIp'],
         'lastLoginTime': value['lastLoginTime'],
+        'createdUser': value['createdUser'],
         'createTime': value['createTime'],
         'updateTime': value['updateTime'],
     };

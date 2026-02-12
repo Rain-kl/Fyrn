@@ -11,10 +11,16 @@ function toggleUserMenu() {
     isUserMenuOpen.value = !isUserMenuOpen.value
 }
 
-function handleLogout() {
-    isUserMenuOpen.value = false
-    userInfo.value = null
-    router.push('/oms/auth/login')
+async function handleLogout() {
+    try {
+        await OmsAuthControllerApi.omsAuthLogoutPost()
+    } catch (e) {
+        console.error('Logout error:', e)
+    } finally {
+        isUserMenuOpen.value = false
+        userInfo.value = null
+        router.push('/oms/auth/login')
+    }
 }
 
 // Fetch user info on mount if not present? Or maybe middleware does it?

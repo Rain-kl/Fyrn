@@ -110,6 +110,34 @@ export class OmsAuthControllerApi extends runtime.BaseAPI {
 
     /**
      * 
+     * 用户登出
+     */
+    async omsAuthLogoutPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/oms/auth/logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultStringFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 用户登出
+     */
+    async omsAuthLogoutPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultString> {
+        const response = await this.omsAuthLogoutPostRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
      * 用户注册
      */
     async omsAuthRegisterPostRaw(requestParameters: OmsAuthRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultString>> {
