@@ -39,8 +39,8 @@ async function handleLogin() {
         toast: 'soft-success',
       })
       // Store user info if needed, e.g. useState or Pinia
-      // const user = useState('user')
-      // user.value = res.data
+      const user = useState('user')
+      user.value = res.data
       router.push('/')
     }
   } catch (error) {

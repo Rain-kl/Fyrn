@@ -3,7 +3,19 @@ import ColorMode from "~/components/button/ColorMode.vue";
 import { useApi } from '~/api/useApi'
 
 const { OmsAuthControllerApi } = useApi()
+const router = useRouter()
 const userInfo = useState<any>('user', () => null) // Global state for user
+const isUserMenuOpen = ref(false)
+
+function toggleUserMenu() {
+    isUserMenuOpen.value = !isUserMenuOpen.value
+}
+
+function handleLogout() {
+    isUserMenuOpen.value = false
+    userInfo.value = null
+    router.push('/oms/auth/login')
+}
 
 // Fetch user info on mount if not present? Or maybe middleware does it?
 // For now, let's assume we fetch it if missing.
@@ -19,23 +31,6 @@ onMounted(async () => {
         }
     }
 })
-
-const userMenuItems = [
-  [{
-    label: 'Profile',
-    to: '/oms/user',
-    icon: 'i-lucide-user-circle'
-  }],
-  [{
-    label: 'Logout',
-    icon: 'i-lucide-log-out',
-    click: () => {
-        // Handle logout
-        userInfo.value = null
-        useRouter().push('/oms/auth/login')
-    }
-  }]
-]
 
 const items = [
   {
@@ -96,14 +91,44 @@ const items = [
     </div>
 
     <div class="app-header__actions">
-      <div v-if="userInfo" class="flex items-center gap-2">
-         <NDropdown :items="userMenuItems">
-            <NButton 
-              :label="userInfo.nickname || userInfo.username" 
-              leading="i-lucide-user" 
-              btn="ghost"
-            />
-         </NDropdown>
+      <div v-if="userInfo" class="relative">
+          <button 
+              @click="toggleUserMenu" 
+              class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+          >
+              <span class="i-lucide-user text-base"></span>
+              <span>{{ userInfo.nickname || userInfo.username }}</span>
+              <span class="i-lucide-chevron-down text-xs opacity-50"></span>
+          </button>
+
+          <!-- Backdrop -->
+          <div v-if="isUserMenuOpen" @click="isUserMenuOpen = false" class="fixed inset-0 z-10 cursor-default"></div>
+
+          <!-- Dropdown Menu -->
+          <div 
+              v-if="isUserMenuOpen"
+              class="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-200 dark:border-gray-700"
+          >
+              <NLink 
+                  to="/oms/user/me" 
+                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 decoration-none"
+                  @click="isUserMenuOpen = false"
+              >
+                  <div class="flex items-center gap-2">
+                      <span class="i-lucide-user-circle"></span>
+                      Profile
+                  </div>
+              </NLink>
+              <button 
+                  class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  @click="handleLogout"
+              >
+                   <div class="flex items-center gap-2">
+                      <span class="i-lucide-log-out"></span>
+                      Logout
+                  </div>
+              </button>
+          </div>
       </div>
       <div v-else>
          <NButton to="/oms/auth/login" label="Login" btn="ghost" size="sm" />
