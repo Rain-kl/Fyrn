@@ -17,10 +17,10 @@
 
 package net.arctel.fyrn.input;
 
-import net.arctel.oms.common.base.BaseQueryPageInput;
-
 import lombok.Getter;
 import lombok.Setter;
+import net.arctel.fyrn.entity.MmsMeta;
+import net.arctel.oms.common.base.BaseQueryPageInput;
 
 @Getter
 @Setter
@@ -40,4 +40,30 @@ public class MmsMetaPageInput extends BaseQueryPageInput {
      * 小说作者
      */
     private String novelAuthor;
+
+
+    /**
+     * 小说来源
+     */
+    private String source;
+
+
+    public static MmsMeta buildMmsMeta(MmsMetaPageInput input) {
+        return MmsMeta.builder()
+                .pbn(input.getNovelId() == null ? null : input.getNovelId().toString())
+                .title(input.getNovelTitle())
+                .author(input.getNovelAuthor())
+                .source(input.getSource())
+                .build();
+    }
+
+    @Override
+    public String toString() {
+        return "MmsMetaPageInput{" +
+                "novelId=" + novelId +
+                ", novelTitle='" + novelTitle + '\'' +
+                ", novelAuthor='" + novelAuthor + '\'' +
+                ", source='" + source + '\'' +
+                '}';
+    }
 }

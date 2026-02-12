@@ -18,27 +18,26 @@
 package net.arctel.fyrn.service.impl;
 
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import net.arctel.fyrn.entity.MmsMeta;
-import net.arctel.fyrn.mapper.MmsMetaMapper;
-import net.arctel.fyrn.service.MmsMetaService;
-import net.arctel.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.arctel.fyrn.entity.MmsMeta;
+import net.arctel.fyrn.mapper.MmsMetaMapper;
+import net.arctel.fyrn.service.MmsMetaService;
+import net.arctel.oms.common.base.BaseQueryPage;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
-* @author ryan
-* @description 针对表【mms_meta(小说元数据表)】的数据库操作Service实现
-* @createDate 2026-01-25 21:02:27
-*/
+ * @author ryan
+ * @description 针对表【mms_meta(小说元数据表)】的数据库操作Service实现
+ * @createDate 2026-01-25 21:02:27
+ */
 @Service
 public class MmsMetaServiceImpl extends ServiceImpl<MmsMetaMapper, MmsMeta>
-    implements MmsMetaService {
+        implements MmsMetaService {
 
     @Override
     public BaseQueryPage<MmsMeta> pageMmsMeta(MmsMeta mmsMeta, Integer pageNo, Integer pageSize) {
@@ -48,13 +47,15 @@ public class MmsMetaServiceImpl extends ServiceImpl<MmsMetaMapper, MmsMeta>
         IPage<MmsMeta> result = page(
                 page,
                 new LambdaQueryWrapper<MmsMeta>()
-                        .eq(mmsMeta.getId() != null,
-                                MmsMeta::getId, mmsMeta.getId())
+                        .like(mmsMeta.getPbn() != null,
+                                MmsMeta::getPbn, mmsMeta.getPbn())
                         .like(mmsMeta.getTitle() != null,
                                 MmsMeta::getTitle, mmsMeta.getTitle())
                         .like(mmsMeta.getAuthor() != null,
                                 MmsMeta::getAuthor, mmsMeta.getAuthor())
-                        .orderByDesc(MmsMeta::getId)
+                        .eq(mmsMeta.getSource() != null
+                                , MmsMeta::getSource, mmsMeta.getSource())
+                        .orderByAsc(MmsMeta::getId)
         );
 
         List<MmsMeta> ordersList = result.getRecords();

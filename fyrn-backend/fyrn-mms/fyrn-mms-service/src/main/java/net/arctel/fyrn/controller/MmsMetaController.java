@@ -18,19 +18,16 @@
 package net.arctel.fyrn.controller;
 
 
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import net.arctel.framework.utils.Result;
-import org.springframework.beans.BeanUtils;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import net.arctel.fyrn.entity.MmsMeta;
 import net.arctel.fyrn.input.MmsMetaPageInput;
 import net.arctel.fyrn.service.MmsMetaService;
 import net.arctel.oms.common.base.BaseQueryPage;
-
-import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/mms/meta")
 @RestController
@@ -49,11 +46,7 @@ public class MmsMetaController {
     @GetMapping("/page")
     public Result<BaseQueryPage<MmsMeta>> page(MmsMetaPageInput input) {
 
-        MmsMeta mmsMeta = new MmsMeta();
-        BeanUtils.copyProperties(input, mmsMeta);
-        mmsMeta.setId(input.getNovelId());
-        mmsMeta.setTitle(input.getNovelTitle());
-        mmsMeta.setAuthor(input.getNovelAuthor());
+        MmsMeta mmsMeta = MmsMetaPageInput.buildMmsMeta(input);
 
         BaseQueryPage<MmsMeta> mmsNovelQueryPage = mmsMetaService.pageMmsMeta(
                 mmsMeta, input.getPageNo(), input.getPageSize());

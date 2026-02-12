@@ -17,14 +17,16 @@
 
 package net.arctel.fyrn.entity;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * 小说元数据表
@@ -32,6 +34,9 @@ import lombok.Data;
  */
 @TableName(value ="mms_meta")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MmsMeta {
     /**
      * 主键
