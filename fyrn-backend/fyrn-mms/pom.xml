@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.arctel</groupId>
+        <artifactId>fyrn</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>fyrn-mms</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Fyrn - MMS Module</name>
+    <description>Fyrn 多媒体管理系统模块</description>
+
+    <!-- ====================================================================== -->
+    <!-- 子模块 -->
+    <!-- ====================================================================== -->
+    <modules>
+        <module>fyrn-mms-api</module>
+        <module>fyrn-mms-service</module>
+        <module>fyrn-mms-domain</module>
+    </modules>
+
+    <!-- ====================================================================== -->
+    <!-- MMS 模块内部版本管理 -->
+    <!-- ====================================================================== -->
+    <properties>
+        <mms.version>${project.version}</mms.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-api</artifactId>
+                <version>${mms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-service</artifactId>
+                <version>${mms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-domain</artifactId>
+                <version>${mms.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

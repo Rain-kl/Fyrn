@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.arctel</groupId>
+        <artifactId>fyrn-mms</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>fyrn-mms-service</artifactId>
+    <name>Fyrn MMS - Service Layer</name>
+    <description>MMS 服务层, 包含业务逻辑实现</description>
+
+    <dependencies>
+        <!-- MMS 内部依赖 -->
+        <dependency>
+            <groupId>net.arctel</groupId>
+            <artifactId>fyrn-mms-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.arctel</groupId>
+            <artifactId>fyrn-mms-domain</artifactId>
+        </dependency>
+
+        <!-- Fyrn 公共模块 -->
+        <dependency>
+            <groupId>net.arctel</groupId>
+            <artifactId>fyrn-common</artifactId>
+        </dependency>
+
+        <!-- OMS 依赖 -->
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-infra</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

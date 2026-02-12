@@ -3,46 +3,81 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.arctel</groupId>
+    <!-- ====================================================================== -->
+    <!-- 项目基本信息 -->
+    <!-- ====================================================================== -->
+    <groupId>net.arctel</groupId>
     <artifactId>fyrn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>Fyrn Backend</name>
+    <description>Fyrn 后端服务 - 企业级多模块项目</description>
+
+    <!-- ====================================================================== -->
+    <!-- 子模块 -->
+    <!-- ====================================================================== -->
     <modules>
         <module>fyrn-common</module>
-        <module>fyrn-biz-domain</module>
-        <module>fyrn-aggregation</module>
-        <module>fyrn-biz-mms</module>
+        <module>fyrn-mms</module>
         <module>fyrn-oms</module>
+        <module>fyrn-opkit</module>
+        <module>fyrn-aggregation</module>
+        <module>fyrn-framework</module>
     </modules>
 
+    <!-- ====================================================================== -->
+    <!-- 统一属性配置 -->
+    <!-- ====================================================================== -->
     <properties>
+        <!-- 项目版本 -->
+        <fyrn.version>${project.version}</fyrn.version>
+
+        <!-- Java 版本 -->
         <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- 编码配置 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.0.13</spring-boot.version>
-        <spring-cloud.version>2022.0.3</spring-cloud.version>
-        <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
-        <springdoc.version>2.1.0</springdoc.version>
-        <lombok.version>1.18.30</lombok.version>
 
-        <druid>1.2.1</druid>
-        <mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
+        <!-- ==================== Spring 生态版本 ==================== -->
+        <spring-boot.version>3.4.13</spring-boot.version>
+        <spring-cloud.version>2024.0.3</spring-cloud.version>
+        <springdoc.version>2.8.4</springdoc.version>
+
+        <!-- ==================== 数据库相关 ==================== -->
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
+        <druid.version>1.2.24</druid.version>
+
+        <!-- ==================== 工具类库 ==================== -->
+        <lombok.version>1.18.30</lombok.version>
+        <hutool-all.version>5.8.40</hutool-all.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
+        <guava.version>32.0.1-android</guava.version>
+        <okhttp.version>4.12.0</okhttp.version>
+        <collection4.version>4.4</collection4.version>
         <fastjson2.version>2.0.36</fastjson2.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <hutool-all.version>5.8.27</hutool-all.version>
-        <spotless-maven-plugin.version>2.22.1</spotless-maven-plugin.version>
+        <juniversalchardet.version>1.0.3</juniversalchardet.version>
+
+        <!-- ==================== 存储相关 ==================== -->
+        <s3.version>2.25.27</s3.version>
+        <caffeine.version>3.1.8</caffeine.version>
+
+        <!-- ==================== Maven 插件版本 ==================== -->
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
+        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
-    </dependencies>
-
+    <!-- ====================================================================== -->
+    <!-- 依赖版本管理 -->
+    <!-- ====================================================================== -->
     <dependencyManagement>
         <dependencies>
+            <!-- ==================== BOM 导入 ==================== -->
+            <!-- Spring Boot BOM -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -51,6 +86,7 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Spring Cloud BOM -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -59,66 +95,161 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- MyBatis Plus BOM -->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>3.4.12</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
+            <!-- ==================== 内部模块版本管理 ==================== -->
+            <!-- Fyrn 核心模块 -->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.14.0</version>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-common</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+
+            <!-- Fyrn MMS 模块 -->
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-api</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-domain</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel</groupId>
+                <artifactId>fyrn-mms-service</artifactId>
+                <version>${fyrn.version}</version>
             </dependency>
 
             <!--
-      Source - https://stackoverflow.com/a
-      Posted by jcompetence, modified by community. See post 'Timeline' for change history
-      Retrieved 2025-12-14, License - CC BY-SA 4.0
-      -->
+                framework 模块版本管理
+            -->
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>framework-core</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>framework-web</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+
+            <!-- 
+                OMS 模块版本管理 
+                注意: fyrn-oms 使用独立的 groupId (net.arctel.platform),
+                为将来独立拆分做准备。OMS 模块内部依赖在 fyrn-oms/pom.xml 中管理。
+            -->
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>oms-common</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>oms-api</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>oms-infra</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>oms-service</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>oms-app</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+
+
+            <!--
+                OPKIT 模块版本管理
+            -->
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-agent</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-api</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-service</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-domain</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-common</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-app</artifactId>
+                <version>${fyrn.version}</version>
+            </dependency>
+
+            <!-- ==================== 第三方库版本管理 ==================== -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${collection4.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>2.0.0</version>
+                <version>${springdoc.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${s3.version}</version>
             </dependency>
-
-            <!-- https://mvnrepository.com/artifact/io.minio/minio -->
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>8.5.17</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
-                <version>3.1.8</version> <!-- 检查最新版本 -->
+                <version>${caffeine.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid}</version>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid.version}</version>
             </dependency>
 
             <dependency>
@@ -132,32 +263,77 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool-all.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.googlecode.juniversalchardet</groupId>
+                <artifactId>juniversalchardet</artifactId>
+                <version>${juniversalchardet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!-- ====================================================================== -->
+    <!-- 全局依赖 (所有模块自动继承) -->
+    <!-- ====================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- ====================================================================== -->
+    <!-- 构建配置 -->
+    <!-- ====================================================================== -->
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
+            <!-- Maven 编译器插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <!-- 保留方法参数名, 供 Spring SpEL 表达式使用 (如 @Cacheable) -->
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
 
+            <!-- 代码格式化插件 -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${spotless-maven-plugin.version}</version>
                 <configuration>
                     <java>
-                        <!--<eclipse>
-                            <file>${maven.multiModuleProjectDirectory}/format/short-link_spotless_formatter.xml</file>
-                        </eclipse>-->
+                        <!-- 移除未使用的 import -->
+                        <removeUnusedImports/>
+                        <!-- 清理行尾空白 -->
+                        <trimTrailingWhitespace/>
+                        <!-- 确保文件以换行结尾 -->
+                        <endWithNewline/>
                         <licenseHeader>
-                            <!-- ${maven.multiModuleProjectDirectory} 爆红属于正常，并不影响编译或者运行，忽略就好 -->
+                            <!-- ${maven.multiModuleProjectDirectory} 爆红属于正常，并不影响编译或者运行 -->
                             <file>${maven.multiModuleProjectDirectory}/format/license-header</file>
                         </licenseHeader>
                     </java>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.arctel</groupId>
+        <artifactId>fyrn</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>net.arctel.platform</groupId>
+    <artifactId>opkit</artifactId>
+    <packaging>pom</packaging>
+
+    <name>OPKIT - 综合业务工具包</name>
+    <description>提供OCR, 翻译, 机器学习等任务</description>
+    <modules>
+        <module>opkit-api</module>
+        <module>opkit-service</module>
+        <module>opkit-common</module>
+        <module>opkit-agent</module>
+        <module>opkit-app</module>
+    </modules>
+
+
+    <properties>
+        <!-- OPKIT 版本号, 独立于主项目版本 -->
+        <opkit.version>${project.version}</opkit.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- ==================== OMS 内部模块 ==================== -->
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-api</artifactId>
+                <version>${opkit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-service</artifactId>
+                <version>${opkit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-common</artifactId>
+                <version>${opkit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.arctel.platform</groupId>
+                <artifactId>opkit-domain</artifactId>
+                <version>${opkit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <!-- POM 模块跳过打包 -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
