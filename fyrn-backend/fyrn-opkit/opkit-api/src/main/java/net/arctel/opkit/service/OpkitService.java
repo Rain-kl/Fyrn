@@ -8,12 +8,10 @@ import java.util.List;
 public interface OpkitService {
 
 
-
     /**
      * 列出所有工具
      */
     List<OpkitListOutput> listTools();
-
 
 
 }
