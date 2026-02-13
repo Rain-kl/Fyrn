@@ -19,7 +19,7 @@ package net.arctel.oms.infra.task;
 
 import net.arctel.oms.entity.OmsTask;
 import net.arctel.oms.common.enums.TaskStatusEnum;
-import net.arctel.framework.core.task.BaseTaskMessage;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.core.task.BaseThreadPoolHandler;
 import net.arctel.oms.input.TaskUpdateInput;
 import net.arctel.oms.service.OmsTaskService;

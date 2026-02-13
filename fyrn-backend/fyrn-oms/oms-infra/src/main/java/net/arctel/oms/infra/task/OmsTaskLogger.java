@@ -20,7 +20,7 @@ package net.arctel.oms.infra.task;
 import net.arctel.framework.constants.LogConstant;
 import net.arctel.oms.dto.TaskProgressDTO;
 import net.arctel.oms.entity.OmsTask;
-import net.arctel.framework.core.task.BaseTaskMessage;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.core.task.BaseTaskRspCollector;
 import net.arctel.framework.core.task.TaskLogger;
 import net.arctel.oms.input.TaskProgressUpdateInput;

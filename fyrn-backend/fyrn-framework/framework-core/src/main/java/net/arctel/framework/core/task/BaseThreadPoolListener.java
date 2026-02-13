@@ -26,6 +26,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import lombok.Getter;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +53,7 @@ public abstract class BaseThreadPoolListener<T extends BaseTaskMessage> implemen
 
     private ThreadPoolConfig config;
 
-
+    @Getter
     private final Map<String, BaseThreadPoolHandler<T>> handlerMap = new HashMap<>();
 
 

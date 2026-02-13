@@ -17,6 +17,8 @@
 
 package net.arctel.framework.core.task;
 
+import net.arctel.framework.core.task.model.BaseTaskMessage;
+import net.arctel.framework.core.task.utils.TaskRspCollectorUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import jakarta.annotation.Resource;

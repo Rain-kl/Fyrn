@@ -20,6 +20,7 @@ package net.arctel.opkit.service.impl;
 import net.arctel.oms.infra.task.DefaultTaskMessage;
 import jakarta.annotation.Resource;
 import net.arctel.opkit.input.TranslationBaseInput;
+import net.arctel.opkit.output.OpkitListOutput;
 import net.arctel.opkit.queue.OpKitProducerQueue;
 import net.arctel.opkit.service.TranslationService;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Service;
 import static net.arctel.opkit.common.constants.TaskTagConstant.OPKIT_TRANS_TAG;
 
 @Service
-public class TranslationServiceImpl extends BaseServiceImpl implements TranslationService {
+public class TranslationServiceImpl extends BaseToolServiceImpl implements TranslationService {
 
     @Resource
     OpKitProducerQueue opKitProducerQueue;
@@ -38,5 +39,15 @@ public class TranslationServiceImpl extends BaseServiceImpl implements Translati
         taskMsg = (DefaultTaskMessage) taskMsg.build().buildTaskMessage(OPKIT_TRANS_TAG, "OPKIT", input);
         opKitProducerQueue.push(taskMsg);
         return taskMsg.getTaskId();
+    }
+
+    @Override
+    public OpkitListOutput getToolInfo() {
+        OpkitListOutput opkitListOutput = new OpkitListOutput();
+        opkitListOutput.setToolName("Translation Service");
+        opkitListOutput.setHandlerTag(OPKIT_TRANS_TAG);
+        opkitListOutput.setDescription("提供文本翻译功能，支持多语言翻译");
+        opkitListOutput.setVersion("V1.0");
+        return opkitListOutput;
     }
 }

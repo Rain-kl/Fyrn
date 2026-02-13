@@ -17,6 +17,8 @@
 
 package net.arctel.framework.core.task;
 
+import net.arctel.framework.core.task.model.BaseTaskMessage;
+
 public interface BaseThreadPoolHandler<T extends BaseTaskMessage> {
 
     default void doProcess(T taskMsg) throws Exception {

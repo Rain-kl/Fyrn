@@ -17,6 +17,7 @@
 
 package net.arctel.fyrn.task;
 
+import net.arctel.framework.core.task.model.RegistrationInfo;
 import net.arctel.oms.infra.task.DefaultTaskMessage;
 import net.arctel.oms.infra.task.OmsTaskQueue;
 import net.arctel.framework.core.task.BaseThreadPoolListener;

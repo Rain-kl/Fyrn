@@ -17,7 +17,7 @@
 
 package net.arctel.framework.core.task.fast;
 
-import net.arctel.framework.core.task.BaseTaskMessage;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.core.task.BaseThreadPoolHandler;
 import lombok.extern.slf4j.Slf4j;
 

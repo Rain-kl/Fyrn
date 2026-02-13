@@ -20,7 +20,7 @@ package net.arctel.oms.infra.task;
 import com.alibaba.fastjson2.JSON;
 import net.arctel.oms.entity.OmsTask;
 import net.arctel.oms.common.enums.TaskStatusEnum;
-import net.arctel.framework.core.task.BaseTaskMessage;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.core.task.BaseTaskQueue;
 import net.arctel.oms.service.OmsTaskService;
 import jakarta.annotation.Resource;

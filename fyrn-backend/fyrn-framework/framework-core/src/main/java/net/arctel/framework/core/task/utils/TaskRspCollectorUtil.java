@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package net.arctel.framework.core.task;
+package net.arctel.framework.core.task.utils;
 
 
 import java.time.Duration;
@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import net.arctel.framework.constants.ErrorConstant;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.exception.BizException;
 import org.springframework.data.redis.core.RedisTemplate;
 

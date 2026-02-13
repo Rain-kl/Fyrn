@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package net.arctel.framework.core.task;
+package net.arctel.framework.core.task.model;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;

@@ -18,7 +18,7 @@
 package net.arctel.framework.core.task.fast;
 
 import net.arctel.framework.constants.LogConstant;
-import net.arctel.framework.core.task.BaseTaskMessage;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 import net.arctel.framework.core.task.BaseTaskRspCollector;
 import net.arctel.framework.core.task.TaskLogger;
 import lombok.extern.slf4j.Slf4j;

@@ -19,8 +19,8 @@ package net.arctel.fyrn.constants;
 
 public class MmsHandlerTagConstant {
 
-    public static final String FileToOssHandler = "FileToOss";
+    public static final String FileToOssHandler = "MMS_FILE_TO_OSS";
 
-    public static final String OssToMms = "OssToMms";
+    public static final String OssToMms = "MMS_OSS_TO_MMS";
 
 }

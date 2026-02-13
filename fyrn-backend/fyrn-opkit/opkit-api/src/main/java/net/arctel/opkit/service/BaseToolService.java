@@ -17,7 +17,9 @@
 
 package net.arctel.opkit.service;
 
-public interface BaseService {
+import net.arctel.opkit.output.OpkitListOutput;
+
+public interface BaseToolService {
 
     /**
      * 翻译文本
@@ -26,6 +28,9 @@ public interface BaseService {
      * @return 翻译后的文本
      */
     <R> R queryResponse(String taskId, Class<R> clazz);
+
+
+    OpkitListOutput getToolInfo();
 
 
 }
