@@ -15,26 +15,18 @@
  * limitations under the License.
  */
 
-package net.arctel.aggregation.config.mvc;
+package net.arctel.opkit.common.constants;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+public class OpkitParameterConstant {
 
-@Configuration
-public class CorsConfig implements WebMvcConfigurer {
+    /**
+     * 翻译引擎参数
+     */
+    public static final Integer TRANSLATION_ENGINE = 20100;
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-//                .allowedOrigins(
-//                        "http://localhost:3000"
-//                )
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .exposedHeaders("X-Total-Count")
-//                .allowCredentials(true)
-                .maxAge(1800);
-    }
+    /**
+     * DeepLX 配置参数
+     */
+    public static final Integer DEEPLX_CONFIG = 20101;
+
 }

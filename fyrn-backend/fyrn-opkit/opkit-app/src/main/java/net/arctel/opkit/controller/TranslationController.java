@@ -34,14 +34,15 @@ package net.arctel.opkit.controller;
  */
 
 
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
 import net.arctel.framework.utils.Result;
+import net.arctel.oms.service.OmsParameterService;
+import net.arctel.opkit.common.constants.OpkitParameterConstant;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.service.BaseToolService;
 import net.arctel.opkit.service.TranslationService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/opkit/translation")
@@ -53,12 +54,28 @@ public class TranslationController {
     @Resource
     private BaseToolService baseToolService;
 
+    @Resource
+    OmsParameterService omsParameterService;
+
     /**
      * 基础翻译接口
      */
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public Result<String> translate(TranslationBaseInput input) {
         String taskId = translationService.translate(input);
+        return Result.success(baseToolService.queryResponse(taskId, String.class));
+    }
+
+    @PostMapping("/deeplx/{action}")
+    public Result<String> translateWithDeeplx(@PathVariable String action, String token, @RequestBody JSONObject input) {
+        TranslationBaseInput translationBaseInput = new TranslationBaseInput();
+        String transEngine = omsParameterService.getParamValueByCode(OpkitParameterConstant.TRANSLATION_ENGINE);
+        translationBaseInput.setTransEngine(transEngine);
+        translationBaseInput.setText(input.get("text").toString());
+        translationBaseInput.setSourceLanguage(input.get("source_lang").toString());
+        translationBaseInput.setTargetLanguage(input.get("target_lang").toString());
+
+        String taskId = translationService.translate(translationBaseInput);
         return Result.success(baseToolService.queryResponse(taskId, String.class));
     }
 }

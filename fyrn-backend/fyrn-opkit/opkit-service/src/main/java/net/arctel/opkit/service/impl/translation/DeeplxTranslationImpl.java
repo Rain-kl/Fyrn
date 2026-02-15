@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import net.arctel.framework.exception.BizException;
 import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.oms.service.OmsParameterService;
+import net.arctel.opkit.common.constants.OpkitParameterConstant;
 import net.arctel.opkit.common.constants.TransEngineConstant;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.model.TranslationResult;
@@ -28,7 +29,7 @@ public class DeeplxTranslationImpl implements TranslationService {
     @Override
     public String translate(TranslationBaseInput input) {
         @SuppressWarnings("unchecked")
-        List<String> paramValueByCode = omsParameterService.getParamValueByCode(20010, List.class);
+        List<String> paramValueByCode = omsParameterService.getParamValueByCode(OpkitParameterConstant.DEEPLX_CONFIG, List.class);
         if (paramValueByCode == null || paramValueByCode.size() != 2) {
             throw new BizException("缺少参数配置：DEEPLX_BASE_URL");
         }

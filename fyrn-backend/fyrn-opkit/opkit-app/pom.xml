@@ -25,6 +25,14 @@
             <groupId>net.arctel.platform</groupId>
             <artifactId>oms-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
