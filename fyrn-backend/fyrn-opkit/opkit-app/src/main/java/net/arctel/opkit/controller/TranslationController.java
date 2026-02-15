@@ -37,6 +37,7 @@ package net.arctel.opkit.controller;
 import jakarta.annotation.Resource;
 import net.arctel.framework.utils.Result;
 import net.arctel.opkit.input.TranslationBaseInput;
+import net.arctel.opkit.service.BaseToolService;
 import net.arctel.opkit.service.TranslationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,12 +50,15 @@ public class TranslationController {
     @Resource
     private TranslationService translationService;
 
+    @Resource
+    private BaseToolService baseToolService;
+
     /**
      * 基础翻译接口
      */
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public Result<String> translate(TranslationBaseInput input) {
         String taskId = translationService.translate(input);
-        return Result.success(translationService.queryResponse(taskId, String.class));
+        return Result.success(baseToolService.queryResponse(taskId, String.class));
     }
 }

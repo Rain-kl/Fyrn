@@ -34,7 +34,7 @@ public abstract class BaseToolServiceImpl implements BaseToolService {
     /**
      * 阻塞式查询任务结果, 直到结果返回或超时
      *
-     * @param taskId 任务ID
+     * @param taskId 任务 ID
      */
     @Override
     public <R> R queryResponse(String taskId, Class<R> clazz) {

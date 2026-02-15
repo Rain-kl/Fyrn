@@ -14,6 +14,16 @@
 
         <dependency>
             <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>opkit-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
             <artifactId>framework-core</artifactId>
         </dependency>
 
@@ -31,6 +41,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
 
     </dependencies>
 

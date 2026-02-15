@@ -17,12 +17,12 @@
 
 package net.arctel.oms.service;
 
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.extension.service.IService;
 import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.entity.OmsParameter;
 import net.arctel.oms.input.ParameterAddInput;
-import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.io.Serializable;
 
 /**
  * @author ryan
@@ -48,7 +48,9 @@ public interface OmsParameterService extends IService<OmsParameter> {
 
     BaseQueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize);
 
-    Object getParamValueByCode(Integer paramCode);
+    String getParamValueByCode(Integer paramCode);
+
+    <R> R getParamValueByCode(Integer paramCode, Class<R> clazz);
 
     boolean clearCache();
 

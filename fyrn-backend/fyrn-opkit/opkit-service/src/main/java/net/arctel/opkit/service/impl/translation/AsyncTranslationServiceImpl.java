@@ -15,20 +15,24 @@
  * limitations under the License.
  */
 
-package net.arctel.opkit.service.impl;
+package net.arctel.opkit.service.impl.translation;
 
-import net.arctel.oms.infra.task.DefaultTaskMessage;
 import jakarta.annotation.Resource;
+import net.arctel.oms.infra.task.DefaultTaskMessage;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.output.OpkitListOutput;
 import net.arctel.opkit.queue.OpKitProducerQueue;
+import net.arctel.opkit.service.BaseToolService;
 import net.arctel.opkit.service.TranslationService;
+import net.arctel.opkit.service.impl.BaseToolServiceImpl;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import static net.arctel.opkit.common.constants.TaskTagConstant.OPKIT_TRANS_TAG;
 
 @Service
-public class TranslationServiceImpl extends BaseToolServiceImpl implements TranslationService {
+@Primary
+public class AsyncTranslationServiceImpl extends BaseToolServiceImpl implements TranslationService, BaseToolService {
 
     @Resource
     OpKitProducerQueue opKitProducerQueue;

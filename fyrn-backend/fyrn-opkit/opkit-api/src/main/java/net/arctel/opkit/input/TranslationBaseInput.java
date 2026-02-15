@@ -22,9 +22,24 @@ import lombok.Data;
 @Data
 public class TranslationBaseInput {
 
+    /**
+     * 待翻译文本
+     */
     private String text;
 
+    /**
+     * 翻译引擎
+     * 可选: "hy-mt1.5-7b", "deeplx"
+     */
+    private String transEngine;
+
+    /**
+     * 源语言
+     */
     private String sourceLanguage;
 
+    /**
+     * 目标语言
+     */
     private String targetLanguage;
 }

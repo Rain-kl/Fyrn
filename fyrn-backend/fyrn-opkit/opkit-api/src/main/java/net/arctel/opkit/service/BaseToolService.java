@@ -24,7 +24,7 @@ public interface BaseToolService {
     /**
      * 翻译文本
      *
-     * @param taskId 任务ID
+     * @param taskId 任务 ID
      * @return 翻译后的文本
      */
     <R> R queryResponse(String taskId, Class<R> clazz);

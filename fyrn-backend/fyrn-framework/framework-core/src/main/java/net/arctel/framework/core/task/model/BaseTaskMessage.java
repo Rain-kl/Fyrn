@@ -20,6 +20,7 @@ package net.arctel.framework.core.task.model;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class BaseTaskMessage {
@@ -85,5 +86,12 @@ public class BaseTaskMessage {
         this.bizTag = bizTag;
         this.bizValue = JSON.toJSONString(bizValue);
         return this;
+    }
+
+    public static <R> R parseBizValue(String bizValue, Class<R> clazz) {
+        if(StringUtils.isBlank(bizValue)) {
+            return null;
+        }
+        return JSON.parseObject(bizValue, clazz);
     }
 }

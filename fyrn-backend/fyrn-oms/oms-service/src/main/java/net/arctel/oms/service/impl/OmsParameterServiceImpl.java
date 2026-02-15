@@ -19,17 +19,18 @@ package net.arctel.oms.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import net.arctel.oms.common.base.BaseQueryPage;
-import net.arctel.oms.entity.OmsParameter;
-import net.arctel.oms.mapper.OmsParameterMapper;
-import net.arctel.oms.input.ParameterAddInput;
-import net.arctel.oms.service.OmsParameterService;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.oms.entity.OmsParameter;
+import net.arctel.oms.input.ParameterAddInput;
+import net.arctel.oms.mapper.OmsParameterMapper;
+import net.arctel.oms.service.OmsParameterService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -49,6 +50,9 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
 
     @Resource
     private OmsParameterMapper omsParameterMapper;
+
+    @Resource
+    private OmsParameterService self;
 
     @Override
     public BaseQueryPage<OmsParameter> queryPage(OmsParameter omsParameter, int pageNo, int pageSize) {
@@ -76,7 +80,7 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
      */
     @Cacheable(value = "OmsParameter", key = "'ParamValueByCode:'+#paramCode", unless = "#result == null")
     @Override
-    public Object getParamValueByCode(Integer paramCode) {
+    public String getParamValueByCode(Integer paramCode) {
         OmsParameter omsParameter = omsParameterMapper.selectById(paramCode);
         if (ObjectUtil.isNull(omsParameter)) {
             return null;
@@ -86,6 +90,15 @@ public class OmsParameterServiceImpl extends ServiceImpl<OmsParameterMapper, Oms
             return null;
         }
         return paramValue;
+    }
+
+    @Override
+    public <R> R getParamValueByCode(Integer paramCode, Class<R> clazz) {
+        String paramValue = self.getParamValueByCode(paramCode);
+        if (paramValue == null) {
+            return null;
+        }
+        return JSON.parseObject(paramValue, clazz);
     }
 
     @CacheEvict(value = "OmsParameter", allEntries = true)

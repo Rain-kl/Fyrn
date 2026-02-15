@@ -17,9 +17,9 @@
 
 package net.arctel.framework.core.task.fast;
 
-import net.arctel.framework.core.task.model.BaseTaskMessage;
-import net.arctel.framework.core.task.BaseThreadPoolHandler;
 import lombok.extern.slf4j.Slf4j;
+import net.arctel.framework.core.task.BaseThreadPoolHandler;
+import net.arctel.framework.core.task.model.BaseTaskMessage;
 
 
 @Slf4j
@@ -40,6 +40,7 @@ public abstract class FastTaskHandler<T extends BaseTaskMessage> extends FastTas
             log.info("Handler {} process task {} success", getHandlerId(), taskMsg.getTaskId());
         } catch (Exception e) {
             log.error("Handler {} process task {} failed: {}", getHandlerId(), taskMsg.getTaskId(), e.getMessage(), e);
+            collectResponse(e.getMessage() + "Handler " + getHandlerId() + " process task failed: ");
         }
     }
 

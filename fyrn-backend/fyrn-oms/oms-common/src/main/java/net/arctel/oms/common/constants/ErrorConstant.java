@@ -36,5 +36,7 @@ public class ErrorConstant {
     public static final String EXTERNAL_SERVICE_ERROR = "5002";
     public static final String TIMEOUT_ERROR = "5003";
 
+    public static final String EXTERNAL_ERROR_PREFIX = "99x";
+
 
 }
