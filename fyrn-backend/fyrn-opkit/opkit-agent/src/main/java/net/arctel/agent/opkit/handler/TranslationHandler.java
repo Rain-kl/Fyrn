@@ -32,7 +32,7 @@ import static net.arctel.opkit.common.constants.TaskTagConstant.OPKIT_TRANS_TAG;
 public class TranslationHandler extends FastTaskHandler<DefaultTaskMessage> {
 
     @Resource
-    private Map<String, TranslationService> services;
+    private Map<String, TranslationService> translationServiceMap;
 
 
     @Override
@@ -44,7 +44,7 @@ public class TranslationHandler extends FastTaskHandler<DefaultTaskMessage> {
     public void handleTask(DefaultTaskMessage taskMsg) throws Exception {
         TranslationBaseInput translationBaseInput = DefaultTaskMessage.parseBizValue(taskMsg.getBizValue(), TranslationBaseInput.class);
         if (translationBaseInput != null) {
-            TranslationService translationService = services.get(translationBaseInput.getTransEngine());
+            TranslationService translationService = translationServiceMap.get(translationBaseInput.getTransEngine());
             if(translationService==null){
                 collectResponse("不支持的翻译引擎: " + translationBaseInput.getTransEngine());
             }else {
