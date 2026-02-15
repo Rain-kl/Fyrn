@@ -8,6 +8,7 @@ import net.arctel.opkit.common.constants.TransEngineConstant;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.model.TranslationResult;
 import net.arctel.opkit.service.TranslationService;
+import net.arctel.opkit.service.impl.translation.client.DeeplxTranslateClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

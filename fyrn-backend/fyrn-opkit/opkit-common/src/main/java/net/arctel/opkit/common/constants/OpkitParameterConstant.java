@@ -29,4 +29,9 @@ public class OpkitParameterConstant {
      */
     public static final Integer DEEPLX_CONFIG = 20101;
 
+    /**
+     * LLM 配置参数，格式：["baseUrl","apiKey","model"]
+     */
+    public static final Integer LLM_CONFIG = 20102;
+
 }

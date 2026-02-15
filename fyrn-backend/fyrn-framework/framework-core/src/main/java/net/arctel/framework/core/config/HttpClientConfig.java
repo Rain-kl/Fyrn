@@ -13,8 +13,9 @@ public class HttpClientConfig {
     public HttpClient httpClient() {
         return HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
+                .version(HttpClient.Version.HTTP_1_1)
                 // 如需对齐 curl/postman 行为，可临时打开重定向跟随验证：
-                // .followRedirects(HttpClient.Redirect.NORMAL)
+                .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
 }
