@@ -20,6 +20,11 @@
             <groupId>net.arctel</groupId>
             <artifactId>fyrn-mms-service</artifactId>
         </dependency>
+        <!-- Fyrn 模块 -->
+        <dependency>
+            <groupId>net.arctel</groupId>
+            <artifactId>wb-service</artifactId>
+        </dependency>
 
         <!-- framework 模块 -->
         <dependency>

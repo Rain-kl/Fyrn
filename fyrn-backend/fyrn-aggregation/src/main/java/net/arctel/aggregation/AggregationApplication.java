@@ -40,7 +40,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "net.arctel.framework",
         "net.arctel.oms",
         "net.arctel.opkit",
-        "net.arctel.agent"
+        "net.arctel.agent",
+        "net.arctel.workbench"
 }, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
 class AggregationApplication {
 

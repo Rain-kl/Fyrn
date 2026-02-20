@@ -1,0 +1,88 @@
+package net.arctel.workbench.domain;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.util.Date;
+
+/**
+ * 工作台任务表
+ *
+ * @TableName wb_task
+ */
+@TableName(value = "wb_task")
+@Data
+public class WbTask {
+    /**
+     * 任务ID
+     */
+    @TableId(type = IdType.ASSIGN_ID)
+    private String id;
+
+    /**
+     * 任务名称
+     */
+    private String name;
+
+    /**
+     * 任务描述
+     */
+    private String description;
+
+    /**
+     * 任务类型 0-普通 1-里程碑 2-子任务
+     */
+    private Integer type;
+
+    /**
+     * 任务分类
+     */
+    private String tag;
+
+    /**
+     * 任务状态 0-未开始 1-进行中 2-已完成 3-已取消
+     */
+    private Integer status;
+
+    /**
+     * 任务进度 0-100
+     */
+    private Integer progress;
+
+    /**
+     * 优先级 1-低 2-中 3-高 4-紧急
+     */
+    private Integer priority;
+
+    /**
+     * 父任务ID
+     */
+    private String parentId;
+
+    /**
+     * 任务开始时间
+     */
+    private Date startTime;
+
+    /**
+     * 任务截止时间
+     */
+    private Date deadline;
+
+    /**
+     * 任务完成时间
+     */
+    private Date completeTime;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+}

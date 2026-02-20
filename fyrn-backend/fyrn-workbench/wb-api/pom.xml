@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.arctel</groupId>
+        <artifactId>fyrn-workbench</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wb-api</artifactId>
+
+    <dependencies>
+        <!-- OMS 公共依赖 -->
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.arctel</groupId>
+            <artifactId>wb-model</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
