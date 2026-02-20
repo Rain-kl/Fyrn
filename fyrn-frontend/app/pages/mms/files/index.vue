@@ -30,11 +30,11 @@ const items = ref([
   >
     <template #content="{ item }">
       <div v-if="item.value === 'oss'">
-        <MmsOosFileManagement />
+        <ModulesMmsOosFileManagement />
       </div>
 
       <div v-if="item.value === 'local'">
-        <MmsLocalFileManagement />
+        <ModulesMmsLocalFileManagement />
       </div>
     </template>
   </NTabs>

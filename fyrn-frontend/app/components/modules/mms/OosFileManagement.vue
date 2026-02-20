@@ -5,7 +5,6 @@ import { useApi } from "~/api/useApi";
 import { formatToYMD } from "~/utils/date";
 import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
-import NovelBindDialog from "~/components/mms/NovelBindDialog.vue";
 
 const { uMmsNovelApi, DataSyncControllerApi} = useApi();
 const { toast } = useToast();
@@ -222,7 +221,7 @@ const handleSync = async () => {
     if (result.code === 200) {
       toast({
         title: "开始同步任务",
-        description: `任务 ID: ${result.data?.jobId}`,
+        description: `任务 ID: ${result.data?.taskId}`,
         toast: "soft-success",
         progress: "success",
         showProgress: true,
@@ -325,7 +324,7 @@ onMounted(() => {
       <!-- end cell -->
     </NTable>
 
-    <NovelBindDialog
+    <ModulesMmsNovelBindDialog
       v-model:open="bindDialogOpen"
       :file="selectedFile"
       @success="fetchData"

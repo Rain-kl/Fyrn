@@ -3,7 +3,6 @@ import type {ColumnDef, RowSelectionState, Table} from '@tanstack/vue-table'
 import type {OmsParameter} from '~/api/models'
 import {useApi} from '~/api/useApi'
 import {formatToYMD} from "~/utils/date";
-import ParameterEditDialog from "~/components/oms/ParameterEditDialog.vue";
 
 const {OmsParameterApi} = useApi()
 
@@ -110,7 +109,7 @@ const handleEdit = async (row: OmsParameter) => {
     })
     if (result.code === 200) {
       // Refresh data or show success message
-      fetchData()
+      await fetchData()
     }
   } catch (error) {
     console.error('Failed to edit parameter:', error)
@@ -244,7 +243,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <ParameterEditDialog
+    <ModulesOmsParameterEditDialog
         v-model:open="isEditDialogOpen"
         :parameter="selectedParameter"
         @save="handleEdit"

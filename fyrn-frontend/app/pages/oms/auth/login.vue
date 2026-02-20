@@ -41,7 +41,7 @@ async function handleLogin() {
       // Store user info if needed, e.g. useState or Pinia
       const user = useState('user')
       user.value = res.data
-      router.push('/')
+      await router.push('/')
     }
   } catch (error) {
     console.error(error)

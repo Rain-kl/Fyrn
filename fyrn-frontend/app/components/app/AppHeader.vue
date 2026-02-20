@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ColorMode from "~/components/button/ColorMode.vue";
 import { useApi } from '~/api/useApi'
 
 const { OmsAuthControllerApi } = useApi()
@@ -140,7 +139,7 @@ const items = [
          <NButton to="/oms/auth/login" label="Login" btn="ghost" size="sm" />
       </div>
 
-      <ColorMode />
+      <CommonButtonColorMode />
       <NThemeSwitcher />
     </div>
   </header>

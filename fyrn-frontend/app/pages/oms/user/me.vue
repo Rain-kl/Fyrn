@@ -74,7 +74,7 @@ const handleUpdateProfile = async () => {
             if (globalUser.value) {
                 globalUser.value = { ...globalUser.value, ...profileForm }
             }
-            fetchUserInfo() 
+            await fetchUserInfo()
         }
     } catch (e) {
         console.error(e)

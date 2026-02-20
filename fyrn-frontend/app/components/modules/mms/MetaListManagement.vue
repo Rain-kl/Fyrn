@@ -429,7 +429,7 @@ onMounted(() => {
     </div>
 
     <!-- Edit Dialog -->
-    <MmsMetaEditDialog
+    <ModulesMmsMetaEditDialog
       v-model:open="editDialogOpen"
       :meta="selectedMeta"
       @saved="handleSaved"

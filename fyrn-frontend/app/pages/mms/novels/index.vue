@@ -84,7 +84,6 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const result = await mmsNovelApi.mmsPageGet({
-      operator: "admin",
       pageNo: pageNo.value,
       pageSize: pageSize.value,
       novelId: filters.novelId || undefined,
@@ -260,6 +259,6 @@ onMounted(() => {
     </div>
 
     <!-- files dialog -->
-    <MmsNovelFilesDialog v-model="isFilesDialogOpen" :novel="selectedNovel" />
+    <ModulesMmsNovelFilesDialog v-model="isFilesDialogOpen" :novel="selectedNovel" />
   </div>
 </template>

@@ -11,6 +11,6 @@ definePageMeta({
       <p class="mt-2 text-muted">管理小说的元数据信息</p>
     </div>
 
-    <MmsMetaListManagement />
+    <ModulesMmsMetaListManagement />
   </div>
 </template>

@@ -3,7 +3,6 @@ import type { ColumnDef, RowSelectionState, Table } from '@tanstack/vue-table'
 import type { UserInfoVo, UserCreateInput, UserUpdateInput } from '~/api/models'
 import { useApi } from '~/api/useApi'
 import { formatToYMD } from "~/utils/date";
-import UserEditDialog from "~/components/oms/UserEditDialog.vue";
 
 const { OmsUserControllerApi } = useApi()
 
@@ -126,7 +125,7 @@ const handleSave = async (payload: UserCreateInput | UserUpdateInput) => {
     }
 
     if (result.code === 200) {
-      fetchData()
+      await fetchData()
     } else {
       console.error('Save failed:', result.msg)
     }
@@ -141,7 +140,7 @@ const handleDelete = async (user: UserInfoVo) => {
       userId: user.userId!
     })
     if (result.code === 200) {
-      fetchData()
+      await fetchData()
     }
   } catch (error) {
     console.error('Failed to delete user:', error)
@@ -247,7 +246,7 @@ watch(filters, () => {
       </div>
     </div>
 
-    <UserEditDialog
+    <ModulesOmsUserEditDialog
       v-model:open="isEditDialogOpen"
       :user="selectedUser"
       @save="handleSave"

@@ -4,7 +4,6 @@ import type { LocalFileSimpleDto } from "~/api/models";
 import { useApi } from "~/api/useApi";
 import { formatBytes } from "~/utils/file";
 import { formatWordCount } from "~/utils/number";
-import SyncConfigDialog from "~/components/mms/SyncConfigDialog.vue";
 
 const { uMmsNovelApi,DataSyncControllerApi } = useApi();
 const { toast } = useToast();
@@ -76,7 +75,6 @@ const handleSync = async (size: number) => {
   syncing.value = true;
   try {
     const result = await DataSyncControllerApi.syncFileToOssPost({
-      operator: "admin",
       size: size,
     });
     if (result.code === 200) {
@@ -199,6 +197,6 @@ watch(
     </div>
 
     <!-- Sync Config Dialog -->
-    <SyncConfigDialog v-model:open="syncDialogOpen" @confirm="handleSync" />
+    <ModulesMmsSyncConfigDialog v-model:open="syncDialogOpen" @confirm="handleSync" />
   </div>
 </template>

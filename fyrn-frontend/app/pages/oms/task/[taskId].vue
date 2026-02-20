@@ -24,7 +24,7 @@ useHead({
         cardContent: 'p-4 h-full',
       }"
     >
-      <OmsTaskDetail :taskId="taskId" />
+      <ModulesOmsTaskDetail :taskId="taskId" />
     </NCard>
   </div>
 </template>

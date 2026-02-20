@@ -54,7 +54,7 @@ async function handleRegister() {
         description: 'Registration successful! Please login.',
         toast: 'soft-success',
       })
-      router.push('/oms/auth/login')
+      await router.push('/oms/auth/login')
     }
   } catch (error) {
     console.error(error)

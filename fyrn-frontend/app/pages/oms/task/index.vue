@@ -33,11 +33,11 @@ const items = ref([
     <template #content="{ item }">
 
       <div v-if="item.value === 'threadStatus'">
-        <OmsThreadStatus/>
+        <ModulesOmsThreadStatus/>
       </div>
 
       <div v-if="item.value === 'taskList'">
-        <OmsTaskListManagement/>
+        <ModulesOmsTaskListManagement/>
       </div>
 
     </template>
