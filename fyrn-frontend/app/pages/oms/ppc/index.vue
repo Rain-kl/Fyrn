@@ -80,7 +80,6 @@ const fetchData = async () => {
   loading.value = true
   try {
     const result = await OmsParameterApi.omsParameterPageGet({
-      operator: 'admin',
       pageNo: pageNo.value,
       pageSize: pageSize.value,
       paramCode: filters.paramCode ? Number(filters.paramCode) : undefined,
@@ -105,9 +104,8 @@ const fetchData = async () => {
 const handleEdit = async (row: OmsParameter) => {
   try {
     const result = await OmsParameterApi.omsParameterEditPost({
-      addParameterInput: {
+      parameterAddInput: {
         ...row,
-        operator: 'admin',
       },
     })
     if (result.code === 200) {
