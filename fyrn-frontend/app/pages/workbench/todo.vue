@@ -1,16 +1,51 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
 definePageMeta({
   layout: "workbench",
 });
+
+const todoListPanelRef = ref<{
+  refresh: () => Promise<void>;
+  openAddModal: () => void;
+} | null>(null);
+
+const handleRefresh = () => {
+  todoListPanelRef.value?.refresh();
+};
+
+const handleOpenAdd = () => {
+  todoListPanelRef.value?.openAddModal();
+};
 </script>
 
 <template>
-  <ModulesWorkbenchBlock title="待办" class="h-full min-h-[calc(100vh-10rem)]">
-    <div
-      class="flex flex-col items-center justify-center h-full text-muted-foreground space-y-4 opacity-70"
-    >
-      <NIcon name="i-lucide-check-square" class="size-12" />
-      <p class="text-lg">待办页面开发中</p>
+  <div class="h-full flex flex-col gap-4 w-full">
+    <div class="flex items-center justify-between pb-4 border-b shrink-0">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight">待办事项</h2>
+        <p class="text-sm text-muted-foreground mt-1">管理和跟踪您的任务与提醒</p>
+      </div>
+      <div class="flex gap-2">
+        <NButton
+          @click="handleRefresh"
+          size="sm"
+          btn="outline-gray"
+          leading="i-radix-icons-update"
+        >
+          刷新
+        </NButton>
+        <NButton
+          @click="handleOpenAdd"
+          size="sm"
+          btn="solid-primary"
+          leading="i-lucide-plus"
+        >
+          添加任务
+        </NButton>
+      </div>
     </div>
-  </ModulesWorkbenchBlock>
+
+    <ModulesWorkbenchTodoListPanel ref="todoListPanelRef" />
+  </div>
 </template>

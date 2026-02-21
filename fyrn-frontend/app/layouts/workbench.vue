@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen w-screen flex flex-col overflow-hidden bg-background">
-    <!-- Restoring the global AppHeader with highest z-index to stay above dropdowns -->
-    <div class="shrink-0 relative z-[100] border-b border-border shadow-sm">
+    <!-- Restoring the global AppHeader with correct z-index to stay above dropdowns internally, but below dialogs -->
+    <div class="shrink-0 relative z-40 border-b border-border shadow-sm">
       <div class="container mx-auto px-4 md:px-6 lg:px-8">
         <AppHeader />
       </div>

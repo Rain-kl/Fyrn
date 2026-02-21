@@ -1,20 +1,11 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full min-h-[700px]"
+    class="workbench-overview-grid grid grid-cols-1 gap-6 h-full min-h-[700px]"
   >
     <!-- Column 1 -->
     <div class="flex flex-col gap-6 h-full">
       <ModulesWorkbenchBlock title="今日待办" class="flex-[2] min-h-[350px]">
-        <div class="space-y-4">
-          <NSkeleton class="h-16 w-full rounded-md" />
-          <NSkeleton class="h-16 w-full rounded-md" />
-          <NSkeleton class="h-16 w-full rounded-md" />
-          <NSkeleton class="h-16 w-full rounded-md" />
-        </div>
+        <ModulesWorkbenchTodoOverviewPanel class="h-full" />
       </ModulesWorkbenchBlock>
       <ModulesWorkbenchBlock title="笔记" class="flex-1 min-h-[250px]">
         <div class="space-y-3">
@@ -50,24 +41,13 @@
         </div>
       </ModulesWorkbenchBlock>
     </div>
-
-    <!-- Column 3 -->
-    <div class="flex flex-col gap-6 h-full">
-      <ModulesWorkbenchBlock
-          title="暂未规划"
-          class="flex-1 h-full min-h-[600px]"
-      >
-        <div
-            class="flex flex-col items-center justify-center h-full text-muted-foreground opacity-50 space-y-4"
-        >
-          <NIcon name="i-lucide-inbox" class="size-16" />
-          <p class="text-lg">暂无内容</p>
-        </div>
-      </ModulesWorkbenchBlock>
-    </div>
   </div>
 </template>
 
 <style scoped>
-
+@media (min-width: 768px) {
+  .workbench-overview-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
 </style>
