@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
-@MapperScan({"net.arctel.fyrn.mapper", "net.arctel.oms.mapper"})
+@MapperScan({"net.arctel.fyrn.mapper", "net.arctel.oms.mapper","net.arctel.workbench.mapper"})
 @ComponentScan(basePackages = {
         "net.arctel.aggregation",
         "net.arctel.fyrn",

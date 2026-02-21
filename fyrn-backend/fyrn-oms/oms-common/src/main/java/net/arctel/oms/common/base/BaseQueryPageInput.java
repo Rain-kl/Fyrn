@@ -17,7 +17,10 @@
 
 package net.arctel.oms.common.base;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 封装分页查询结果
@@ -26,6 +29,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseQueryPageInput {
+
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
 
     /**
      * 当前页码
@@ -36,6 +42,19 @@ public class BaseQueryPageInput {
      * 每页记录数
      */
     private Integer pageSize = 20;
+
+    /**
+     * 排序字段，默认为id
+     * -- GETTER --
+     * 获取排序字段，如果为空则返回默认值id
+     */
+    @Getter
+    private String orderBy = null;
+
+    /**
+     * 排序方向，默认为升序（asc），可选值为asc或desc
+     */
+    private String orderDirection = ASC;
 
     /**
      * 获取当前页码，如果为空则返回默认值1
@@ -49,6 +68,13 @@ public class BaseQueryPageInput {
      */
     public Integer getPageSize() {
         return pageSize == null ? 20 : pageSize;
+    }
+
+    /**
+     * 获取排序方向，如果为空则返回默认值asc
+     */
+    public String getOrderDirection() {
+        return orderDirection == null ? ASC : orderDirection;
     }
 
 }

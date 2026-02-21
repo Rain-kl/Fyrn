@@ -1,5 +1,6 @@
 package net.arctel.workbench.service;
 
+import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.workbench.domain.WbTask;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +10,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2026-02-20 17:37:20
 */
 public interface WbTaskService extends IService<WbTask> {
+
+    BaseQueryPage<WbTask> pageWbTask(
+            WbTask wbTaskInput, Integer pageNo, Integer pageSize, String orderBy, String orderDirection);
 
 }

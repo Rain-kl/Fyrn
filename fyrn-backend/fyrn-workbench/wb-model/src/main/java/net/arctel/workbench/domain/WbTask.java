@@ -3,7 +3,10 @@ package net.arctel.workbench.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -14,6 +17,9 @@ import java.util.Date;
  */
 @TableName(value = "wb_task")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WbTask {
     /**
      * 任务ID
@@ -85,4 +91,20 @@ public class WbTask {
      * 更新时间
      */
     private Date updateTime;
+
+
+    public static WbTask buildPageInput(WbTask input) {
+        return WbTask.builder()
+                .name(input.getName())
+                .description(input.getDescription())
+                .type(input.getType())
+                .tag(input.getTag())
+                .status(input.getStatus())
+                .priority(input.getPriority())
+                .parentId(input.getParentId())
+                .startTime(input.getStartTime())
+                .deadline(input.getDeadline())
+                .completeTime(input.getCompleteTime())
+                .build();
+    }
 }
