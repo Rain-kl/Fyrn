@@ -9,3 +9,4 @@ export * from './OmsUserControllerApi';
 export * from './OmsAuthControllerApi';
 export * from './MmsMetaControllerApi';
 export * from './DataSyncControllerApi';
+export * from './WbTaskControllerApi';
