@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.arctel.framework.utils.CustomPaginationUtil;
 import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.common.base.BaseQueryPageInput;
 import net.arctel.workbench.domain.WbTask;
@@ -11,6 +12,7 @@ import net.arctel.workbench.mapper.WbTaskMapper;
 import net.arctel.workbench.service.WbTaskService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,21 +28,15 @@ public class WbTaskServiceImpl extends ServiceImpl<WbTaskMapper, WbTask>
     public BaseQueryPage<WbTask> pageWbTask(
             WbTask wbTaskInput, Integer pageNo, Integer pageSize, String orderBy, String orderDirection) {
 
-        // 1. 设置分页
-        IPage<WbTask> page = new Page<>(pageNo, pageSize);
-
-        // 🔥 关键点：这里改为普通的 QueryWrapper，它支持字符串列名
-        QueryWrapper<WbTask> wrapper = new QueryWrapper<>();
-
-        // 2. 动态排序 (QueryWrapper 直接支持字符串 orderBy)
-        if (orderBy != null && orderDirection != null) {
-            boolean isAsc = BaseQueryPageInput.ASC.equals(orderDirection);
-            // 这里的 orderBy 是字符串，例如 "name" 或 "create_time"
-            wrapper.orderBy(true, isAsc, orderBy);
+        if (orderBy != null) {
+            return standardOrderBy(wbTaskInput, pageNo, pageSize, orderBy, orderDirection);
+        } else {
+            return defaultOrderBy(wbTaskInput, pageNo, pageSize);
         }
+    }
 
-        // 3. 条件筛选 (使用 wrapper.lambda() 获取 LambdaQueryWrapper 进行筛选)
-        // 这样你就可以继续使用 WbTask::getName 这种写法了
+    private QueryWrapper<WbTask> buildPageWbTaskQueryWrapper(WbTask wbTaskInput) {
+        QueryWrapper<WbTask> wrapper = new QueryWrapper<>();
         wrapper.lambda()
                 .like(wbTaskInput.getName() != null, WbTask::getName, wbTaskInput.getName())
                 .like(wbTaskInput.getDescription() != null, WbTask::getDescription, wbTaskInput.getDescription())
@@ -52,16 +48,53 @@ public class WbTaskServiceImpl extends ServiceImpl<WbTaskMapper, WbTask>
                 .ge(wbTaskInput.getStartTime() != null, WbTask::getStartTime, wbTaskInput.getStartTime())
                 .le(wbTaskInput.getDeadline() != null, WbTask::getDeadline, wbTaskInput.getDeadline())
                 .ge(wbTaskInput.getCompleteTime() != null, WbTask::getCompleteTime, wbTaskInput.getCompleteTime());
+        return wrapper;
+    }
+
+    private BaseQueryPage<WbTask> defaultOrderBy(WbTask wbTaskInput, Integer pageNo, Integer pageSize) {
+        // 1. 构建查询条件
+        QueryWrapper<WbTask> wrapper = buildPageWbTaskQueryWrapper(wbTaskInput);
+        // 2. 查询符合条件的所有数据
+        List<WbTask> allTasks = getBaseMapper().selectList(wrapper);
+
+        // 3. 定义排序规则：首先按状态排序(未开始0、进行中1优先)，然后按截止日期升序排序
+        Comparator<WbTask> taskComparator = Comparator
+                // 按状态排序：0和1排前面，2和3排后面
+                .comparing((WbTask task) -> {
+                    Integer status = task.getStatus();
+                    if (status == null)
+                        return 2; // null 状态当作已完成处理
+                    return (status == 0 || status == 1) ? 0 : 1; // 未开始和进行中优先
+                })
+                // 再按截止日期升序排序，null值排在最后
+                .thenComparing(WbTask::getDeadline, Comparator.nullsLast(Comparator.naturalOrder()));
+
+        // 4. 使用 CustomPaginationUtil 进行排序和分页
+        CustomPaginationUtil.PageResult<WbTask> pageResult = CustomPaginationUtil.pagination(allTasks, pageNo, pageSize,
+                taskComparator);
+
+        // 5. 转换为 BaseQueryPage 返回
+        return new BaseQueryPage<>(pageResult.getTotal(), pageSize, pageNo, pageResult.getRows());
+    }
+
+    private BaseQueryPage<WbTask> standardOrderBy(WbTask wbTaskInput, Integer pageNo, Integer pageSize, String orderBy,
+                                                  String orderDirection) {
+        // 1. 设置分页
+        IPage<WbTask> page = new Page<>(pageNo, pageSize);
+
+        QueryWrapper<WbTask> wrapper = buildPageWbTaskQueryWrapper(wbTaskInput);
+
+        // 2. 动态排序 (QueryWrapper 直接支持字符串 orderBy)
+        if (orderBy != null && orderDirection != null) {
+            boolean isAsc = BaseQueryPageInput.ASC.equals(orderDirection);
+            // 这里的 orderBy 是字符串，例如 "name" 或 "create_time"
+            wrapper.orderBy(true, isAsc, orderBy);
+        }
 
         // 4. 执行查询
         IPage<WbTask> result = page(page, wrapper);
-
         List<WbTask> ordersList = result.getRecords();
-
         return new BaseQueryPage<>(result.getTotal(), pageSize, pageNo, ordersList);
     }
+
 }
-
-
-
-

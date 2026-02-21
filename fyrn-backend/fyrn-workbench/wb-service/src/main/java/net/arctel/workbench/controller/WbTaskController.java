@@ -23,30 +23,64 @@ public class WbTaskController {
     @Resource
     WbTaskService wbTaskService;
 
+    /**
+     * 分页查询工作台任务列表
+     *
+     * @param input
+     * @return
+     */
     @PostMapping("/page")
     public Result<BaseQueryPage<WbTask>> page(@RequestBody WbTaskPageInput input) {
-        WbTask wbTaskInput = WbTask.buildPageInput(input.getWbTask());
+        WbTask wbTask = input.getWbTask();
+        if (wbTask == null) {
+            wbTask = new WbTask();
+        }
+        WbTask wbTaskInput = WbTask.buildPageInput(wbTask);
 
         BaseQueryPage<WbTask> wbTaskBaseQueryPage = wbTaskService.pageWbTask(
                 wbTaskInput, input.getPageNo(), input.getPageSize(), input.getOrderBy(), input.getOrderDirection());
         return Result.success(wbTaskBaseQueryPage);
     }
 
+    /**
+     * 根据ID查询工作台任务详情
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/get")
     public Result<WbTask> get(String id) {
         return Result.success(wbTaskService.getById(id));
     }
 
+    /**
+     * 创建工作台任务
+     *
+     * @param input
+     * @return
+     */
     @PostMapping("/add")
     public Result<Boolean> add(@RequestBody WbTask input) {
         return Result.success(wbTaskService.save(input));
     }
 
+    /**
+     * 更新工作台任务
+     *
+     * @param input
+     * @return
+     */
     @PostMapping("/update")
     public Result<Boolean> update(@RequestBody WbTask input) {
         return Result.success(wbTaskService.updateById(input));
     }
 
+    /**
+     * 删除工作台任务
+     *
+     * @param ids
+     * @return
+     */
     @PostMapping("/delete")
     public Result<Boolean> delete(@RequestBody List<String> ids) {
         return Result.success(wbTaskService.removeByIds(ids));

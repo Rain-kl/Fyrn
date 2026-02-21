@@ -38,12 +38,12 @@ public class WbTask {
     private String description;
 
     /**
-     * 任务类型 0-普通 1-里程碑 2-子任务
+     * 任务类型 0-任务 1-提醒
      */
     private Integer type;
 
     /**
-     * 任务分类
+     * 任务分类, 未分类/日常/工作/<自定义>
      */
     private String tag;
 
