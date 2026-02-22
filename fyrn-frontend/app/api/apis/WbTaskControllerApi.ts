@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ResultBaseQueryPageWbTask,
   ResultBoolean,
+  ResultListWbTask,
   ResultWbTask,
   WbTask,
   WbTaskPageInput,
@@ -26,6 +27,8 @@ import {
     ResultBaseQueryPageWbTaskToJSON,
     ResultBooleanFromJSON,
     ResultBooleanToJSON,
+    ResultListWbTaskFromJSON,
+    ResultListWbTaskToJSON,
     ResultWbTaskFromJSON,
     ResultWbTaskToJSON,
     WbTaskFromJSON,
@@ -35,6 +38,10 @@ import {
 } from '../models/index';
 
 export interface WbAddPostRequest {
+    wbTask?: WbTask;
+}
+
+export interface WbAddSubTaskPostRequest {
     wbTask?: WbTask;
 }
 
@@ -48,6 +55,10 @@ export interface WbGetGetRequest {
 
 export interface WbPagePostRequest {
     wbTaskPageInput?: WbTaskPageInput;
+}
+
+export interface WbSubTasksGetRequest {
+    parentId?: string;
 }
 
 export interface WbUpdatePostRequest {
@@ -87,6 +98,37 @@ export class WbTaskControllerApi extends runtime.BaseAPI {
      */
     async wbAddPost(requestParameters: WbAddPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
         const response = await this.wbAddPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * 创建子任务
+     */
+    async wbAddSubTaskPostRaw(requestParameters: WbAddSubTaskPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultBoolean>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/wb/addSubTask`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: WbTaskToJSON(requestParameters['wbTask']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultBooleanFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 创建子任务
+     */
+    async wbAddSubTaskPost(requestParameters: WbAddSubTaskPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBoolean> {
+        const response = await this.wbAddSubTaskPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -181,6 +223,38 @@ export class WbTaskControllerApi extends runtime.BaseAPI {
      */
     async wbPagePost(requestParameters: WbPagePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultBaseQueryPageWbTask> {
         const response = await this.wbPagePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * 查询指定父任务下的子任务列表
+     */
+    async wbSubTasksGetRaw(requestParameters: WbSubTasksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResultListWbTask>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['parentId'] != null) {
+            queryParameters['parentId'] = requestParameters['parentId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/wb/subTasks`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResultListWbTaskFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * 查询指定父任务下的子任务列表
+     */
+    async wbSubTasksGet(requestParameters: WbSubTasksGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResultListWbTask> {
+        const response = await this.wbSubTasksGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
