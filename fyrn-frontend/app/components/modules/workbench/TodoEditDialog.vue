@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, reactive, resolveComponent, h } from "vue";
+import { ref, computed, watch, reactive } from "vue";
 import dayjs from "dayjs";
 import type { WbTask } from "~/api/models/WbTask";
 import { useApi } from "~/api/useApi";
@@ -25,6 +25,7 @@ const isOpen = computed({
 });
 
 const isView = ref(false);
+const viewDetailExpanded = ref(false);
 const loading = ref(false);
 const todayString = dayjs().format("YYYY-MM-DD");
 
@@ -69,11 +70,38 @@ const progressSliderValue = computed<number[]>({
   },
 });
 
+const typeText = computed(() => (formData.type === 1 ? "提醒" : "任务"));
+
+const priorityTextMap: Record<number, string> = {
+  1: "低",
+  2: "中",
+  3: "高",
+  4: "紧急",
+};
+
+const priorityText = computed(
+  () => priorityTextMap[Number(formData.priority || 1)] || "低",
+);
+
+const periodText = computed(() => {
+  if (formData.type === 1) {
+    return formData.deadline
+      ? dayjs(formData.deadline).format("YYYY-MM-DD HH:mm")
+      : "-";
+  }
+  const start = formData.startTime
+    ? dayjs(formData.startTime).format("YYYY-MM-DD")
+    : "-";
+  const end = formData.deadline ? dayjs(formData.deadline).format("YYYY-MM-DD") : "-";
+  return `${start} 至 ${end}`;
+});
+
 watch(
   () => props.open,
   (opened) => {
     if (opened) {
       isView.value = !!props.viewMode;
+      viewDetailExpanded.value = false;
       if (props.task) {
         Object.assign(formData, {
           id: props.task.id,
@@ -155,6 +183,9 @@ const saveTask = async () => {
         wbTask: Object.assign({}, props.task, payload),
       });
       toast({ title: "任务已更新", toast: "soft-success" });
+      emit("saved");
+      isView.value = true;
+      return;
     } else {
       // Default Status based on logic
       if (payload.type === 0) {
@@ -222,7 +253,47 @@ const handleEditClick = () => {
         </NFormGroup>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div
+        v-if="isView"
+        class="rounded-md border border-border/70 bg-muted/10"
+      >
+        <button
+          type="button"
+          class="w-full px-3 py-2 text-left text-sm font-medium flex items-center justify-between"
+          @click="viewDetailExpanded = !viewDetailExpanded"
+        >
+          <span>任务详情</span>
+          <NIcon
+            :name="
+              viewDetailExpanded
+                ? 'i-lucide-chevron-up'
+                : 'i-lucide-chevron-down'
+            "
+            class="size-4 text-muted-foreground"
+          />
+        </button>
+        <div
+          v-if="viewDetailExpanded"
+          class="grid grid-cols-2 gap-x-6 gap-y-3 px-3 pb-3 pt-1 text-sm"
+        >
+          <div>
+            <span class="text-muted-foreground">类型：</span>{{ typeText }}
+          </div>
+          <div>
+            <span class="text-muted-foreground">优先级：</span>{{ priorityText }}
+          </div>
+          <div>
+            <span class="text-muted-foreground">进度：</span>{{ formData.progress || 0 }}%
+          </div>
+          <div>
+            <span class="text-muted-foreground">{{
+              formData.type === 1 ? "提醒时间：" : "任务周期："
+            }}</span>{{ periodText }}
+          </div>
+        </div>
+      </div>
+
+      <div v-if="!isView" class="grid grid-cols-2 gap-4">
         <NFormGroup label="类型">
           <div class="flex gap-4 text-sm font-medium pt-2">
             <label class="flex items-center gap-1.5 cursor-pointer">
@@ -294,7 +365,7 @@ const handleEditClick = () => {
         </NFormGroup>
       </div>
 
-      <div v-if="formData.type === 0" class="grid grid-cols-2 gap-4">
+      <div v-if="!isView && formData.type === 0" class="grid grid-cols-2 gap-4">
 
         <NFormGroup label="进度 (%)" class="col-span-1">
           <div class="flex items-center gap-3 pt-1">
@@ -319,7 +390,7 @@ const handleEditClick = () => {
           />
         </NFormGroup>
       </div>
-      <div v-else class="grid grid-cols-2 gap-4">
+      <div v-else-if="!isView" class="grid grid-cols-2 gap-4">
         <NFormGroup label="提醒时间" class="col-span-1">
           <CommonDateTimePicker
             v-model="formData.deadline"

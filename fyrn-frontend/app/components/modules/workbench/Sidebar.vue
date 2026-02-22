@@ -13,6 +13,11 @@ const data = {
       url: "/workbench/dashboard",
       icon: "i-lucide-bar-chart-2",
     },
+    {
+      title: "设置",
+      url: "/workbench/settings",
+      icon: "i-lucide-settings",
+    },
   ],
 };
 </script>

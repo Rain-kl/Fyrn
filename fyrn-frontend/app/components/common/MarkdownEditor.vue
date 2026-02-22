@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { MdEditor, MdPreview, config } from "md-editor-v3";
+import { computed } from "vue";
 import "md-editor-v3/lib/style.css";
 import "md-editor-v3/lib/preview.css";
+import { useWorkbenchMarkdownTheme } from "~/composables/useWorkbenchSettings";
 
 const props = defineProps<{
   modelValue: string;
   disabled?: boolean;
+  previewTheme?: string;
 }>();
 
 const emit = defineEmits<{
   "update:modelValue": [value: string];
 }>();
+
+const globalMarkdownTheme = useWorkbenchMarkdownTheme();
+const resolvedPreviewTheme = computed(
+  () => props.previewTheme || globalMarkdownTheme.value || "default",
+);
 
 // Ensure basic Chinese locale config
 config({
@@ -100,6 +108,7 @@ config({
       v-if="disabled"
       :model-value="modelValue"
       language="zh-CN"
+      :preview-theme="resolvedPreviewTheme"
       class="w-full"
     />
     <div
@@ -111,6 +120,7 @@ config({
         @update:model-value="(v) => emit('update:modelValue', v)"
         language="zh-CN"
         :preview="false"
+        :preview-theme="resolvedPreviewTheme"
         class="h-[300px]"
         :toolbars="[
           'bold',
@@ -154,21 +164,5 @@ config({
   --md-bk-color: transparent;
   --md-color: inherit;
   --md-border-color: transparent;
-}
-
-/* Keep preview mode scrollable when content exceeds fixed editor height. */
-:deep(.md-editor.md-editor-previewOnly) {
-  height: 100%;
-  overflow: hidden;
-}
-
-:deep(.md-editor.md-editor-previewOnly .md-editor-content) {
-  height: 100%;
-  min-height: 0;
-}
-
-:deep(.md-editor.md-editor-previewOnly .md-editor-preview-wrapper) {
-  height: 100%;
-  overflow-y: auto;
 }
 </style>
