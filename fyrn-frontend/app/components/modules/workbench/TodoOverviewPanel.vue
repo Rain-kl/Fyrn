@@ -37,7 +37,8 @@ const fetchTasks = async () => {
           const daysLeft = dayjs(t.deadline)
             .startOf("day")
             .diff(dayjs().startOf("day"), "day");
-          return daysLeft >= 0 && daysLeft <= 7;
+          // Show upcoming tasks within 7 days and all overdue tasks.
+          return daysLeft <= 7;
         })
         .sort((a, b) => {
           const dateA = a.deadline ? dayjs(a.deadline).valueOf() : Infinity;
@@ -105,7 +106,7 @@ onMounted(() => {
       class="flex flex-col items-center justify-center h-full text-muted-foreground opacity-70 space-y-2 py-6"
     >
       <NIcon name="i-lucide-calendar-check-2" class="size-10" />
-      <p class="text-sm">未来 7 天内无截止任务</p>
+      <p class="text-sm">未来 7 天内和已超期均无截止任务</p>
     </div>
 
     <NScrollArea v-else class="h-[344px] min-h-[344px] max-h-[344px] pr-1">

@@ -100,12 +100,12 @@ config({
     :class="disabled ? 'bg-muted/20' : ''"
   >
     <ClientOnly>
-      <MdPreview
-        v-if="disabled"
-        :model-value="modelValue"
-        language="zh-CN"
-        class="w-full p-4 min-h-[100px] max-h-[60vh] overflow-y-auto"
-      />
+      <div v-if="disabled" class="w-full p-4 min-h-[100px] max-h-[60vh] overflow-y-auto">
+        <MdPreview
+          :model-value="modelValue"
+          language="zh-CN"
+        />
+      </div>
       <MdEditor
         v-else
         :model-value="modelValue"
@@ -155,5 +155,21 @@ config({
   --md-bk-color: transparent;
   --md-color: inherit;
   --md-border-color: transparent;
+}
+
+/* Keep preview mode scrollable when content exceeds fixed editor height. */
+:deep(.md-editor.md-editor-previewOnly) {
+  height: 100%;
+  overflow: hidden;
+}
+
+:deep(.md-editor.md-editor-previewOnly .md-editor-content) {
+  height: 100%;
+  min-height: 0;
+}
+
+:deep(.md-editor.md-editor-previewOnly .md-editor-preview-wrapper) {
+  height: 100%;
+  overflow-y: auto;
 }
 </style>
