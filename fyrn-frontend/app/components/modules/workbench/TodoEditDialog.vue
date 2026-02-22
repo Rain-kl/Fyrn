@@ -11,6 +11,8 @@ const props = defineProps<{
   open: boolean;
   task?: WbTask;
   viewMode?: boolean; // Default to false
+  parentTaskId?: string;
+  hideSubTask?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -27,6 +29,12 @@ const isOpen = computed({
 const isView = ref(false);
 const viewDetailExpanded = ref(false);
 const loading = ref(false);
+const loadingSubTasks = ref(false);
+const subTasks = ref<WbTask[]>([]);
+const subTaskDialogOpen = ref(false);
+const subTaskDialogTask = ref<WbTask | undefined>(undefined);
+const subTaskDialogViewMode = ref(false);
+const openedSubTaskActionMenuId = ref<string | undefined>(undefined);
 const todayString = dayjs().format("YYYY-MM-DD");
 
 const formData = reactive<WbTask>({
@@ -96,6 +104,123 @@ const periodText = computed(() => {
   return `${start} 至 ${end}`;
 });
 
+const canManageSubTasks = computed(
+  () =>
+    !props.hideSubTask &&
+    isView.value &&
+    !!formData.id &&
+    (formData.type || 0) !== 1,
+);
+
+const getStatusText = (status?: number) => {
+  const map: Record<number, string> = {
+    0: "未开始",
+    1: "进行中",
+    2: "已完成",
+    3: "已作废",
+  };
+  return map[status || 0] || "未知";
+};
+
+const getStatusBadgeVariant = (status?: number) => {
+  if (status === 2) return "badge-soft-success";
+  if (status === 1) return "badge-soft-primary";
+  if (status === 3) return "badge-soft-error";
+  return "badge-soft-warning";
+};
+
+const fetchSubTasks = async () => {
+  if (!formData.id) {
+    subTasks.value = [];
+    return;
+  }
+  loadingSubTasks.value = true;
+  try {
+    const res = await WbTaskControllerApi.wbSubTasksGet({ parentId: formData.id });
+    subTasks.value = (res.data || []).slice().sort((a, b) => {
+      const dateA = a.deadline ? dayjs(a.deadline).valueOf() : Infinity;
+      const dateB = b.deadline ? dayjs(b.deadline).valueOf() : Infinity;
+      if (dateA !== dateB) return dateA - dateB;
+      return (a.createTime ? dayjs(a.createTime).valueOf() : 0) -
+        (b.createTime ? dayjs(b.createTime).valueOf() : 0);
+    });
+  } catch (e) {
+    subTasks.value = [];
+  } finally {
+    loadingSubTasks.value = false;
+  }
+};
+
+const openCreateSubTaskDialog = () => {
+  if (!formData.id) return;
+  subTaskDialogTask.value = {
+    parentId: formData.id,
+    type: 0,
+    priority: formData.priority || 1,
+    tag: formData.tag || "0",
+    status: 0,
+    progress: 0,
+    startTime: todayString,
+    deadline: formData.deadline || undefined,
+  };
+  subTaskDialogViewMode.value = false;
+  subTaskDialogOpen.value = true;
+};
+
+const openSubTaskDetail = (task: WbTask) => {
+  closeSubTaskActionMenu();
+  subTaskDialogTask.value = task;
+  subTaskDialogViewMode.value = true;
+  subTaskDialogOpen.value = true;
+};
+
+const updateSubTaskStatus = async (
+  task: WbTask,
+  targetStatus: number,
+  actionTitle: string,
+) => {
+  if (!task.id) return;
+  closeSubTaskActionMenu();
+  try {
+    const payload: WbTask = { ...task, status: targetStatus };
+    if (targetStatus === 2 && task.type !== 1) {
+      payload.progress = 100;
+    }
+    await WbTaskControllerApi.wbUpdatePost({ wbTask: payload });
+    toast({ title: `${actionTitle}成功`, toast: "soft-success" });
+    await fetchSubTasks();
+    emit("saved");
+  } catch (e) {
+  }
+};
+
+const deleteSubTask = async (task: WbTask) => {
+  if (!task.id) return;
+  closeSubTaskActionMenu();
+  try {
+    await WbTaskControllerApi.wbDeletePost({ requestBody: [task.id] });
+    toast({ title: "子任务已删除", toast: "soft-success" });
+    await fetchSubTasks();
+    emit("saved");
+  } catch (e) {
+  }
+};
+
+const handleSubTaskSaved = async () => {
+  await fetchSubTasks();
+  emit("saved");
+};
+
+const toggleSubTaskActionMenu = (taskId?: string) => {
+  if (!taskId) return;
+  openedSubTaskActionMenuId.value =
+    openedSubTaskActionMenuId.value === taskId ? undefined : taskId;
+};
+
+const closeSubTaskActionMenu = () => {
+  openedSubTaskActionMenuId.value = undefined;
+};
+
 watch(
   () => props.open,
   (opened) => {
@@ -123,6 +248,7 @@ watch(
               ? todayString
               : undefined,
         });
+        fetchSubTasks();
       } else {
         Object.assign(formData, {
           id: undefined,
@@ -136,9 +262,11 @@ watch(
           progress: 0,
           startTime: todayString,
         });
+        subTasks.value = [];
       }
     }
   },
+  { immediate: true },
 );
 
 watch(
@@ -194,8 +322,14 @@ const saveTask = async () => {
         payload.status = 1; // Reminder defaults to doing
       }
       payload.progress = 0;
-      await WbTaskControllerApi.wbAddPost({ wbTask: payload });
-      toast({ title: "任务已创建", toast: "soft-success" });
+      if (props.parentTaskId) {
+        payload.parentId = props.parentTaskId;
+        await WbTaskControllerApi.wbAddSubTaskPost({ wbTask: payload });
+        toast({ title: "子任务已创建", toast: "soft-success" });
+      } else {
+        await WbTaskControllerApi.wbAddPost({ wbTask: payload });
+        toast({ title: "任务已创建", toast: "soft-success" });
+      }
     }
     emit("saved");
     isOpen.value = false;
@@ -401,6 +535,129 @@ const handleEditClick = () => {
         </NFormGroup>
       </div>
 
+      <div
+        v-if="canManageSubTasks"
+        class="rounded-md border border-border/70 bg-muted/5 p-3 space-y-2"
+      >
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-medium">子任务</div>
+          <div class="flex items-center gap-2">
+            <div class="text-xs text-muted-foreground">共 {{ subTasks.length }} 项</div>
+            <NButton
+              label="添加子任务"
+              btn="solid-primary"
+              size="xs"
+              :_button="{ class: 'h-7 px-2.5 text-xs' }"
+              @click="openCreateSubTaskDialog"
+            />
+          </div>
+        </div>
+
+        <div v-if="loadingSubTasks" class="space-y-2">
+          <NSkeleton class="h-10 w-full rounded" />
+          <NSkeleton class="h-10 w-full rounded" />
+        </div>
+        <div
+          v-else-if="subTasks.length === 0"
+          class="text-sm text-muted-foreground py-2"
+        >
+          暂无子任务
+        </div>
+        <NScrollArea v-else class="max-h-[260px] pr-1">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border/70 text-muted-foreground">
+                <th class="text-left font-medium py-2 pr-3">标题</th>
+                <th class="text-left font-medium py-2 pr-3 w-52"></th>
+                <th class="text-left font-medium py-2 pr-3 w-24">状态</th>
+                <th class="text-left font-medium py-2 pr-3 w-20">优先级</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in subTasks"
+                :key="item.id"
+                class="group border-b border-border/50 hover:bg-muted/20 transition-colors"
+                @mouseleave="closeSubTaskActionMenu"
+              >
+                <td class="py-2 pr-3">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      :class="[
+                        'w-4 h-4 shrink-0',
+                        (item.status || 0) === 2
+                          ? 'i-lucide-check-square text-green-500'
+                          : 'i-lucide-square text-gray-400',
+                      ]"
+                    />
+                    <button
+                      type="button"
+                      class="truncate max-w-[280px] text-left hover:text-primary cursor-pointer"
+                      @click="openSubTaskDetail(item)"
+                    >
+                      {{ item.name || "-" }}
+                    </button>
+                  </div>
+                </td>
+                <td class="py-2 pr-3">
+                  <div
+                    class="relative opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity flex items-center gap-1"
+                  >
+                    <button
+                      v-if="(item.status || 0) === 0"
+                      class="cursor-pointer text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors px-1"
+                      @click.stop="updateSubTaskStatus(item, 1, '开始任务')"
+                    >
+                      开始
+                    </button>
+                    <button
+                      v-else-if="(item.status || 0) === 1"
+                      class="cursor-pointer text-sm font-medium text-green-500 hover:text-green-600 transition-colors px-1"
+                      @click.stop="updateSubTaskStatus(item, 2, '完成任务')"
+                    >
+                      完成
+                    </button>
+                    <button
+                      class="cursor-pointer text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors inline-flex items-center gap-1 px-1"
+                      @click.stop="toggleSubTaskActionMenu(item.id)"
+                    >
+                      更多
+                      <span class="i-lucide-chevron-down w-3 h-3" />
+                    </button>
+                    <div
+                      v-if="openedSubTaskActionMenuId === item.id"
+                      class="absolute left-0 bottom-8 z-40 w-24 rounded-md border bg-white p-1 shadow-md"
+                    >
+                      <button
+                        v-if="(item.status || 0) !== 2 && (item.status || 0) !== 3"
+                        class="w-full text-left px-2 py-1.5 rounded text-sm text-gray-600 hover:bg-gray-50"
+                        @click.stop="updateSubTaskStatus(item, 3, '作废任务')"
+                      >
+                        作废
+                      </button>
+                      <button
+                        class="w-full text-left px-2 py-1.5 rounded text-sm text-red-500 hover:bg-red-50"
+                        @click.stop="deleteSubTask(item)"
+                      >
+                        删除
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-2 pr-3">
+                  <NBadge
+                    class="text-xs"
+                    :una="{ badgeDefaultVariant: getStatusBadgeVariant(item.status) }"
+                    :label="getStatusText(item.status)"
+                  />
+                </td>
+                <td class="py-2 pr-3">{{ priorityTextMap[Number(item.priority || 1)] || "低" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </NScrollArea>
+      </div>
+
       <NFormGroup label="描述">
         <CommonMarkdownEditor
           :modelValue="formData.description || ''"
@@ -430,4 +687,14 @@ const handleEditClick = () => {
       </div>
     </template>
   </NDialog>
+
+  <ModulesWorkbenchTodoEditDialog
+    v-if="subTaskDialogOpen"
+    v-model:open="subTaskDialogOpen"
+    :task="subTaskDialogTask"
+    :view-mode="subTaskDialogViewMode"
+    :parent-task-id="formData.id"
+    :hide-sub-task="true"
+    @saved="handleSubTaskSaved"
+  />
 </template>
