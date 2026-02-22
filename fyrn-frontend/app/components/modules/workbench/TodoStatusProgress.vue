@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import dayjs from "dayjs";
 import type { WbTask } from "~/api/models/WbTask";
 
@@ -16,6 +16,8 @@ const props = withDefaults(
 const status = computed(() => props.task.status || 0);
 const progress = computed(() => props.task.progress || 0);
 const taskType = computed(() => props.task.type || 0);
+const nowTick = ref(Date.now());
+let tickTimer: ReturnType<typeof setInterval> | undefined;
 
 const statusLabel = computed(() => {
   const map: Record<number, string> = {
@@ -47,6 +49,29 @@ const deadlineAlert = computed(() => {
   const deadlineTime = dayjs(props.task.deadline);
   if (!deadlineTime.isValid()) return null;
 
+  // Reminder: use minute-level countdown.
+  if (taskType.value === 1) {
+    const now = dayjs(nowTick.value);
+    const minutesLeft = deadlineTime.diff(now, "minute");
+    const absMinutes = Math.abs(minutesLeft);
+    const durationText =
+      absMinutes >= 60
+        ? `${Math.floor(absMinutes / 60)}小时${absMinutes % 60}分钟`
+        : `${absMinutes} 分钟`;
+
+    if (minutesLeft < 0) {
+      return { label: `已超期 ${durationText}`, className: "text-red-500" };
+    }
+    if (minutesLeft < 3 * 24 * 60) {
+      return { label: `剩余 ${durationText}`, className: "text-orange-500" };
+    }
+    if (minutesLeft > 7 * 24 * 60) {
+      return { label: `剩余 ${durationText}`, className: "text-green-500" };
+    }
+    return { label: `剩余 ${durationText}`, className: "text-blue-500" };
+  }
+
+  // Task: keep original day-based logic.
   const daysLeft = deadlineTime.startOf("day").diff(dayjs().startOf("day"), "day");
   if (daysLeft < 0) {
     return { label: "已超期", className: "text-red-500" };
@@ -65,6 +90,16 @@ const circumference = computed(() => 2 * Math.PI * radius.value);
 const dashoffset = computed(
   () => circumference.value - (progress.value / 100) * circumference.value,
 );
+
+onMounted(() => {
+  tickTimer = setInterval(() => {
+    nowTick.value = Date.now();
+  }, 60000);
+});
+
+onBeforeUnmount(() => {
+  if (tickTimer) clearInterval(tickTimer);
+});
 </script>
 
 <template>
