@@ -33,6 +33,9 @@ const emptyText = computed(() =>
     ? "未来 7 天内和已超期均无提醒"
     : "未来 7 天内和已超期均无截止任务",
 );
+const scrollAreaClass = computed(() =>
+  isReminderMode.value ? "max-h-[190px] pr-1" : "max-h-[344px] pr-1",
+);
 
 const fetchTasks = async () => {
   loadingTasks.value = true;
@@ -127,7 +130,7 @@ onMounted(() => {
       <p class="text-sm">{{ emptyText }}</p>
     </div>
 
-    <NScrollArea v-else class="max-h-[344px] pr-1">
+    <NScrollArea v-else :class="scrollAreaClass">
       <div class="space-y-1.5">
         <div
           v-for="task in tasks"
