@@ -35,6 +35,26 @@ public class WbTaskServiceImpl extends ServiceImpl<WbTaskMapper, WbTask>
         }
     }
 
+    @Override
+    public boolean addSubTask(WbTask subTask) {
+        if (subTask.getParentId() == null || subTask.getParentId().isEmpty()) {
+            throw new IllegalArgumentException("子任务必须指定父任务ID");
+        }
+        // 校验父任务是否存在
+        WbTask parent = getById(subTask.getParentId());
+        if (parent == null) {
+            throw new IllegalArgumentException("父任务不存在: " + subTask.getParentId());
+        }
+        return save(subTask);
+    }
+
+    @Override
+    public List<WbTask> listSubTasks(String parentId) {
+        QueryWrapper<WbTask> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(WbTask::getParentId, parentId);
+        return list(wrapper);
+    }
+
     private QueryWrapper<WbTask> buildPageWbTaskQueryWrapper(WbTask wbTaskInput) {
         QueryWrapper<WbTask> wrapper = new QueryWrapper<>();
         wrapper.lambda()
@@ -45,6 +65,7 @@ public class WbTaskServiceImpl extends ServiceImpl<WbTaskMapper, WbTask>
                 .eq(wbTaskInput.getStatus() != null, WbTask::getStatus, wbTaskInput.getStatus())
                 .eq(wbTaskInput.getPriority() != null, WbTask::getPriority, wbTaskInput.getPriority())
                 .eq(wbTaskInput.getParentId() != null, WbTask::getParentId, wbTaskInput.getParentId())
+                .isNull(wbTaskInput.getParentId() == null, WbTask::getParentId)
                 .ge(wbTaskInput.getStartTime() != null, WbTask::getStartTime, wbTaskInput.getStartTime())
                 .le(wbTaskInput.getDeadline() != null, WbTask::getDeadline, wbTaskInput.getDeadline())
                 .ge(wbTaskInput.getCompleteTime() != null, WbTask::getCompleteTime, wbTaskInput.getCompleteTime());
@@ -78,7 +99,7 @@ public class WbTaskServiceImpl extends ServiceImpl<WbTaskMapper, WbTask>
     }
 
     private BaseQueryPage<WbTask> standardOrderBy(WbTask wbTaskInput, Integer pageNo, Integer pageSize, String orderBy,
-                                                  String orderDirection) {
+            String orderDirection) {
         // 1. 设置分页
         IPage<WbTask> page = new Page<>(pageNo, pageSize);
 

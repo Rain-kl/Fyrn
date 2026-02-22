@@ -85,4 +85,26 @@ public class WbTaskController {
     public Result<Boolean> delete(@RequestBody List<String> ids) {
         return Result.success(wbTaskService.removeByIds(ids));
     }
+
+    /**
+     * 创建子任务
+     *
+     * @param input 子任务信息，parentId 必填
+     * @return
+     */
+    @PostMapping("/addSubTask")
+    public Result<Boolean> addSubTask(@RequestBody WbTask input) {
+        return Result.success(wbTaskService.addSubTask(input));
+    }
+
+    /**
+     * 查询指定父任务下的子任务列表
+     *
+     * @param parentId 父任务ID
+     * @return
+     */
+    @GetMapping("/subTasks")
+    public Result<List<WbTask>> subTasks(String parentId) {
+        return Result.success(wbTaskService.listSubTasks(parentId));
+    }
 }
