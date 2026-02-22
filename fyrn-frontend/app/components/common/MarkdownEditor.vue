@@ -95,19 +95,18 @@ config({
 </script>
 
 <template>
-  <div
-    class="border border-border rounded-md overflow-hidden relative z-0"
-    :class="disabled ? 'bg-muted/20' : ''"
-  >
-    <ClientOnly>
-      <div v-if="disabled" class="w-full p-4 min-h-[100px] max-h-[60vh] overflow-y-auto">
-        <MdPreview
-          :model-value="modelValue"
-          language="zh-CN"
-        />
-      </div>
+  <ClientOnly>
+    <MdPreview
+      v-if="disabled"
+      :model-value="modelValue"
+      language="zh-CN"
+      class="w-full"
+    />
+    <div
+      v-else
+      class="border border-border rounded-md overflow-hidden relative z-0"
+    >
       <MdEditor
-        v-else
         :model-value="modelValue"
         @update:model-value="(v) => emit('update:modelValue', v)"
         language="zh-CN"
@@ -141,13 +140,13 @@ config({
           'catalog',
         ]"
       />
-      <template #fallback>
-        <div class="h-[300px] flex items-center justify-center text-muted">
-          正在加载编辑器...
-        </div>
-      </template>
-    </ClientOnly>
-  </div>
+    </div>
+    <template #fallback>
+      <div class="h-[300px] flex items-center justify-center text-muted">
+        正在加载编辑器...
+      </div>
+    </template>
+  </ClientOnly>
 </template>
 
 <style scoped>
