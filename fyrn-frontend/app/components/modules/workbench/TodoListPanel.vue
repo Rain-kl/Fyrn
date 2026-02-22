@@ -31,6 +31,7 @@ const searchName = ref("");
 const filterType = ref<number | undefined>(undefined);
 const filterStatus = ref<number | undefined>(undefined);
 const filterPriority = ref<number | undefined>(undefined);
+const filterTag = ref<string | undefined>(undefined);
 const sorting = ref<any[]>([]);
 
 const filterTypeLabel = computed({
@@ -77,6 +78,21 @@ const filterPriorityLabel = computed({
     else if (val === "高") filterPriority.value = 3;
     else if (val === "紧急") filterPriority.value = 4;
     else filterPriority.value = undefined;
+  },
+});
+
+const filterTagLabel = computed({
+  get: () => {
+    if (filterTag.value === "0") return "未分类";
+    if (filterTag.value === "1") return "日常";
+    if (filterTag.value === "2") return "工作";
+    return "全部分类";
+  },
+  set: (val: string) => {
+    if (val === "未分类") filterTag.value = "0";
+    else if (val === "日常") filterTag.value = "1";
+    else if (val === "工作") filterTag.value = "2";
+    else filterTag.value = undefined;
   },
 });
 
@@ -423,6 +439,7 @@ const fetchTasks = async () => {
             filterPriority.value !== undefined
               ? filterPriority.value
               : undefined,
+          tag: filterTag.value !== undefined ? filterTag.value : undefined,
         },
       },
     });
@@ -456,7 +473,7 @@ watch([pageNo, pageSize], () => {
   fetchTasks();
 });
 
-watch([searchName, filterType, filterStatus, filterPriority], () => {
+watch([searchName, filterType, filterStatus, filterPriority, filterTag], () => {
   pageNo.value = 1;
   fetchTasks();
 });
@@ -496,6 +513,12 @@ watch(
         v-model="filterPriorityLabel"
         :items="['全部优先级', '低', '中', '高', '紧急']"
         placeholder="优先级"
+        :_select-trigger="{ class: 'w-[130px]' }"
+      />
+      <NSelect
+        v-model="filterTagLabel"
+        :items="['全部分类', '未分类', '日常', '工作']"
+        placeholder="任务分类"
         :_select-trigger="{ class: 'w-[130px]' }"
       />
     </div>

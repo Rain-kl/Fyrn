@@ -23,7 +23,7 @@ const handleOpenAdd = () => {
   <div class="h-full flex flex-col gap-4 w-full">
     <div class="flex items-center justify-between pb-4 border-b shrink-0">
       <div>
-        <h2 class="text-2xl font-semibold tracking-tight">待办事项</h2>
+        <h2 class="text-2xl font-semibold tracking-tight">任务待办</h2>
         <p class="text-sm text-muted-foreground mt-1">管理和跟踪您的任务与提醒</p>
       </div>
       <div class="flex gap-2">

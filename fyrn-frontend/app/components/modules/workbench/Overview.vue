@@ -4,8 +4,8 @@
   >
     <!-- Column 1 -->
     <div class="flex flex-col gap-6 h-full">
-      <ModulesWorkbenchBlock title="今日待办" class="flex-[2] min-h-[350px]">
-        <ModulesWorkbenchTodoOverviewPanel class="h-full" />
+      <ModulesWorkbenchBlock title="任务待办">
+        <ModulesWorkbenchTodoOverviewPanel mode="task" />
       </ModulesWorkbenchBlock>
       <ModulesWorkbenchBlock title="笔记" class="flex-1 min-h-[250px]">
         <div class="space-y-3">
@@ -24,14 +24,8 @@
           <NSkeleton v-for="i in 4" :key="i" class="aspect-square rounded-xl" />
         </div>
       </ModulesWorkbenchBlock>
-      <ModulesWorkbenchBlock title="即将开始" class="flex-1 min-h-[180px]">
-        <div class="flex items-center space-x-4 mb-4" v-for="i in 2" :key="i">
-          <NSkeleton rounded="full" class="h-10 w-10" />
-          <div class="space-y-2 flex-1">
-            <NSkeleton class="h-4 w-1/2" />
-            <NSkeleton class="h-3 w-1/3" />
-          </div>
-        </div>
+      <ModulesWorkbenchBlock title="提醒">
+        <ModulesWorkbenchTodoOverviewPanel mode="reminder" />
       </ModulesWorkbenchBlock>
       <ModulesWorkbenchBlock title="待分类" class="flex-[1.5] min-h-[240px]">
         <div class="space-y-3">

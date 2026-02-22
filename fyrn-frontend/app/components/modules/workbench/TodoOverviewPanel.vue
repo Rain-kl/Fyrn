@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import dayjs from "dayjs";
 import type { WbTask } from "~/api/models/WbTask";
 import { useApi } from "~/api/useApi";
+
+const props = withDefaults(
+  defineProps<{
+    mode?: "task" | "reminder";
+  }>(),
+  {
+    mode: "task",
+  },
+);
 
 const { WbTaskControllerApi } = useApi();
 const { toast } = useToast();
@@ -18,6 +27,12 @@ const confirmActionObj = ref<{
   actionTitle: string;
   targetStatus: number;
 } | null>(null);
+const isReminderMode = computed(() => props.mode === "reminder");
+const emptyText = computed(() =>
+  isReminderMode.value
+    ? "未来 7 天内和已超期均无提醒"
+    : "未来 7 天内和已超期均无截止任务",
+);
 
 const fetchTasks = async () => {
   loadingTasks.value = true;
@@ -31,6 +46,9 @@ const fetchTasks = async () => {
 
     if (res.data?.rows) {
       const filteredTasks = res.data.rows
+        .filter((t) =>
+          isReminderMode.value ? (t.type || 0) === 1 : (t.type || 0) !== 1,
+        )
         .filter((t) => t.status !== 2 && t.status !== 3)
         .filter((t) => {
           if (!t.deadline) return false;
@@ -94,7 +112,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="overview-todo-panel h-[340px] flex flex-col">
+  <div class="overview-todo-panel flex flex-col">
     <div v-if="loadingTasks" class="space-y-3">
       <NSkeleton class="h-14 w-full rounded-md" />
       <NSkeleton class="h-14 w-full rounded-md" />
@@ -103,13 +121,13 @@ onMounted(() => {
 
     <div
       v-else-if="tasks.length === 0"
-      class="flex flex-col items-center justify-center h-full text-muted-foreground opacity-70 space-y-2 py-6"
+      class="flex flex-col items-center justify-center text-muted-foreground opacity-70 space-y-2 py-6"
     >
       <NIcon name="i-lucide-calendar-check-2" class="size-10" />
-      <p class="text-sm">未来 7 天内和已超期均无截止任务</p>
+      <p class="text-sm">{{ emptyText }}</p>
     </div>
 
-    <NScrollArea v-else class="h-[344px] min-h-[344px] max-h-[344px] pr-1">
+    <NScrollArea v-else class="max-h-[344px] pr-1">
       <div class="space-y-1.5">
         <div
           v-for="task in tasks"
@@ -123,10 +141,10 @@ onMounted(() => {
             <div class="min-w-0 flex items-center gap-2">
               <NBadge
                 :una="{
-                  badgeDefaultVariant: task.type === 1 ? 'badge-soft-warning' : 'badge-soft-info',
+                  badgeDefaultVariant: isReminderMode ? 'badge-soft-warning' : 'badge-soft-info',
                 }"
                 class="text-[10px] shrink-0"
-                :label="task.type === 1 ? '提醒' : '任务'"
+                :label="isReminderMode ? '提醒' : '任务'"
               />
               <div class="min-w-0">
                 <div class="text-[15px] font-semibold truncate max-w-[180px] leading-5">
