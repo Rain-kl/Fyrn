@@ -25,7 +25,7 @@ import net.arctel.fyrn.input.UMmsNovelPageInput;
 import net.arctel.fyrn.input.UMmsPageInput;
 import net.arctel.fyrn.output.DownloadResult;
 import net.arctel.fyrn.service.MmsNovelFileService;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import jakarta.annotation.Resource;
 import net.arctel.platform.framework.utils.Result;
 import org.springframework.beans.BeanUtils;

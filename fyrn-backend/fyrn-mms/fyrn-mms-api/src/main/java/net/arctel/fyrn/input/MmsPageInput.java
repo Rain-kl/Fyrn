@@ -17,7 +17,7 @@
 
 package net.arctel.fyrn.input;
 
-import net.arctel.oms.common.base.BaseQueryPageInput;
+import net.arctel.platform.oms.common.base.BaseQueryPageInput;
 
 import lombok.Getter;
 import lombok.Setter;

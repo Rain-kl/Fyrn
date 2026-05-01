@@ -23,7 +23,7 @@ import net.arctel.fyrn.entity.MmsNovelFile;
 import net.arctel.fyrn.input.BindNovelFileInput;
 import net.arctel.fyrn.input.UMmsPageInput;
 import net.arctel.fyrn.output.DownloadResult;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.io.IOException;

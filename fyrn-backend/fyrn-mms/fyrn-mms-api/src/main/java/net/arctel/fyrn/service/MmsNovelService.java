@@ -21,7 +21,7 @@ import java.util.List;
 
 import net.arctel.fyrn.entity.MmsNovel;
 import net.arctel.fyrn.entity.MmsNovelFile;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 
 /**
  * MmsNovelBizService, 本地小说业务服务

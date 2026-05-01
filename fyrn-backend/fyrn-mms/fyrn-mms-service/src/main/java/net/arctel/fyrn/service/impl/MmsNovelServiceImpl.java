@@ -29,7 +29,7 @@ import net.arctel.fyrn.mapper.MmsNovelFileMapper;
 import net.arctel.fyrn.mapper.MmsNovelMapper;
 import net.arctel.fyrn.service.MmsNovelFileService;
 import net.arctel.fyrn.service.MmsNovelService;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

@@ -36,14 +36,10 @@
             <artifactId>axion-web</artifactId>
         </dependency>
 
-        <!-- OMS 模块 -->
+        <!-- OMS 模块 (通过 starter 自动装配 OMS 组件和 Mapper) -->
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>oms-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.arctel.platform</groupId>
-            <artifactId>oms-app</artifactId>
+            <artifactId>oms-starter</artifactId>
         </dependency>
 
       <!-- OPKIT 模块 -->

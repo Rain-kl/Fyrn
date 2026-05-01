@@ -22,9 +22,9 @@ import net.arctel.fyrn.constants.MmsHandlerTagConstant;
 import net.arctel.fyrn.dto.LocalFileSimpleDTO;
 import net.arctel.fyrn.input.UMmsPageInput;
 import net.arctel.fyrn.service.MmsNovelFileService;
-import net.arctel.oms.common.base.BaseQueryPage;
-import net.arctel.oms.infra.task.DefaultTaskMessage;
-import net.arctel.oms.infra.task.OmsTaskHandler;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.task.DefaultTaskMessage;
+import net.arctel.platform.oms.task.OmsTaskHandler;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

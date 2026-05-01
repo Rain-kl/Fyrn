@@ -21,7 +21,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import net.arctel.oms.common.constants.ErrorConstant;
+import net.arctel.platform.oms.common.constants.ErrorConstant;
 import net.arctel.platform.framework.exception.BizException;
 import net.arctel.platform.framework.utils.Result;
 import org.springframework.validation.BindException;

@@ -1,6 +1,6 @@
 package net.arctel.workbench.service;
 
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import net.arctel.workbench.domain.WbTask;
 import com.baomidou.mybatisplus.extension.service.IService;
 

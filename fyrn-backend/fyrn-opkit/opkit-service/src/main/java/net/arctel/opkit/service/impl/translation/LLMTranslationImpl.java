@@ -1,13 +1,13 @@
 package net.arctel.opkit.service.impl.translation;
 
 import jakarta.annotation.Resource;
-import net.arctel.platform.framework.exception.BizException;
-import net.arctel.oms.service.OmsParameterService;
 import net.arctel.opkit.common.constants.OpkitParameterConstant;
 import net.arctel.opkit.common.constants.TransEngineConstant;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.service.TranslationService;
 import net.arctel.opkit.service.impl.translation.client.LLMTranslateClient;
+import net.arctel.platform.framework.exception.BizException;
+import net.arctel.platform.oms.service.OmsParameterService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

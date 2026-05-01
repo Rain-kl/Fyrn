@@ -20,7 +20,7 @@ package net.arctel.fyrn.service;
 import java.io.IOException;
 
 import net.arctel.fyrn.input.SyncMaterialInput;
-import net.arctel.oms.entity.OmsTask;
+import net.arctel.platform.oms.entity.OmsTask;
 
 /**
  * @author ryan

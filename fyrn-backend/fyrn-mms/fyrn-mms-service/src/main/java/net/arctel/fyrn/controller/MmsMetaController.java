@@ -25,7 +25,7 @@ import net.arctel.platform.framework.utils.Result;
 import net.arctel.fyrn.entity.MmsMeta;
 import net.arctel.fyrn.input.MmsMetaPageInput;
 import net.arctel.fyrn.service.MmsMetaService;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

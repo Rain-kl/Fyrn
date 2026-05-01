@@ -20,12 +20,12 @@ package net.arctel.opkit.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
-import net.arctel.platform.framework.utils.Result;
-import net.arctel.oms.service.OmsParameterService;
 import net.arctel.opkit.common.constants.OpkitParameterConstant;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.service.BaseToolService;
 import net.arctel.opkit.service.TranslationService;
+import net.arctel.platform.framework.utils.Result;
+import net.arctel.platform.oms.service.OmsParameterService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

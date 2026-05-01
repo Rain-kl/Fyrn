@@ -29,11 +29,6 @@
 
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>oms-infra</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.arctel.platform</groupId>
             <artifactId>opkit-common</artifactId>
         </dependency>
 

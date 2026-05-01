@@ -18,19 +18,17 @@
 package net.arctel.fyrn.service.impl;
 
 
-import java.io.IOException;
-
-import org.springframework.stereotype.Service;
-
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import net.arctel.fyrn.constants.MmsHandlerTagConstant;
 import net.arctel.fyrn.input.SyncMaterialInput;
 import net.arctel.fyrn.service.DataSyncService;
 import net.arctel.fyrn.task.MmsSvrQueue;
-import net.arctel.oms.entity.OmsTask;
-import net.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.platform.oms.entity.OmsTask;
+import net.arctel.platform.oms.task.DefaultTaskMessage;
+import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
 
 /**
  * @author ryan

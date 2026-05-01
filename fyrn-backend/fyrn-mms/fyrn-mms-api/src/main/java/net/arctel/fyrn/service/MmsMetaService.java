@@ -18,7 +18,7 @@
 package net.arctel.fyrn.service;
 
 import net.arctel.fyrn.entity.MmsMeta;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

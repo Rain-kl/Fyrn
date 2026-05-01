@@ -1,7 +1,7 @@
 package net.arctel.workbench.input;
 
 import lombok.Data;
-import net.arctel.oms.common.base.BaseQueryPageInput;
+import net.arctel.platform.oms.common.base.BaseQueryPageInput;
 import net.arctel.workbench.domain.WbTask;
 
 @Data

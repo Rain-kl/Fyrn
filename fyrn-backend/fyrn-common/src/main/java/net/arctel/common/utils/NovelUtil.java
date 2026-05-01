@@ -24,7 +24,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import net.arctel.oms.common.utils.CharsetUtil;
+import net.arctel.platform.oms.common.utils.CharsetUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

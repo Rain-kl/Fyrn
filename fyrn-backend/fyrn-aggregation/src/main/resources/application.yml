@@ -40,6 +40,7 @@ mybatis-plus:
     banner: false
 
 oss:
+  protocol: ${fyrn.oss.protocol}
   access-key-id: ${fyrn.oss.access-key-id}
   access-key-secret: ${fyrn.oss.access-key-secret}
   bucket-name: ${fyrn.oss.bucket-name}

@@ -23,7 +23,7 @@ import net.arctel.fyrn.entity.MmsNovel;
 import net.arctel.fyrn.entity.MmsNovelFile;
 import net.arctel.fyrn.input.MmsPageInput;
 import net.arctel.fyrn.service.MmsNovelService;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import net.arctel.platform.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;

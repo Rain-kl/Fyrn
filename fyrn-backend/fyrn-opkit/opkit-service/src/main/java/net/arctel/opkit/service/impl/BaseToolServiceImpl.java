@@ -17,13 +17,11 @@
 
 package net.arctel.opkit.service.impl;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
-import net.arctel.platform.framework.task.utils.TaskRspCollectorUtil;
-
 import jakarta.annotation.Resource;
 import net.arctel.opkit.service.BaseToolService;
+import net.arctel.platform.framework.task.utils.TaskRspCollectorUtil;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 @Service
 public abstract class BaseToolServiceImpl implements BaseToolService {

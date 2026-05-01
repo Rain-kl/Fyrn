@@ -19,6 +19,12 @@ package net.arctel.fyrn.service.impl;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import net.arctel.common.constants.ParameterConstant;
 import net.arctel.common.utils.NovelUtil;
 import net.arctel.fyrn.dto.LocalFileSimpleDTO;
@@ -31,19 +37,13 @@ import net.arctel.fyrn.mapper.MmsNovelMapper;
 import net.arctel.fyrn.output.DownloadResult;
 import net.arctel.fyrn.service.MmsNovelFileService;
 import net.arctel.fyrn.service.MmsNovelService;
-import net.arctel.oms.common.base.BaseQueryPage;
-import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.platform.framework.exception.BizException;
-import net.arctel.oms.common.utils.FileUtil;
-import net.arctel.oms.common.utils.PagingUtil;
-import net.arctel.oms.service.OmsParameterService;
-import net.arctel.oms.service.OmsStorageService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
+import net.arctel.platform.framework.oss.AxionOSS;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.constants.ErrorConstant;
+import net.arctel.platform.oms.common.utils.FileUtil;
+import net.arctel.platform.oms.common.utils.PagingUtil;
+import net.arctel.platform.oms.service.OmsParameterService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -75,7 +75,7 @@ public class MmsNovelFileServiceImpl extends ServiceImpl<MmsNovelFileMapper, Mms
     OmsParameterService publicParamSupport;
 
     @Resource
-    OmsStorageService oosSupport;
+    AxionOSS oosSupport;
 
     @Resource
     private MmsNovelService mmsNovelService;

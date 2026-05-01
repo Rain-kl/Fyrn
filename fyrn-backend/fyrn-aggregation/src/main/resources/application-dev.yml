@@ -14,6 +14,7 @@ fyrn:
     database: 0
 
   oss:
+    protocol: s3
     access-key-id: eZkIBk8WaWlfxjCx5OAW
     access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
     bucket-name: fyrn

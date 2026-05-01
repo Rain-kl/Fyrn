@@ -28,7 +28,6 @@
     <modules>
         <module>fyrn-common</module>
         <module>fyrn-mms</module>
-        <module>fyrn-oms</module>
         <module>fyrn-opkit</module>
         <module>fyrn-aggregation</module>
         <module>fyrn-workbench</module>
@@ -39,6 +38,8 @@
     <!-- ====================================================================== -->
     <properties>
         <fyrn.version>${project.version}</fyrn.version>
+        <axion.version>1.0-SNAPSHOT</axion.version>
+        <oms.version>1.0-SNAPSHOT</oms.version>
     </properties>
 
     <!-- ====================================================================== -->
@@ -88,37 +89,17 @@
                 <version>${fyrn.version}</version>
             </dependency>
 
-            <!-- 
-                OMS 模块版本管理 
-                注意: fyrn-oms 使用独立的 groupId (net.arctel.platform),
-                为将来独立拆分做准备。OMS 模块内部依赖在 fyrn-oms/pom.xml 中管理。
+            <!--
+                OMS 模块版本管理
+                通过 BOM 导入 axion-oms 的依赖管理, 自动继承所有 OMS 子模块版本
             -->
             <dependency>
                 <groupId>net.arctel.platform</groupId>
-                <artifactId>oms-common</artifactId>
-                <version>${fyrn.version}</version>
+                <artifactId>axion-oms</artifactId>
+                <version>${oms.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>oms-api</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>oms-infra</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>oms-service</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>oms-app</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-
 
             <!--
                 OPKIT 模块版本管理

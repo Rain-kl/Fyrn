@@ -17,7 +17,7 @@
 
 package net.arctel.fyrn.task;
 
-import net.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.platform.oms.task.DefaultTaskMessage;
 import net.arctel.platform.framework.task.BaseThreadPoolListener;
 import org.springframework.stereotype.Component;
 

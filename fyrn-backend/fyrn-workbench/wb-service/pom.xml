@@ -20,6 +20,10 @@
             <groupId>net.arctel</groupId>
             <artifactId>wb-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>axion-web</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -18,7 +18,7 @@
 package net.arctel.agent.opkit;
 
 import net.arctel.platform.framework.task.model.RegistrationInfo;
-import net.arctel.oms.infra.task.DefaultTaskMessage;
+import net.arctel.platform.oms.task.DefaultTaskMessage;
 import net.arctel.platform.framework.task.BaseTaskQueue;
 import net.arctel.platform.framework.task.BaseThreadPoolListener;
 import jakarta.annotation.Resource;

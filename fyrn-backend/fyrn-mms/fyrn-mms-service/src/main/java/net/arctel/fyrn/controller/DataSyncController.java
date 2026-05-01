@@ -21,7 +21,7 @@ package net.arctel.fyrn.controller;
 import jakarta.annotation.Resource;
 import net.arctel.fyrn.input.SyncMaterialInput;
 import net.arctel.fyrn.service.DataSyncService;
-import net.arctel.oms.entity.OmsTask;
+import net.arctel.platform.oms.entity.OmsTask;
 import net.arctel.platform.framework.utils.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

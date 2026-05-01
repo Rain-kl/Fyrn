@@ -20,7 +20,7 @@ package net.arctel.fyrn.input;
 import lombok.Getter;
 import lombok.Setter;
 import net.arctel.fyrn.entity.MmsMeta;
-import net.arctel.oms.common.base.BaseQueryPageInput;
+import net.arctel.platform.oms.common.base.BaseQueryPageInput;
 
 @Getter
 @Setter

@@ -17,11 +17,9 @@
 
 package net.arctel.fyrn.task.handler;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import net.arctel.common.utils.NovelUtil;
 import net.arctel.fyrn.constants.MmsHandlerTagConstant;
 import net.arctel.fyrn.entity.MmsNovel;
@@ -29,13 +27,13 @@ import net.arctel.fyrn.entity.MmsNovelFile;
 import net.arctel.fyrn.mapper.MmsNovelMapper;
 import net.arctel.fyrn.service.MmsNovelFileService;
 import net.arctel.fyrn.service.MmsNovelService;
-import net.arctel.oms.common.base.BaseQueryPage;
-import net.arctel.oms.infra.task.DefaultTaskMessage;
-import net.arctel.oms.infra.task.OmsTaskHandler;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.task.DefaultTaskMessage;
+import net.arctel.platform.oms.task.OmsTaskHandler;
+import org.springframework.stereotype.Component;
 
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.List;
 
 @Component
 @Slf4j

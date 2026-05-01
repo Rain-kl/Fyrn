@@ -25,7 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.arctel.fyrn.entity.MmsMeta;
 import net.arctel.fyrn.mapper.MmsMetaMapper;
 import net.arctel.fyrn.service.MmsMetaService;
-import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.oms.common.base.BaseQueryPage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

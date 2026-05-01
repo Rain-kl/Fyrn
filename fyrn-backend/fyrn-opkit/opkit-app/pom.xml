@@ -33,6 +33,10 @@
             <groupId>net.arctel.platform</groupId>
             <artifactId>opkit-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.arctel.platform</groupId>
+            <artifactId>oms-app</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
