@@ -29,7 +29,7 @@
         <!-- framework 模块 -->
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>axion-core</artifactId>
+            <artifactId>axion-data</artifactId>
         </dependency>
         <dependency>
             <groupId>net.arctel.platform</groupId>

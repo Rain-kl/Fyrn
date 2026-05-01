@@ -18,6 +18,7 @@
 package net.arctel.aggregation;
 
 import net.arctel.common.utils.StartupHelper;
+import net.arctel.platform.framework.annotation.AxionApplication;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
+@AxionApplication
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
@@ -37,7 +38,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "net.arctel.aggregation",
         "net.arctel.fyrn",
         "net.arctel.common",
-        "net.arctel.platform.framework",
         "net.arctel.opkit",
         "net.arctel.agent",
         "net.arctel.workbench"
