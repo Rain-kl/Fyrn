@@ -2,7 +2,7 @@ package net.arctel.opkit.service.impl;
 
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.core.task.utils.TaskRedisUtil;
+import net.arctel.platform.framework.task.utils.TaskRedisUtil;
 import net.arctel.opkit.output.OpkitListOutput;
 import net.arctel.opkit.service.BaseToolService;
 import net.arctel.opkit.service.OpkitService;

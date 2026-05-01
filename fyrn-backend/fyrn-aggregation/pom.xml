@@ -29,11 +29,11 @@
         <!-- framework 模块 -->
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>framework-core</artifactId>
+            <artifactId>axion-core</artifactId>
         </dependency>
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>framework-web</artifactId>
+            <artifactId>axion-web</artifactId>
         </dependency>
 
         <!-- OMS 模块 -->

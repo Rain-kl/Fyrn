@@ -18,9 +18,13 @@
 package net.arctel.fyrn.controller;
 
 
-import java.util.List;
-
-import net.arctel.framework.utils.Result;
+import jakarta.annotation.Resource;
+import net.arctel.fyrn.entity.MmsNovel;
+import net.arctel.fyrn.entity.MmsNovelFile;
+import net.arctel.fyrn.input.MmsPageInput;
+import net.arctel.fyrn.service.MmsNovelService;
+import net.arctel.oms.common.base.BaseQueryPage;
+import net.arctel.platform.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.arctel.fyrn.entity.MmsNovel;
-import net.arctel.fyrn.entity.MmsNovelFile;
-import net.arctel.fyrn.input.MmsPageInput;
-import net.arctel.fyrn.service.MmsNovelService;
-import net.arctel.oms.common.base.BaseQueryPage;
-
-import jakarta.annotation.Resource;
+import java.util.List;
 
 @RequestMapping("/mms")
 @RestController

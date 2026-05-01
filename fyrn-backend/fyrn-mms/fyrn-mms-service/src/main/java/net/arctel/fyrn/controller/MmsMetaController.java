@@ -21,7 +21,7 @@ package net.arctel.fyrn.controller;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import net.arctel.fyrn.entity.MmsMeta;
 import net.arctel.fyrn.input.MmsMetaPageInput;
 import net.arctel.fyrn.service.MmsMetaService;

@@ -27,7 +27,7 @@ import net.arctel.fyrn.output.DownloadResult;
 import net.arctel.fyrn.service.MmsNovelFileService;
 import net.arctel.oms.common.base.BaseQueryPage;
 import jakarta.annotation.Resource;
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

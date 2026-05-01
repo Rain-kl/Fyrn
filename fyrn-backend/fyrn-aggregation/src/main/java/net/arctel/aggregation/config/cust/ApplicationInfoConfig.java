@@ -1,7 +1,7 @@
 package net.arctel.aggregation.config.cust;
 
 import lombok.extern.slf4j.Slf4j;
-import net.arctel.framework.dto.ApplicationInfo;
+import net.arctel.platform.framework.model.ApplicationInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

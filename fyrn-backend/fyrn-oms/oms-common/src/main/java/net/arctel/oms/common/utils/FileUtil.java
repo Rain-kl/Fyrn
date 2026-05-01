@@ -17,6 +17,10 @@
 
 package net.arctel.oms.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import net.arctel.oms.common.constants.ErrorConstant;
+import net.arctel.platform.exception.BizException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -26,11 +30,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import net.arctel.oms.common.constants.ErrorConstant;
-
-import lombok.extern.slf4j.Slf4j;
-import net.arctel.framework.exception.BizException;
 
 @Slf4j
 public class FileUtil {

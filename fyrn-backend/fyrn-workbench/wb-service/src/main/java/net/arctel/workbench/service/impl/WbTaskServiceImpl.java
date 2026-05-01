@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.arctel.framework.utils.CustomPaginationUtil;
+import net.arctel.platform.framework.utils.CustomPaginationUtil;
 import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.common.base.BaseQueryPageInput;
 import net.arctel.workbench.domain.WbTask;

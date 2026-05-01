@@ -17,10 +17,10 @@
 
 package net.arctel.agent.opkit;
 
-import net.arctel.framework.core.task.model.RegistrationInfo;
+import net.arctel.platform.framework.task.model.RegistrationInfo;
 import net.arctel.oms.infra.task.DefaultTaskMessage;
-import net.arctel.framework.core.task.BaseTaskQueue;
-import net.arctel.framework.core.task.BaseThreadPoolListener;
+import net.arctel.platform.framework.task.BaseTaskQueue;
+import net.arctel.platform.framework.task.BaseThreadPoolListener;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

@@ -18,7 +18,7 @@
 package net.arctel.oms.controller;
 
 
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import net.arctel.oms.input.TaskDetailGetInput;
 import net.arctel.oms.input.TaskPageQueryInput;
 import net.arctel.oms.input.TaskProgressUpdateInput;

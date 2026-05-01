@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.arctel.framework.exception.BizException;
+import net.arctel.platform.framework.exception.BizException;
 import net.arctel.oms.common.constants.ErrorConstant;
 import net.arctel.oms.common.utils.HttpSupport;
 import org.springframework.stereotype.Component;

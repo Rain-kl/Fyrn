@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "net.arctel.aggregation",
         "net.arctel.fyrn",
         "net.arctel.common",
-        "net.arctel.framework",
+        "net.arctel.platform.framework",
         "net.arctel.oms",
         "net.arctel.opkit",
         "net.arctel.agent",

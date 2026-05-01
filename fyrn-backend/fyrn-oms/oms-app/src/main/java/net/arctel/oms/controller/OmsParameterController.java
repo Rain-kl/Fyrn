@@ -18,7 +18,7 @@
 package net.arctel.oms.controller;
 
 
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 

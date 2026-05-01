@@ -18,7 +18,7 @@
 package net.arctel.agent.opkit;
 
 import net.arctel.oms.infra.task.DefaultTaskMessage;
-import net.arctel.framework.core.task.BaseThreadPoolListener;
+import net.arctel.platform.framework.task.BaseThreadPoolListener;
 import org.springframework.stereotype.Component;
 
 @Component

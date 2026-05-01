@@ -1,7 +1,7 @@
 package net.arctel.opkit.service.impl.translation;
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.exception.BizException;
+import net.arctel.platform.framework.exception.BizException;
 import net.arctel.oms.service.OmsParameterService;
 import net.arctel.opkit.common.constants.OpkitParameterConstant;
 import net.arctel.opkit.common.constants.TransEngineConstant;

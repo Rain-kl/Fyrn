@@ -31,7 +31,6 @@
         <module>fyrn-oms</module>
         <module>fyrn-opkit</module>
         <module>fyrn-aggregation</module>
-        <module>fyrn-framework</module>
         <module>fyrn-workbench</module>
     </modules>
 
@@ -86,21 +85,6 @@
             <dependency>
                 <groupId>net.arctel</groupId>
                 <artifactId>wb-service</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-
-
-            <!--
-                framework 模块版本管理
-            -->
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>framework-core</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>framework-web</artifactId>
                 <version>${fyrn.version}</version>
             </dependency>
 

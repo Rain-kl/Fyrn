@@ -20,7 +20,7 @@ package net.arctel.opkit.service.impl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import net.arctel.framework.core.task.utils.TaskRspCollectorUtil;
+import net.arctel.platform.framework.task.utils.TaskRspCollectorUtil;
 
 import jakarta.annotation.Resource;
 import net.arctel.opkit.service.BaseToolService;

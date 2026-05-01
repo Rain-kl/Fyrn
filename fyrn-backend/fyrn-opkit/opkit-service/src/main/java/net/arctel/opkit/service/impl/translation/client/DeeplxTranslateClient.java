@@ -1,7 +1,7 @@
 package net.arctel.opkit.service.impl.translation.client;
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.exception.BizException;
+import net.arctel.platform.framework.exception.BizException;
 import net.arctel.oms.common.constants.ErrorConstant;
 import org.springframework.stereotype.Component;
 

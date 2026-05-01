@@ -17,10 +17,10 @@
 
 package net.arctel.fyrn.task;
 
-import net.arctel.framework.core.task.model.RegistrationInfo;
+import net.arctel.platform.framework.task.model.RegistrationInfo;
 import net.arctel.oms.infra.task.DefaultTaskMessage;
 import net.arctel.oms.infra.task.OmsTaskQueue;
-import net.arctel.framework.core.task.BaseThreadPoolListener;
+import net.arctel.platform.framework.task.BaseThreadPoolListener;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

@@ -17,22 +17,20 @@
 
 package net.arctel.common.exception;
 
-import java.util.stream.Collectors;
-
 import cn.dev33.satoken.exception.NotLoginException;
-import net.arctel.framework.exception.BizException;
-import net.arctel.framework.utils.Result;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import net.arctel.oms.common.constants.ErrorConstant;
+import net.arctel.platform.framework.exception.BizException;
+import net.arctel.platform.framework.utils.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice

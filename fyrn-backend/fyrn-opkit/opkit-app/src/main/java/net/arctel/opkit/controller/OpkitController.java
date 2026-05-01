@@ -1,7 +1,7 @@
 package net.arctel.opkit.controller;
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import net.arctel.opkit.output.OpkitListOutput;
 import net.arctel.opkit.service.OpkitService;
 import org.springframework.web.bind.annotation.GetMapping;

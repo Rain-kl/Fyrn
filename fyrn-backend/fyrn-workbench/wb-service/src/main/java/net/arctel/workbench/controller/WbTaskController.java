@@ -1,7 +1,7 @@
 package net.arctel.workbench.controller;
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.workbench.domain.WbTask;
 import net.arctel.workbench.input.WbTaskPageInput;

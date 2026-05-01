@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
         "net.arctel.agent",
         "net.arctel.opkit",
-        "net.arctel.framework.core"
+        "net.arctel.platform.framework",
 }, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
 class AgentApplication {
 

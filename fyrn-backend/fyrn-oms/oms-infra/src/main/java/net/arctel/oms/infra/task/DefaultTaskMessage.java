@@ -17,7 +17,7 @@
 
 package net.arctel.oms.infra.task;
 
-import net.arctel.framework.core.task.model.BaseTaskMessage;
+import net.arctel.platform.framework.task.model.BaseTaskMessage;
 
 import lombok.Data;
 

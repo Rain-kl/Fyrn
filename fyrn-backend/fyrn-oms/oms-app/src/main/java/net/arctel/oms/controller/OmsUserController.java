@@ -17,7 +17,7 @@
 
 package net.arctel.oms.controller;
 
-import net.arctel.framework.utils.Result;
+import net.arctel.platform.framework.utils.Result;
 import org.springframework.web.bind.annotation.*;
 
 import net.arctel.oms.common.base.BaseQueryPage;

@@ -18,7 +18,7 @@
 
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>framework-core</artifactId>
+            <artifactId>axion-core</artifactId>
         </dependency>
 
         <!-- 工具类 -->

@@ -20,7 +20,7 @@ package net.arctel.oms.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import net.arctel.oms.common.constants.ErrorConstant;
-import net.arctel.framework.exception.BizException;
+import net.arctel.platform.framework.exception.BizException;
 import net.arctel.oms.entity.OmsUser;
 import net.arctel.oms.mapper.OmsUserMapper;
 import net.arctel.oms.output.UserInfoVo;

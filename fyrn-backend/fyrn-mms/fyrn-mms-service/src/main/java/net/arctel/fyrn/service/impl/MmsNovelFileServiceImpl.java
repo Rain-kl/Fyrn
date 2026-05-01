@@ -33,7 +33,7 @@ import net.arctel.fyrn.service.MmsNovelFileService;
 import net.arctel.fyrn.service.MmsNovelService;
 import net.arctel.oms.common.base.BaseQueryPage;
 import net.arctel.oms.common.constants.ErrorConstant;
-import net.arctel.framework.exception.BizException;
+import net.arctel.platform.framework.exception.BizException;
 import net.arctel.oms.common.utils.FileUtil;
 import net.arctel.oms.common.utils.PagingUtil;
 import net.arctel.oms.service.OmsParameterService;

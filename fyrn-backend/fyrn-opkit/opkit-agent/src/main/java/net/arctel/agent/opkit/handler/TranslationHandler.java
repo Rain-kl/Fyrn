@@ -18,7 +18,7 @@
 package net.arctel.agent.opkit.handler;
 
 import jakarta.annotation.Resource;
-import net.arctel.framework.core.task.fast.FastTaskHandler;
+import net.arctel.platform.framework.task.fast.FastTaskHandler;
 import net.arctel.oms.infra.task.DefaultTaskMessage;
 import net.arctel.opkit.input.TranslationBaseInput;
 import net.arctel.opkit.service.TranslationService;

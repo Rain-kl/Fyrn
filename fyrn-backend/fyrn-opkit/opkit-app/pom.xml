@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>net.arctel.platform</groupId>
-            <artifactId>framework-web</artifactId>
+            <artifactId>axion-web</artifactId>
         </dependency>
         <dependency>
             <groupId>net.arctel.platform</groupId>
